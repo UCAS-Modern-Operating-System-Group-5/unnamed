@@ -14,7 +14,7 @@ Install [EditorConfig](https://editorconfig.org/) plugin for the editor you are 
 ```
 cargo run -p server # Run apps/server
 cargo run -p client # Run apps/client
-cargo test -p example # Test crates/example
+cargo test -p ipc # Test crates/ipc
 ```
 
 # Rust Learning Resources
