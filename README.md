@@ -12,8 +12,8 @@ Install [EditorConfig](https://editorconfig.org/) plugin for the editor you are 
 ## Commands
 
 ```
-cargo run -p server # Run apps/server
 cargo run -p client # Run apps/client
+cargo run -- serve # Run apps/server. Equivalent to `cargo run -p server -- serve`
 cargo test -p ipc # Test crates/ipc
 ```
 
