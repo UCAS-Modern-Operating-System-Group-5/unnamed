@@ -59,10 +59,12 @@ pub fn load_system_chinese_font() -> Result<FontData, String> {
 }
 
 
+// This methods find NotoSansCJK-VF.otf.ttc (~33MB) font on my system and takes
+// ~66MB ((154536 - 86876) / 1024) memory
+// use log::warn;
 // pub fn setup_fonts(ctx: &Context) {
 //     let mut fonts = FontDefinitions::default();
 
-//     // This method seems bump memory usage by 50 MB
 //     match load_system_chinese_font() {
 //         Ok(chinese_font_data) => {
 //             fonts.font_data.insert("chinese".to_owned(),
@@ -89,16 +91,24 @@ pub fn load_system_chinese_font() -> Result<FontData, String> {
 //     }
 // }
 
-/// We don't load system Chinese font since it will takes generally 50~70MB memory
-/// Embedding Maple Mono NL CN font takes around 10MB memory (Only loads regular weight font)
+// It takes no additional memory since font data are inside the `.rodata` segment.
+// The cost is the increased executable size.
 pub fn setup_fonts(ctx: &Context) {
     let mut fonts = FontDefinitions::empty();
     let font_name = "Maple Mono NL CN".to_string();
     
+    // We only load regular weight font since egui currently doesn't support
+    // font weight. Related issues:
+    // https://github.com/emilk/egui/issues/3218
+    // https://github.com/emilk/egui/issues/3218#issuecomment-3173550321
     fonts.font_data.insert(font_name.clone(),
         Arc::new(FontData::from_static(include_bytes!(
-            "../../assets/MapleMonoNL-CN-Regular.ttf"
-        ))),
+            "../../assets/NotoSansSC-Regular.otf"
+        )).tweak(egui::FontTweak {
+            scale: 1.5,
+            y_offset: 0.0,
+            y_offset_factor: 0.0
+        })),
     );
 
     fonts
