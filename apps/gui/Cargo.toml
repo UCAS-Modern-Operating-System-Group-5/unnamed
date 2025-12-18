@@ -16,7 +16,7 @@ version = "0.33.3"
 default-features = false
 features = [
 "accesskit",
-"default_fonts",
+# "default_fonts",
 "glow",
 "wayland",
 "x11"
