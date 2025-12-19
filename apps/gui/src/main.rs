@@ -46,7 +46,7 @@ fn main() -> eframe::Result {
     let viewport = egui::ViewportBuilder::default()
         .with_inner_size([config.window.width, config.window.height])
         .with_resizable(false) // Suits tiling window manager
-        .with_decorations(false)
+        // .with_decorations(false)
          // Wayland user can use app-id to customize window's behavior
         .with_app_id(constants::APP_ID)
         .with_drag_and_drop(true);
