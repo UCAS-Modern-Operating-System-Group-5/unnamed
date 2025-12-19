@@ -12,9 +12,17 @@ Install [EditorConfig](https://editorconfig.org/) plugin for the editor you are 
 ## Commands
 
 ```
-cargo run -p client # Run apps/client
+cargo run -p gui # Run apps/client
 cargo run -- serve # Run apps/server. Equivalent to `cargo run -p server -- serve`
 cargo test -p ipc # Test crates/ipc
+```
+
+If you are familiar with [just](https://github.com/casey/just?tab=readme-ov-file),
+a command runner, you can use `just` to execute commands. For example:
+
+```
+just
+just run -- serve
 ```
 
 # Rust Learning Resources
