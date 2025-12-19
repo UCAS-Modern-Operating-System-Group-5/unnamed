@@ -16,20 +16,14 @@
           libGL
         ];
       in {
-        env = {
-          LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath runtimeLibs}";
-          
-          # Needed for cross compilation by `cross`
-          CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = "gcc";
-          CROSS_CONTAINER_UID = "0";
-          CROSS_CONTAINER_GID = "0";
-        };
+        env.LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath runtimeLibs}";
 
         packages = with pkgs; [
           pkg-config
 
           # apps/gui ==============
           fontconfig
+          
           # puffin_viewer ---------
           # (Though they are compile time needed)
           gtk3

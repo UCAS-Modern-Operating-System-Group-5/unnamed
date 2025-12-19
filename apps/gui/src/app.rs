@@ -1,11 +1,15 @@
 use crate::ui;
 
-pub struct App {}
+pub struct App {
+    dropped_files: Vec<egui::DroppedFile>,
+}
 
 impl App {
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         ui::theme::setup_fonts(&cc.egui_ctx);
-        Self {}
+        Self {
+            dropped_files: Default::default(),
+        }
     }
 }
 
