@@ -25,6 +25,18 @@ just
 just run -- serve
 ```
 
+## Cross Compilation
+
+Use [cross](https://github.com/cross-rs/cross).
+
+For example, the command to cross compile to Risc-V:
+
+```
+CROSS_CONTAINER_UID=0 CROSS_CONTAINER_GID=0 cross build --release --target riscv64gc-unknown-linux-gnu
+```
+
+Or you can use command `just build-riscv` with environment set in `.env` or `.envrc` (loaded by [direnv](https://github.com/jyn514/direnv))
+
 # Rust Learning Resources
 
 - Google's [Comprehensive Rust](https://github.com/google/comprehensive-rust)
