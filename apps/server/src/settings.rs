@@ -38,7 +38,6 @@ impl Default for Settings {
 impl Settings {
     pub fn from_file_or_env(location: Option<&str>, env_prefix: &str) -> Result<Self> {
         let defaults = Self::default();
-        // TODO avoid redundant serialization and de-serialization
         let defaults_json = serde_json::to_string(&defaults)?;
 
         let mut builder = config::Config::builder()
