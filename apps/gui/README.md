@@ -6,6 +6,12 @@ Download [Noto Sans CJK font](https://github.com/notofonts/noto-cjk/tree/main/Sa
 
 ## Profiling Tips
 
+### Profile with [Puffin](https://github.com/EmbarkStudios/puffin)
+
+```
+cargo run -p gui -F profile-with-puffin -- --profile
+```
+
 ### Monitor Resource Occupation
 
 ```

@@ -7,13 +7,30 @@ mod settings;
 mod constants;
 mod error;
 
-use log::error;
-
+use tracing::{error, info};
 
 use eframe::egui;
 
 fn main() -> eframe::Result {
-    env_logger::init();
+    tracing_subscriber::fmt::init();
+    
+    for arg in std::env::args().skip(1) {
+        match arg.as_str() {
+            "--profile" => {
+                #[cfg(feature = "profile-with-puffin")]
+                start_puffin_server();
+
+                #[cfg(not(feature = "profile-with-puffin"))]
+                panic!(
+                    "Unknown argument: {arg} - you need to enable the 'puffin' feature to use this."
+                );
+            }
+
+            _ => {
+                panic!("Unknown argument: {arg}");
+            }
+        }
+    }
 
     let config = match settings::Settings::from_file_or_env(None, constants::ENV_PREFIX) {
         Ok(c) => c,
@@ -43,4 +60,30 @@ fn main() -> eframe::Result {
         options,
         Box::new(|cc| Ok(Box::new(app::App::new(cc)))),
     )
+}
+
+
+#[cfg(feature = "profile-with-puffin")]
+fn start_puffin_server() {
+    puffin::set_scopes_on(true);
+
+    match puffin_http::Server::new("127.0.0.1:8585") {
+        Ok(puffin_server) => {
+            info!("To install puffin_viewer, run: cargo install puffin_viewer");
+
+            std::process::Command::new("puffin_viewer")
+                .arg("--url")
+                .arg("127.0.0.1:8585")
+                .spawn()
+                .ok();
+
+            // We can store the server if we want, but in this case we just want
+            // it to keep running. Dropping it closes the server, so let's not drop it!
+            #[expect(clippy::mem_forget)]
+            std::mem::forget(puffin_server);
+        }
+        Err(err) => {
+            error!("Failed to start puffin server: {err}");
+        }
+    }
 }

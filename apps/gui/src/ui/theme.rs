@@ -2,7 +2,7 @@ use egui::{Context, FontData, FontDefinitions, FontFamily};
 use font_kit::{
     family_name::FamilyName, handle::Handle, properties::Properties, source::SystemSource,
 };
-use log::{debug, info};
+use tracing::{debug, info};
 use std::sync::Arc;
 
 #[allow(dead_code)]

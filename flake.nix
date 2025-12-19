@@ -8,12 +8,12 @@
     flakelight ./. {
       devShell = pkgs: let
         runtimeLibs = with pkgs; [
-          # apps/gui -----------
+          # apps/gui ==============
           libxkbcommon
           wayland
           
           # vulkan-loader
-          libGL 
+          libGL
         ];
       in {
         env = {
@@ -28,8 +28,13 @@
         packages = with pkgs; [
           pkg-config
 
-          # apps/gui -----------
+          # apps/gui ==============
           fontconfig
+          # puffin_viewer ---------
+          # (Though they are compile time needed)
+          gtk3
+          glib
+          atk
         ];
       };
     };

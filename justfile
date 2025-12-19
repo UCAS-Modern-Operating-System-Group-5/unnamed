@@ -8,6 +8,9 @@ default: run
 run *flags:
     cargo run {{CARGO_ADDITIONAL_FLAGS}} {{flags}}
 
+run-gui-profiling:
+    cargo run -p gui -F profile-with-puffin -- --profile
+
 build *flags:
     cargo build {{CARGO_ADDITIONAL_FLAGS}} {{flags}}
 
