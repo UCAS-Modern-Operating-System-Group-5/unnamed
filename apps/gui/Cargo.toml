@@ -6,17 +6,20 @@ edition.workspace = true
 [dependencies]
 egui.version = "0.33.3"
 egui_extras = { version = "0.33.3", features = ["default", "image"] }
-# eframe = { version = "0.33.3", features = [ "glow" ] }
+font-kit = "0.14.3"
+
 log = "0.4.29"
 env_logger = "0.11.8"
-font-kit = "0.14.3"
+serde.workspace = true
+serde_json.workspace = true
+config.workspace = true
+anyhow.workspace = true
 
 [dependencies.eframe]
 version = "0.33.3"
 default-features = false
 features = [
 "accesskit",
-# "default_fonts",
 "glow",
 "wayland",
 "x11"

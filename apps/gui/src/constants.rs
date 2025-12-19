@@ -1,2 +1,4 @@
 pub const APP_NAME: &'static str = "unnamed";
 pub const APP_ID: &'static str = "unnamed";
+
+pub const ENV_PREFIX: &str = "UNNAMED";
