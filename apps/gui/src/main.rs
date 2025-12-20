@@ -6,9 +6,12 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc; // Much faster allocator
 
 mod ui;
 mod app;
-mod settings;
+mod config;
 mod constants;
 mod error;
+mod key;
+mod user_command;
+mod scope;
 
 use tracing::{error, info};
 
@@ -17,7 +20,7 @@ use eframe::egui;
 fn main() -> eframe::Result {
     tracing_subscriber::fmt::init();
     
-    for arg in std::env::args().skip(1) {
+    if let Some(arg) = std::env::args().skip(1).next() {
         match arg.as_str() {
             "--profile" => {
                 #[cfg(feature = "profile-with-puffin")]
@@ -35,16 +38,16 @@ fn main() -> eframe::Result {
         }
     }
 
-    let config = match settings::Settings::from_file_or_env(None, constants::ENV_PREFIX) {
+    let cfg = match config::Config::load() {
         Ok(c) => c,
         Err(e) => {
-            error!("Failed to load settings: {:#}", e);
-            settings::Settings::default() 
+            error!("Load user configuration failed: {e}");
+            config::Config::load_str("").expect("Load empty configuration failed!")
         }
     };
-
+    
     let viewport = egui::ViewportBuilder::default()
-        .with_inner_size([config.window.width, config.window.height])
+        .with_inner_size([cfg.app.width, cfg.app.height])
         .with_resizable(false) // Suits tiling window manager
         // .with_decorations(false)
          // Wayland user can use app-id to customize window's behavior

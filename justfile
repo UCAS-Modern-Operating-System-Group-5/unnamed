@@ -11,6 +11,15 @@ default: run
 run *flags:
     cargo run {{CARGO_ADDITIONAL_FLAGS}} {{flags}}
 
+check *flags:
+    cargo check {{CARGO_ADDITIONAL_FLAGS}} {{flags}}
+    
+test *flags:
+    cargo test {{CARGO_ADDITIONAL_FLAGS}} {{flags}}
+    
+clippy *flags:
+    cargo clippy {{CARGO_ADDITIONAL_FLAGS}} {{flags}}
+    
 run-gui-profiling:
     cargo run -p gui -F profile-with-puffin -- --profile
 
