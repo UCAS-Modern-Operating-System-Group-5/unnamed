@@ -12,6 +12,7 @@ mod error;
 mod key;
 mod user_command;
 mod scope;
+mod screen;
 
 use tracing::{error, info};
 
@@ -50,8 +51,9 @@ fn main() -> eframe::Result {
         .with_inner_size([cfg.app.width, cfg.app.height])
         .with_resizable(false) // Suits tiling window manager
         // .with_decorations(false)
-         // Wayland user can use app-id to customize window's behavior
+        // Wayland user can use app-id to customize window's behavior
         .with_app_id(constants::APP_ID)
+        .with_transparent(true)
         .with_drag_and_drop(true);
 
     let options = eframe::NativeOptions {
@@ -64,7 +66,7 @@ fn main() -> eframe::Result {
     eframe::run_native(
         constants::APP_NAME,
         options,
-        Box::new(|cc| Ok(Box::new(app::App::new(cc)))),
+        Box::new(|cc| Ok(Box::new(app::App::new(cc, &cfg.app)))),
     )
 }
 

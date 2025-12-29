@@ -7,3 +7,9 @@ pub enum Scope {
     Main,
     SearchbarMain // Main -> SearchBar
 }
+
+impl Default for Scope {
+    fn default() -> Self {
+        Self::Global
+    }
+}
