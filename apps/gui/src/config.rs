@@ -78,6 +78,18 @@ mod test {
     }
 
     #[test]
+    fn test_load_app_config_unknown_field() {
+        const USER_CONFIG: &'static str = r#"
+        [app]
+        Am-i-kawaii = "🥰"
+        "#;
+        let cfg = Config::load_str(USER_CONFIG);
+        let err = cfg.unwrap_err();
+        assert!(err.to_string().contains("unknown field `Am-i-kawaii`"));
+    }
+
+
+    #[test]
     fn test_key_config() {
         const USER_CONFIG: &'static str = r#"
         [keys.global]
