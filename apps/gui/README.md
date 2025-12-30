@@ -18,3 +18,8 @@ cargo run -p gui -F profile-with-puffin -- --profile
 cargo run -p gui # At the project root
 htop -p $(pgrep gui) # In another terminal
 ```
+
+
+## TODO
+
+- [] Preview Panel

@@ -105,7 +105,7 @@ pub fn setup_fonts(ctx: &Context) {
         Arc::new(FontData::from_static(include_bytes!(
             "../../assets/NotoSansSC-Regular.otf"
         )).tweak(egui::FontTweak {
-            scale: 1.5,
+            scale: 1.0,
             y_offset: 0.0,
             y_offset_factor: 0.0
         })),

@@ -5,11 +5,12 @@
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc; // Much faster allocator, can give 20% speedups: https://github.com/emilk/egui/pull/7029
 
 mod ui;
-mod app;
 mod config;
 mod constants;
 mod error;
-mod screen;
+mod app;
+mod components;
+mod backend;
 
 use tracing::{error, info};
 
