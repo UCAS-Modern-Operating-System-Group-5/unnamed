@@ -1,9 +1,15 @@
+// Currently egui doesn't support automatically load system font to cover missing
+// glyph
+// Issue to track: https://github.com/emilk/egui/issues/5233
+
 use egui::{Context, FontData, FontDefinitions, FontFamily};
 use font_kit::{
     family_name::FamilyName, handle::Handle, properties::Properties, source::SystemSource,
 };
 use tracing::{debug, info};
 use std::sync::Arc;
+
+
 
 #[allow(dead_code)]
 // Reference: https://github.com/woelper/oculante/blob/66e00785f13ef008e516d790b88ec34436188d24/src/ui/theme.rs#L110-L133
@@ -95,33 +101,35 @@ pub fn load_system_chinese_font() -> Result<FontData, String> {
 // The cost is the increased executable size.
 pub fn setup_fonts(ctx: &Context) {
     let mut fonts = FontDefinitions::empty();
-    let font_name = "Maple Mono NL CN".to_string();
     
     // We only load regular weight font since egui currently doesn't support
     // font weight. Related issues:
     // https://github.com/emilk/egui/issues/3218
     // https://github.com/emilk/egui/issues/3218#issuecomment-3173550321
-    fonts.font_data.insert(font_name.clone(),
+    fonts.font_data.insert("Noto Sans".to_string(),
         Arc::new(FontData::from_static(include_bytes!(
-            "../../assets/NotoSansSC-Regular.otf"
-        )).tweak(egui::FontTweak {
-            scale: 1.0,
-            y_offset: 0.0,
-            y_offset_factor: 0.0
-        })),
+            "../../assets/NotoSansCJKsc-Regular.otf"
+        )))
     );
+
+    fonts.font_data.insert("Noto Sans Mono".to_string(),
+        Arc::new(FontData::from_static(include_bytes!(
+            "../../assets/NotoSansMonoCJKsc-Regular.otf"
+        )))
+    );
+
 
     fonts
         .families
         .entry(FontFamily::Proportional)
         .or_default()
-        .insert(0, font_name.clone());
+        .insert(0, "Noto Sans".to_string());
 
     fonts
         .families
         .entry(FontFamily::Monospace)
         .or_default()
-        .insert(0, font_name.clone());
+        .insert(0, "Noto Sans Mono".to_string());
             
     ctx.set_fonts(fonts);
 }

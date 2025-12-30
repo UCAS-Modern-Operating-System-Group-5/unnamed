@@ -31,13 +31,8 @@ impl ContextComponent for StatusBar {
         let mut events = Vec::new();
 
         egui::TopBottomPanel::bottom("status_bar")
-            .exact_height(24.0)
-            .frame(egui::Frame::NONE.inner_margin(egui::Margin {
-                left: 12,
-                right: 12,
-                top: 4,
-                bottom: 4
-            }))
+            // .exact_height(30.0)
+            .frame(egui::Frame::NONE)
             .show(ctx, |ui| {
                 ui.horizontal(|ui| {
                     ui.label("El Psy Congraoo");

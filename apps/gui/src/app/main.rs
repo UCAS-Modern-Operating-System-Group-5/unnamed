@@ -23,12 +23,16 @@ pub struct State {
 }
 
 impl App {
-    pub fn new(cc: &eframe::CreationContext<'_>, config: Config) -> Self {
-        ui::theme::setup_fonts(&cc.egui_ctx);
+    pub fn new(config: Config) -> Self {
         Self {
             config,
             ..Default::default()
         }
+    }
+
+    // Setup things like UI
+    pub fn setup(&self, cc: &eframe::CreationContext<'_>) {
+        ui::setup_ui(&cc.egui_ctx, &self.config.ui);
     }
 
     /// Should set search path to the parent directory of the file; Or if the dropped
@@ -58,10 +62,18 @@ impl App {
 }
 
 impl eframe::App for App {
-    fn clear_color(&self, _visuals: &egui::Visuals) -> [f32; 4] {
-        egui::Rgba::from_black_alpha(self.config.app.background_alpha).to_array()
-        // egui::Rgba::TRANSPARENT.to_array()
+    fn clear_color(&self, visuals: &egui::Visuals) -> [f32; 4] {
+        let color = egui::lerp(
+            egui::Rgba::from(visuals.panel_fill)..=egui::Rgba::from(visuals.extreme_bg_color),
+            0.5,
+        );
+    
+        let mut color = egui::Color32::from(color);
+        color = color.gamma_multiply(self.config.app.background_alpha); 
+
+        color.to_normalized_gamma_f32()
     }
+
 
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if ctx.input_mut(|i| i.consume_key(egui::Modifiers::NONE, egui::Key::F11)) {
@@ -74,6 +86,7 @@ impl eframe::App for App {
         self.update_window_title(ctx);
 
         self.render_status_bar(ctx);
+
 
         // TODO no_frame() function in 0.33.4
         egui::CentralPanel::default().frame(egui::Frame::NONE).show(ctx, |ui| {

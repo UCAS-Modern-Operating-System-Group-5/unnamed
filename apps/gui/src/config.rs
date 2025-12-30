@@ -1,4 +1,5 @@
 use crate::app::AppConfig;
+use crate::ui::UiConfig;
 use crate::constants;
 use crate::error::Result;
 use crate::app::{KeyConfig, default_key_config, merge_key_config};
@@ -9,6 +10,7 @@ use etcetera::{choose_app_strategy, AppStrategy, AppStrategyArgs};
 #[serde(rename_all = "kebab-case", default, deny_unknown_fields)]
 pub struct Config {
     pub app: AppConfig,
+    pub ui: UiConfig,
     pub keys: KeyConfig,
 }
 
@@ -22,6 +24,7 @@ impl Config {
 
         let res = Self {
             app: user_config.app,
+            ui: user_config.ui,
             keys
         };
 

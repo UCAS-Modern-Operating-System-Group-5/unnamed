@@ -64,7 +64,11 @@ fn main() -> eframe::Result {
     eframe::run_native(
         constants::APP_NAME,
         options,
-        Box::new(|cc| Ok(Box::new(app::App::new(cc, cfg)))),
+        Box::new(|cc| {
+            let app = app::App::new(cfg);
+            app.setup(cc);
+            Ok(Box::new(app))
+        }),
     )
 }
 
