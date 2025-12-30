@@ -1,28 +1,29 @@
 use crate::ui;
-use crate::scope::Scope;
-use serde::Deserialize;
+use crate::config::Config;
+use super::Scope;
 
 #[derive(Default)]
 pub struct App {
-    current_scope: Scope,
-    dropped_files: Vec<egui::DroppedFile>,
+    config: Config,
     
-    background_alpha: f32,
+    current_scope: Scope,
+    
+    dropped_files: Vec<egui::DroppedFile>,
 }
 
 impl App {
-    pub fn new(cc: &eframe::CreationContext<'_>, app_config: &AppConfig) -> Self {
+    pub fn new(cc: &eframe::CreationContext<'_>, config: Config) -> Self {
         ui::theme::setup_fonts(&cc.egui_ctx);
         Self {
-            background_alpha: app_config.background_alpha,
-            ..Self::default()
+            config,
+            ..Default::default()
         }
     }
 }
 
 impl eframe::App for App {
     fn clear_color(&self, _visuals: &egui::Visuals) -> [f32; 4] {
-        egui::Rgba::from_black_alpha(self.background_alpha).to_array()
+        egui::Rgba::from_black_alpha(self.config.app.background_alpha).to_array()
         // egui::Rgba::TRANSPARENT.to_array()
     }
 
@@ -32,31 +33,11 @@ impl eframe::App for App {
             ctx.send_viewport_cmd(egui::ViewportCommand::Fullscreen(!fullscreen));
         }
 
+        // TODO no_frame() function in 0.33.4
         egui::CentralPanel::default().frame(egui::Frame::NONE).show(ctx, |ui| {
             ui.heading("egui using custom fonts");
             ui.text_edit_multiline(&mut "你好\nEl Psy Congaroo!");
         });
-    }
-}
-
-
-
-#[derive(Debug, Clone, Deserialize)]
-#[serde(rename_all = "kebab-case", default, deny_unknown_fields)]
-pub struct AppConfig {
-    pub width: f32,
-    pub height: f32,
-    pub background_alpha: f32,
-}
-
-
-impl Default for AppConfig {
-    fn default() -> Self {
-        Self {
-            width: 800.0,
-            height: 600.0,
-            background_alpha: 1.0,
-        }
     }
 }
 

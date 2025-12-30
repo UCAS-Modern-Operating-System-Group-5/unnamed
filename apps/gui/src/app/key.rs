@@ -2,8 +2,8 @@ use std::str::FromStr;
 use egui::{Key, Modifiers};
 use serde::{Deserialize, Deserializer, Serialize, Serializer, de};
 use std::collections::HashMap;
-use crate::user_command::UserCommand;
-use crate::scope::Scope;
+use crate::app::UserCommand;
+use crate::app::Scope;
 
 #[derive(PartialEq, Eq, Hash, Debug, Clone, derive_more::From)]
 pub struct KeyShortcut(pub egui::KeyboardShortcut);

@@ -9,9 +9,6 @@ mod app;
 mod config;
 mod constants;
 mod error;
-mod key;
-mod user_command;
-mod scope;
 mod screen;
 
 use tracing::{error, info};
@@ -66,7 +63,7 @@ fn main() -> eframe::Result {
     eframe::run_native(
         constants::APP_NAME,
         options,
-        Box::new(|cc| Ok(Box::new(app::App::new(cc, &cfg.app)))),
+        Box::new(|cc| Ok(Box::new(app::App::new(cc, cfg)))),
     )
 }
 

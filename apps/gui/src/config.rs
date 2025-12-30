@@ -1,15 +1,8 @@
 use crate::app::AppConfig;
 use crate::constants;
 use crate::error::Result;
-use crate::key::{KeyConfig, default_key_config, merge_key_config};
+use crate::app::{KeyConfig, default_key_config, merge_key_config};
 use serde::Deserialize;
-use std::collections::HashMap;
-use std::env;
-use std::fmt::Display;
-use std::io::Error as IOError;
-use std::path::Path;
-use toml::de::Error as TomlError;
-use crate::user_command::UserCommand;
 use etcetera::{choose_app_strategy, AppStrategy, AppStrategyArgs};
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -61,9 +54,9 @@ impl Config {
 mod test {
     use super::*;
     
-    use crate::user_command::UserCommand;
-    use crate::scope::Scope;
-    use crate::key::KeyShortcut;
+    use crate::app::UserCommand;
+    use crate::app::Scope;
+    use crate::app::KeyShortcut;
 
 
     #[test]
