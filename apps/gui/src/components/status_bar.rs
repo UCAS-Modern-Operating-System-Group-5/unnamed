@@ -1,4 +1,7 @@
-use crate::{backend::{ServerStatus, ServerWorkingStatus}, components::ContextComponent};
+use crate::{
+    backend::{ServerStatus, ServerWorkingStatus},
+    components::ContextComponent,
+};
 
 #[derive(Default)]
 pub struct StatusBar;
@@ -10,18 +13,16 @@ pub struct StatusBarProps {
 #[derive(Default)]
 pub struct StatusBarStatus;
 
-
 /// Events emitted by the status bar
 pub enum StatusBarEvent {
     /// User clicked on the restart button by the side of server status label
-    RestartServer
+    RestartServer,
 }
 
 /// Output from status bar component
 pub struct StatusBarOutput {
     pub events: Vec<StatusBarEvent>,
 }
-
 
 impl ContextComponent for StatusBar {
     type Props<'a> = StatusBarProps;
@@ -31,7 +32,6 @@ impl ContextComponent for StatusBar {
         let mut events = Vec::new();
 
         egui::TopBottomPanel::bottom("status_bar")
-            // .exact_height(30.0)
             .frame(egui::Frame::NONE)
             .show(ctx, |ui| {
                 ui.horizontal(|ui| {
@@ -42,6 +42,3 @@ impl ContextComponent for StatusBar {
         StatusBarOutput { events }
     }
 }
-
-
-

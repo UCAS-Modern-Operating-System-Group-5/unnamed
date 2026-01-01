@@ -33,6 +33,13 @@ impl App {
     // Setup things like UI
     pub fn setup(&self, cc: &eframe::CreationContext<'_>) {
         ui::setup_ui(&cc.egui_ctx, &self.config.ui);
+        self.setup_debug_options(&cc.egui_ctx);
+    }
+
+    fn setup_debug_options(&self, ctx: &egui::Context) {
+        ctx.style_mut(|style| {
+            style.debug.debug_on_hover_with_all_modifiers = true
+        });
     }
 
     /// Should set search path to the parent directory of the file; Or if the dropped
@@ -93,6 +100,17 @@ impl eframe::App for App {
             ui.heading("egui using custom fonts");
             ui.text_edit_multiline(&mut "你好\nEl Psy Congaroo!");
             ui.label(format!("{}", ui.text_style_height(&egui::TextStyle::Body)));
+
+            ui.horizontal(|ui| {
+                let row_height = ui.text_style_height(&egui::TextStyle::Body);
+                let (rect, response) = ui.allocate_exact_size([10.0, row_height].into(), egui::Sense::hover());
+                ui.painter().circle_filled(
+                    rect.center(),
+                    rect.height() / 8.0,
+                    ui.visuals().strong_text_color(),
+                );
+                ui.label(format!("{}", ui.text_style_height(&egui::TextStyle::Body)));
+            });
         });
     }
 }

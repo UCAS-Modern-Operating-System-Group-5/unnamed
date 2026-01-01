@@ -25,3 +25,4 @@ htop -p $(pgrep gui) # In another terminal
 ## TODO
 
 - [] Preview Panel
+- [] Set Application Logo. https://github.com/emilk/egui/discussions/5356

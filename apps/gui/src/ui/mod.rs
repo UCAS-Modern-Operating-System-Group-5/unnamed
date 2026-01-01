@@ -3,6 +3,7 @@
 mod theme;
 mod font;
 mod config;
+pub mod icon;
 
 pub use font::setup_fonts;
 pub use config::UiConfig;
