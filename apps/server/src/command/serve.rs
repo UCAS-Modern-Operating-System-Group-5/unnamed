@@ -1,15 +1,15 @@
 use super::Command;
 use crate::error::Result;
-use crate::settings::Settings;
+use crate::config::Config;
 
 pub struct ServeCommand {
-    settings: Settings
+    config: Config
 }
 
 impl ServeCommand {
-    pub fn new(settings: Settings) -> Self {
+    pub fn new(cfg: Config) -> Self {
         Self {
-            settings
+            config: cfg
         }
     }
 }

@@ -94,7 +94,6 @@ impl eframe::App for App {
 
         self.render_status_bar(ctx);
 
-
         // TODO no_frame() function in 0.33.4
         egui::CentralPanel::default().frame(egui::Frame::NONE).show(ctx, |ui| {
             ui.heading("egui using custom fonts");

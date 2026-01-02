@@ -38,7 +38,7 @@ impl Config {
             app_name: constants::APP_NAME.to_string(),
         })?;
 
-        let config_path = strategy.config_dir().join("config.toml");
+        let config_path = strategy.config_dir().join(constants::CONFIG_FILE_NAME);
         
         match std::fs::read_to_string(&config_path) {
             Ok(user_config_str) => Self::load_str(&user_config_str),

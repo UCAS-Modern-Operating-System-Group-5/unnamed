@@ -1,6 +1,8 @@
 // Reference: https://github.com/anitnilay20/thoth/blob/main/src/components/traits.rs
 mod status_bar;
+mod search_bar;
 
+// pub use search_bar::{}
 pub use status_bar::{StatusBar, StatusBarEvent, StatusBarProps};
 
 
