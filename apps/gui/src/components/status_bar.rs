@@ -101,8 +101,8 @@ impl ContextComponent for StatusBar {
                     },
                     |ui| {
                         ui.add(StatusBarStatusWidget::new(
-                            props.server_status.clone(),
-                            palette.clone()
+                            props.server_status,
+                            palette
                         ));
                     },
                 );
