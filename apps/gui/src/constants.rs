@@ -1,6 +1,8 @@
-pub const APP_ID: &'static str = "unnamed";
-pub const APP_NAME: &'static str = "unnamed";
-pub const AUTHOR: &'static str = "Group 5";
-pub const TOP_LEVEL_DOMAIN: &'static str = "mcst";
+pub const APP_ID: &str = "unnamed";
+pub const APP_NAME: &str = "unnamed";
+pub const AUTHOR: &str = "Group 5";
+pub const TOP_LEVEL_DOMAIN: &str = "mcst";
 
-pub const ENV_PREFIX: &str = "UNNAMED";
+pub const ID_THEME_EXTRA_PALETTE_KEY: &str = "theme_extra_palette";
+
+

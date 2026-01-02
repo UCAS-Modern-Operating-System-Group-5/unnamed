@@ -6,9 +6,21 @@ use egui::{
     epaint::{AlphaFromCoverage, Stroke, Shadow, CornerRadius}
 };
 
+/// Palette that contains extra color settings for a theme.
+/// It's recommend access normal setting like background color via egui's `Context.Style`
+#[derive(Clone)]
+pub struct ThemeExtraPalette {
+    pub error: Color32,
+    pub success: Color32,
+    pub warning: Color32,
+    pub info: Color32
+}
+
 pub struct Theme {
     pub name: String,
-    pub visuals: Visuals
+    // Besides colors, a theme should also be able to change things like the corner radius
+    pub visuals: Visuals,
+    pub extra_palette: ThemeExtraPalette
 }
 
 impl Theme {
@@ -82,7 +94,7 @@ mod modus_themes {
                             active: WidgetVisuals {
                                 bg_fill: BG_ACTIVE,
                                 weak_bg_fill: BG_ACTIVE,
-                                bg_stroke: Stroke::new(1.0, BLUE_WARMER), 
+                                bg_stroke: Stroke::new(1.0, FG_LINK), 
                                 fg_stroke: Stroke::new(2.0, FG_ALT),
                                 corner_radius: modus_rounding,
                                 ..bv.widgets.active
@@ -99,20 +111,20 @@ mod modus_themes {
 
                         selection: Selection {
                             bg_fill: BG_BLUE_SUBTLE,
-                            stroke: Stroke { color: CYAN, width: 1.0 },
+                            stroke: Stroke { color: FG_MARK_SELECT, width: 1.0 },
                         },
 
-                        hyperlink_color: BLUE_WARMER,
+                        hyperlink_color: FG_LINK,
                         faint_bg_color: BG_DIM,
                         extreme_bg_color: BG_MAIN,
                         text_edit_bg_color: Some(BG_MAIN), 
                         code_bg_color: BG_DIM,
 
-                        warn_fg_color: YELLOW_WARMER, 
-                        error_fg_color: RED,
+                        warn_fg_color: WARNING, 
+                        error_fg_color: ERR,
 
                         window_fill: BG_MAIN,
-                        window_stroke: Stroke { color: BORDER, width: 1.0 },
+                        window_stroke: Stroke::new(1.0, BORDER),
                         window_corner_radius: modus_rounding,
                         
                         window_shadow: Shadow {
@@ -137,7 +149,14 @@ mod modus_themes {
                         striped: true,
                         
                         ..bv
+                    },
+                    extra_palette: ThemeExtraPalette {
+                        error: ERR,
+                        success: INFO,
+                        warning: WARNING,
+                        info: INFO
                     }
+                    
                 }
             }
         };
