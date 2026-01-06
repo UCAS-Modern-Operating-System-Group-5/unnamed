@@ -1,4 +1,5 @@
 use clap::{ArgAction, Parser, Subcommand};
+use std::path::PathBuf;
 
 #[derive(Parser, Debug)]
 #[command(version, about)]
@@ -15,4 +16,8 @@ pub struct Cli {
 pub enum Commands {
     /// Serve
     Serve,
+    /// Index the whole file system
+    Index {
+        root_path: PathBuf
+    }
 }
