@@ -16,6 +16,7 @@ use clap::Parser;
 #[tokio::main]
 async fn main() -> error::Result<()> {
     color_eyre::install()?;
+    tracing_subscriber::fmt::init();
 
     let cfg = config::Config::load().context("Load configuration error")?;
     let command_line = cli::Cli::parse();

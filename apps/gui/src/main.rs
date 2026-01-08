@@ -1,24 +1,24 @@
- // hide console window on Windows in release
+// hide console window on Windows in release
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 #[global_allocator]
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc; // Much faster allocator, can give 20% speedups: https://github.com/emilk/egui/pull/7029
 
-mod ui;
+mod app;
+mod backend;
+mod components;
 mod config;
 mod constants;
 mod error;
-mod app;
-mod components;
-mod backend;
+mod ui;
 
-use tracing::{error, info};
+use tracing::error;
 
 use eframe::egui;
 
 fn main() -> eframe::Result {
     tracing_subscriber::fmt::init();
-    
+
     if let Some(arg) = std::env::args().skip(1).next() {
         match arg.as_str() {
             "--profile" => {
@@ -44,7 +44,7 @@ fn main() -> eframe::Result {
             config::Config::load_str("").expect("Load empty configuration failed!")
         }
     };
-    
+
     let viewport = egui::ViewportBuilder::default()
         .with_inner_size([cfg.app.width, cfg.app.height])
         .with_resizable(false) // Suits tiling window manager
@@ -62,16 +62,11 @@ fn main() -> eframe::Result {
     };
 
     eframe::run_native(
-        constants::APP_NAME,
+        ::config::constants::APP_NAME,
         options,
-        Box::new(|cc| {
-            let app = app::App::new(cfg);
-            app.setup(cc);
-            Ok(Box::new(app))
-        }),
+        Box::new(|cc| Ok(Box::new(app::App::new(cfg, cc)))),
     )
 }
-
 
 #[cfg(feature = "profile-with-puffin")]
 fn start_puffin_server() {

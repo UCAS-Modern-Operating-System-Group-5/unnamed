@@ -1,7 +1,9 @@
 // In the future, this may be moved to `ipc` crate
 use std::path::PathBuf;
 use std::time::SystemTime;
+use serde::{Serialize, Deserialize};
 
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SearchRequest {
     pub root_directories: Vec<PathBuf>,
 
@@ -33,6 +35,7 @@ pub struct SearchRequest {
     pub max_results: Option<usize>
 }
 
+#[derive(Debug, Serialize, Deserialize)]
 pub enum SortMode {
     Alphabetical,
     ReverseAlphabetical,
@@ -45,6 +48,7 @@ pub enum SortMode {
 }
 
 
+#[derive(Debug, Serialize, Deserialize)]
 pub enum SearchResult {
     /// Search started successfully
     /// session_id allows the client to listen for specific result streams

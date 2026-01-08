@@ -19,7 +19,10 @@ puffin_http = { version = "0.16", optional = true }
 mimalloc = "0.1.48"
 derive_more.workspace = true
 toml.workspace = true
-etcetera.workspace = true
+tokio.workspace = true
+rpc = { path = "../../crates/rpc" }
+config = { path = "../../crates/config" }
+tarpc.workspace = true
 
 
 [dependencies.eframe]

@@ -1,11 +1,16 @@
-#[derive(Default)]
-pub struct SearchBar;
+// #[derive(Default)]
+// pub struct SearchBar;
 
-pub struct SearchBarProps {}
+// pub struct SearchBarProps {
+//     pub search_histories: Vec<String>
+// }
 
-pub enum SearchBarEvent {
-    SendSearch,
-    CancelSearch
+// pub enum SearchBarEvent {
+//     SendSearch,
+//     CancelSearch
+// }
+
+
+struct SearchInputWidget {
+    
 }
-
-
