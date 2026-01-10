@@ -18,6 +18,7 @@ pub enum Commands {
     Serve,
     /// Index the whole file system
     Index {
-        root_path: PathBuf
+        /// 要索引的目录路径（可选，不提供则使用配置文件中的 watch_paths）
+        root_path: Option<PathBuf>
     }
 }

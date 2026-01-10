@@ -4,6 +4,7 @@ mod config;
 mod constants;
 mod error;
 mod indexer;
+mod session;
 
 use error::WrapErr;
 
