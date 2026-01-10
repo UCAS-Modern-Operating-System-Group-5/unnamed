@@ -35,7 +35,7 @@ pub struct SearchRequest {
     pub max_results: Option<usize>
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum SortMode {
     Alphabetical,
     ReverseAlphabetical,
@@ -47,18 +47,32 @@ pub enum SortMode {
     Relevance,
 }
 
-
+/// 搜索启动结果
 #[derive(Debug, Serialize, Deserialize)]
-pub enum SearchResult {
-    /// Search started successfully
-    /// session_id allows the client to listen for specific result streams
-    Started { 
-        session_id: usize,
-        total_count: usize,  // 总结果数
+pub enum StartSearchResult {
+    /// 搜索已启动，后台异步执行
+    Started { session_id: usize },
+    /// 立即失败（参数错误等）
+    Failed(String),
+}
+
+/// 搜索状态
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum SearchStatus {
+    /// 搜索进行中
+    InProgress {
+        /// 目前已找到的结果数
+        found_so_far: usize,
     },
-    
-    /// Immediate failure (e.g., Invalid Regex, Path not found).
-    Failed(String)
+    /// 搜索已完成
+    Completed {
+        /// 总结果数
+        total_count: usize,
+    },
+    /// 搜索失败
+    Failed(String),
+    /// 搜索已取消
+    Cancelled,
 }
 
 /// 单个搜索结果项
@@ -71,7 +85,35 @@ pub struct SearchHit {
     pub modified_time: SystemTime,
 }
 
-/// 分页结果
+/// Offset-based 结果获取响应
+#[derive(Debug, Serialize, Deserialize)]
+pub struct FetchResults {
+    pub session_id: usize,
+    /// 当前返回结果的起始偏移量
+    pub offset: usize,
+    /// 本次返回的结果
+    pub hits: Vec<SearchHit>,
+    /// 当前搜索状态
+    pub status: SearchStatus,
+    /// 是否还有更多结果（用于无限滚动）
+    pub has_more: bool,
+}
+
+// ============ 兼容旧 API（可选保留）============
+
+/// 旧版搜索结果（兼容）
+#[derive(Debug, Serialize, Deserialize)]
+pub enum SearchResult {
+    /// Search started successfully
+    Started { 
+        session_id: usize,
+        total_count: usize,
+    },
+    /// Immediate failure
+    Failed(String)
+}
+
+/// 旧版分页结果（兼容）
 #[derive(Debug, Serialize, Deserialize)]
 pub struct PagedResults {
     pub session_id: usize,

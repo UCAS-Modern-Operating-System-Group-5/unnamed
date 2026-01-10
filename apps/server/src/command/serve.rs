@@ -9,7 +9,7 @@ use tracing::info;
 
 use rpc::{
     World,
-    search::{SearchRequest, SearchResult, PagedResults, SearchHit}
+    search::{SearchRequest, SearchResult, StartSearchResult, FetchResults, PagedResults, SearchHit}
 };
 use tarpc::{
     context::Context,
@@ -29,13 +29,83 @@ struct Server {
     sessions: Arc<SessionManager>,
 }
 
+impl Server {
+    /// 将内部 SearchResultItem 转换为 RPC SearchHit
+    fn convert_to_hits(results: Vec<rpc_compat::SearchResultItem>) -> Vec<SearchHit> {
+        results.into_iter().map(|hit| {
+            SearchHit {
+                file_path: hit.path,
+                score: hit.score,
+                snippet: hit.preview,
+                file_size: hit.file_size,
+                modified_time: hit.modified_time,
+            }
+        }).collect()
+    }
+}
+
 impl World for Server {
     async fn ping(self, _c: Context) -> String {
         "Pong".to_string()
     }
 
+    // ============ 新 API: 异步流式搜索 ============
+
+    async fn start_search_async(self, _c: Context, req: SearchRequest) -> StartSearchResult {
+        info!("收到异步搜索请求: {:?}", req.keywords);
+        
+        // 创建异步会话（立即返回）
+        let session_id = self.sessions.create_async_session();
+        info!("创建异步搜索会话: {}", session_id);
+        
+        // 后台执行搜索
+        let engine = self.engine.clone();
+        let sessions = self.sessions.clone();
+        let req_clone = req;
+        
+        let handle = tokio::spawn(async move {
+            match rpc_compat::search_sync(&engine, &req_clone) {
+                Ok(results) => {
+                    let hits = Self::convert_to_hits(results);
+                    info!("异步搜索完成，找到 {} 个结果", hits.len());
+                    
+                    // 追加结果并标记完成
+                    sessions.append_results(session_id, hits);
+                    sessions.mark_completed(session_id);
+                }
+                Err(e) => {
+                    info!("异步搜索失败: {}", e);
+                    sessions.mark_failed(session_id, e);
+                }
+            }
+        });
+        
+        // 保存任务句柄（用于取消）
+        self.sessions.set_task_handle(session_id, handle);
+        
+        StartSearchResult::Started { session_id }
+    }
+
+    async fn fetch_results(
+        self, 
+        _c: Context, 
+        session_id: usize, 
+        offset: usize, 
+        limit: usize
+    ) -> Option<FetchResults> {
+        info!("获取搜索结果: session={}, offset={}, limit={}", session_id, offset, limit);
+        self.sessions.fetch_results(session_id, offset, limit)
+    }
+
+    async fn cancel_search(self, _c: Context, session_id: usize) -> bool {
+        info!("取消搜索会话: {}", session_id);
+        self.sessions.cancel_session(session_id)
+    }
+
+    // ============ 旧 API: 同步搜索（兼容）============
+
     async fn start_search(self, _c: Context, req: SearchRequest) -> SearchResult {
-        info!("收到搜索请求: {:?}", req.keywords);
+        info!("收到同步搜索请求: {:?}", req.keywords);
         
         // 使用 rpc_compat 处理请求
         match rpc_compat::search_sync(&self.engine, &req) {
@@ -44,15 +114,7 @@ impl World for Server {
                 info!("搜索完成，找到 {} 个结果", total_count);
                 
                 // 转换为 SearchHit
-                let hits: Vec<SearchHit> = results.into_iter().map(|hit| {
-                    SearchHit {
-                        file_path: hit.path,
-                        score: hit.score,
-                        snippet: hit.preview,
-                        file_size: hit.file_size,
-                        modified_time: hit.modified_time,
-                    }
-                }).collect();
+                let hits = Self::convert_to_hits(results);
                 
                 // 创建会话存储结果
                 let session_id = self.sessions.create_session(hits);
@@ -73,13 +135,8 @@ impl World for Server {
         page: usize, 
         page_size: usize
     ) -> Option<PagedResults> {
-        info!("获取搜索结果: session={}, page={}, size={}", session_id, page, page_size);
+        info!("获取分页结果: session={}, page={}, size={}", session_id, page, page_size);
         self.sessions.get_page(session_id, page, page_size)
-    }
-
-    async fn cancel_search(self, _c: Context, session_id: usize) -> bool {
-        info!("取消搜索会话: {}", session_id);
-        self.sessions.cancel_session(session_id)
     }
 }
 
