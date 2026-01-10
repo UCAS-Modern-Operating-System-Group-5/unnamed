@@ -1,6 +1,6 @@
 use super::Scope;
 use crate::backend;
-use crate::components::{self, ContextComponent};
+use crate::components::{self, prelude::*};
 use crate::config::Config;
 use crate::constants;
 use crate::ui;
@@ -12,6 +12,8 @@ pub struct App {
     config: Config,
 
     s: State,
+    ability: Ability,
+    search_bar: components::SearchBar,
     status_bar: components::StatusBar,
 
     tx_request: mpsc::Sender<Request>,
@@ -20,21 +22,32 @@ pub struct App {
 
 #[derive(Default)]
 pub struct State {
-    cur_scope: Scope,
+    scope: Scope,
+
+    /// Whether this application finishes initialization
+    initialized: bool,
+
+    // Whether in Expand Mode
+    expand: bool,
+    window_size: egui::Vec2,
 
     // Window State
     dropped_files: Vec<egui::DroppedFile>,
 }
 
+#[derive(Default)]
+pub struct Ability {
+    pub recenter: bool,
+}
+
 impl App {
-    pub fn new(config: Config, cc: &eframe::CreationContext<'_>) -> Self {
+    pub fn new(cc: &eframe::CreationContext<'_>, config: Config) -> Self {
         let (tx_request, rx_request) = mpsc::channel();
         let (tx_response, rx_response) = mpsc::channel();
         let unix_socket_path = config
             .runtime_dir
             .join(config::constants::UNIX_SOCKET_FILE_NAME);
 
-        // info! works here (`new`), but doesn't work inside (`spawn_backend`)
         backend::spawn_backend(
             rx_request,
             tx_response,
@@ -42,18 +55,50 @@ impl App {
             unix_socket_path,
         );
 
-        ui::setup_ui(&cc.egui_ctx, &config.ui);
+        ui::setup_ui(&cc.egui_ctx, &config.ui, config.app.background_alpha);
+        Self::setup_i18n();
+
+        #[cfg(debug_assertions)]
         Self::setup_debug_options(&cc.egui_ctx);
+
+        // On Android/Wayland, getting outer position is impossible
+        let can_recenter =
+            egui::ViewportCommand::center_on_screen(&cc.egui_ctx).is_some();
+
+
+        let state = State {
+            expand: if can_recenter { false } else { true },
+            ..Default::default()
+        };
+
 
         Self {
             config,
-            s: Default::default(),
+            s: state,
+            ability: Ability {
+                recenter: can_recenter,
+            },
+            search_bar: Default::default(),
             status_bar: Default::default(),
             tx_request,
             rx_response,
         }
     }
 
+    fn setup_i18n() {
+        let en = String::from_utf8_lossy(include_bytes!("../../assets/trans/en.ftl"));
+        let zh = String::from_utf8_lossy(include_bytes!("../../assets/trans/zh-hans.ftl"));
+
+        // Note, it should panic if we cannot display text on the UI
+        egui_i18n::load_translations_from_text("en", en).unwrap();
+        egui_i18n::load_translations_from_text("zh", zh).unwrap();
+
+        // TODO Should detect system locale
+        egui_i18n::set_language("zh");
+        egui_i18n::set_fallback("en");
+    }
+
+    #[cfg(debug_assertions)]
     fn setup_debug_options(ctx: &egui::Context) {
         ctx.style_mut(|style| style.debug.debug_on_hover_with_all_modifiers = true);
     }
@@ -69,13 +114,22 @@ impl App {
         ctx.send_viewport_cmd(egui::ViewportCommand::Title(title));
     }
 
+    pub fn render_search_bar(&mut self, ctx: &egui::Context) {
+        let props = components::SearchBarProps::default();
+        let output = self.search_bar.render(ctx, props);
+
+        for _event in output.events {
+            // TODO handle search bar events
+        }
+    }
+
     pub fn render_status_bar(&mut self, ctx: &egui::Context) {
         let server_status =
             backend::ServerStatus::Online(backend::ServerWorkingStatus::Searching);
         let props = components::StatusBarProps { server_status };
-        let status_bar_output = self.status_bar.render(ctx, props);
+        let output = self.status_bar.render(ctx, props);
 
-        for _event in status_bar_output.events {
+        for _event in output.events {
             // TODO handle status bar events
         }
     }
@@ -96,57 +150,66 @@ impl App {
             }
         }
     }
+
+    pub fn resize_window(&self, ctx: &egui::Context) {
+        if !self.ability.recenter {
+            return;
+        }
+
+        let height = self.status_bar.height() + self.search_bar.height()
+            - ctx.style().visuals.widgets.noninteractive.bg_stroke.width;
+        
+        ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::vec2(
+            800.0, height,
+        )));
+
+        if let Some(cmd) = egui::ViewportCommand::center_on_screen(ctx) {
+            ctx.send_viewport_cmd(cmd);
+        }
+    }
 }
 
 impl eframe::App for App {
     fn clear_color(&self, visuals: &egui::Visuals) -> [f32; 4] {
-        let color = egui::lerp(
-            egui::Rgba::from(visuals.panel_fill)
-                ..=egui::Rgba::from(visuals.extreme_bg_color),
-            0.5,
-        );
-
-        let mut color = egui::Color32::from(color);
-        color = color.gamma_multiply(self.config.app.background_alpha);
-
-        color.to_normalized_gamma_f32()
+        // let mut color = egui::Color32::from(visuals.panel_fill);
+        // color = color.gamma_multiply(self.config.app.background_alpha);
+        // color.to_normalized_gamma_f32()
+        egui::Color32::TRANSPARENT.to_normalized_gamma_f32()
     }
 
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        if !self.s.initialized {
+            self.search_bar.request_focus();
+            
+            self.s.initialized = true;
+        }
+        
         if ctx.input_mut(|i| i.consume_key(egui::Modifiers::NONE, egui::Key::F11)) {
             let fullscreen = ctx.input(|i| i.viewport().fullscreen.unwrap_or(false));
             ctx.send_viewport_cmd(egui::ViewportCommand::Fullscreen(!fullscreen));
         }
 
+        // TODO first test it on my Arch Linux XFCE desktop
+
         self.handle_backend_event();
 
-        self.handle_file_drop(ctx);
+        self.resize_window(ctx);
 
         self.update_window_title(ctx);
 
+        self.handle_file_drop(ctx);
+
+        self.render_search_bar(ctx);
+
         self.render_status_bar(ctx);
 
-        // TODO no_frame() function in 0.33.4
         egui::CentralPanel::default()
-            .frame(egui::Frame::NONE)
+            .frame(
+                egui::Frame::NONE.inner_margin(egui::vec2(4.0, 2.0))
+                    .fill(ctx.style().visuals.panel_fill)
+            )
             .show(ctx, |ui| {
-                ui.heading("egui using custom fonts");
-                ui.text_edit_multiline(&mut "你好\nEl Psy Congaroo!");
-                ui.label(format!("{}", ui.text_style_height(&egui::TextStyle::Body)));
-
-                ui.horizontal(|ui| {
-                    let row_height = ui.text_style_height(&egui::TextStyle::Body);
-                    let (rect, response) = ui.allocate_exact_size(
-                        [10.0, row_height].into(),
-                        egui::Sense::hover(),
-                    );
-                    ui.painter().circle_filled(
-                        rect.center(),
-                        rect.height() / 8.0,
-                        ui.visuals().strong_text_color(),
-                    );
-                    ui.label(format!("{}", ui.text_style_height(&egui::TextStyle::Body)));
-                });
+                
             });
     }
 }

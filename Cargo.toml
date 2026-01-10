@@ -34,3 +34,7 @@ features = [
 "serde-transport-bincode",
 "unix"
 ]
+
+
+[patch.crates-io]
+egui = { git = 'https://github.com/UCAS-Modern-Operating-System-Group-5/egui.git' }

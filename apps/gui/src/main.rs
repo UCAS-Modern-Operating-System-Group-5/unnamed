@@ -47,7 +47,15 @@ fn main() -> eframe::Result {
 
     let viewport = egui::ViewportBuilder::default()
         .with_inner_size([cfg.app.width, cfg.app.height])
-        .with_resizable(false) // Suits tiling window manager
+        .with_always_on_top()
+        .with_active(true)
+        // Need this to make InnerSize viewport command to work on my Niri Wayland WM
+        .with_decorations(false)
+        // Suits tiling window manager, making it float by default
+        // See https://docs.rs/winit/latest/winit/window/struct.Window.html#method.set_resizable
+        .with_resizable(false)
+        // .with_window_type(egui::X11WindowType::Dialog)
+        
         // .with_decorations(false)
         // Wayland user can use app-id to customize window's behavior
         .with_app_id(constants::APP_ID)
@@ -64,7 +72,11 @@ fn main() -> eframe::Result {
     eframe::run_native(
         ::config::constants::APP_NAME,
         options,
-        Box::new(|cc| Ok(Box::new(app::App::new(cfg, cc)))),
+        Box::new(|cc| {
+            egui_extras::install_image_loaders(&cc.egui_ctx);
+                
+            Ok(Box::new(app::App::new(cc, cfg)))
+        }),
     )
 }
 

@@ -4,6 +4,11 @@ mod search_bar;
 
 // pub use search_bar::{}
 pub use status_bar::{StatusBar, StatusBarEvent, StatusBarProps};
+pub use search_bar::{SearchBar, SearchBarEvent, SearchBarProps};
+
+pub mod prelude {
+    pub use super::{StatelessComponent, StatefulComponent, ContextComponent};
+}
 
 
 /// Trait for stateless UI components

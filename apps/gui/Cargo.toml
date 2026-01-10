@@ -4,9 +4,11 @@ version = "0.1.0"
 edition.workspace = true
 
 [dependencies]
+# Note, we are using an patched version, which is specified at the Cargo.toml
+# at project root 
 egui.version = "0.33.3"
-egui_extras = { version = "0.33.3", features = ["default", "image"] }
-font-kit = "0.14.3"
+egui_extras = { version = "0.33.3", features = ["svg"] }
+egui-i18n = { version = "0.1",  features = ["fluent"] }
 
 tracing.workspace = true
 tracing-subscriber.workspace = true
@@ -41,3 +43,4 @@ rstest.workspace = true
 
 [features]
 profile-with-puffin = ["profiling/profile-with-puffin", "dep:puffin", "dep:puffin_http"]
+
