@@ -37,10 +37,9 @@ impl SearchBar {
 
 fn setup_text_edit_style(style: &mut egui::Style) {
     style.visuals.widgets.hovered.bg_stroke = egui::Stroke::NONE;
-    style.visuals.widgets.hovered.fg_stroke = egui::Stroke::NONE;
-
     style.visuals.widgets.active.bg_stroke = egui::Stroke::NONE;
-    style.visuals.widgets.active.fg_stroke = egui::Stroke::NONE;
+    style.visuals.widgets.inactive.bg_stroke = egui::Stroke::NONE;
+    style.visuals.text_cursor.stroke = egui::Stroke::new(4.0, style.visuals.text_color());
 
     // Note, focused text edit's border uses the same stroke
     // as selection, but we cannot directory set selection's stroke
@@ -48,11 +47,6 @@ fn setup_text_edit_style(style: &mut egui::Style) {
     // correctly. Currently we use our patched egui crate to
     // solve this problem.
     // style.visuals.selection.stroke = egui::Stroke::NONE;
-
-    style.visuals.widgets.inactive.bg_stroke = egui::Stroke::NONE;
-    style.visuals.widgets.inactive.fg_stroke = egui::Stroke::NONE;
-
-    style.visuals.text_cursor.stroke = egui::Stroke::new(4.0, style.visuals.text_color());
 }
 
 impl ContextComponent for SearchBar {
@@ -77,6 +71,9 @@ impl ContextComponent for SearchBar {
                     SearchMode::Natural => tr!("search-bar-natural-mode-hint"),
                     SearchMode::Rule => tr!("search-bar-rule-mode-hint"),
                 };
+
+                // dbg!(ui.style().visuals.weak_text_color());
+                // dbg!(ui.style().visuals.text_color());
 
                 ui.scope(|ui| {
                     let style = ui.style_mut();

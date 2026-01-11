@@ -38,8 +38,13 @@ pub fn setup_ui(ctx: &egui::Context, cfg: &config::UiConfig, alpha: f32) {
     style.text_styles = text_styles;
 
     // Theme
-    let cur_theme = hexa34c_light(alpha);
-    style.visuals = cur_theme.visuals;
+    let theme = hexa34c_light(alpha);
+    if theme.is_dark {
+        ctx.set_theme(egui::Theme::Dark);
+    } else {
+        ctx.set_theme(egui::Theme::Light);
+    }
+    style.visuals = theme.visuals;
 
     ctx.set_style(style);
 }
