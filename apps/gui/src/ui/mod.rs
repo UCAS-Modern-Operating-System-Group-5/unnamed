@@ -38,7 +38,7 @@ pub fn setup_ui(ctx: &egui::Context, cfg: &config::UiConfig, alpha: f32) {
     style.text_styles = text_styles;
 
     // Theme
-    let cur_theme = monochrome_light(alpha);
+    let cur_theme = hexa34c_light(alpha);
     style.visuals = cur_theme.visuals;
 
     ctx.set_style(style);

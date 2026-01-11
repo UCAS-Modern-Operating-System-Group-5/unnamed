@@ -115,7 +115,10 @@ impl App {
     }
 
     pub fn render_search_bar(&mut self, ctx: &egui::Context) {
-        let props = components::SearchBarProps::default();
+        let props = components::SearchBarProps {
+            search_mode: Default::default(),
+            draw_separate_line: self.s.expand
+        };
         let output = self.search_bar.render(ctx, props);
 
         for _event in output.events {
@@ -209,7 +212,7 @@ impl eframe::App for App {
                     .fill(ctx.style().visuals.panel_fill)
             )
             .show(ctx, |ui| {
-                
+                ui.label("HI");
             });
     }
 }

@@ -1,8 +1,5 @@
 use super::ContextComponent;
-use crate::constants;
-use crate::ui::icon::icon_image;
-use egui::InnerResponse;
-use rpc::search::{SearchMode, SortMode};
+use rpc::search::SearchMode;
 
 use egui_i18n::tr;
 
@@ -15,8 +12,8 @@ pub struct SearchBar {
 
 #[derive(Default)]
 pub struct SearchBarProps {
-    search_mode: SearchMode,
-    sort_mode: SortMode,
+    pub search_mode: SearchMode,
+    pub draw_separate_line: bool,
 }
 
 pub struct SearchBarOutput {
@@ -38,6 +35,26 @@ impl SearchBar {
     }
 }
 
+fn setup_text_edit_style(style: &mut egui::Style) {
+    style.visuals.widgets.hovered.bg_stroke = egui::Stroke::NONE;
+    style.visuals.widgets.hovered.fg_stroke = egui::Stroke::NONE;
+
+    style.visuals.widgets.active.bg_stroke = egui::Stroke::NONE;
+    style.visuals.widgets.active.fg_stroke = egui::Stroke::NONE;
+
+    // Note, focused text edit's border uses the same stroke
+    // as selection, but we cannot directory set selection's stroke
+    // to NONE otherwise the text selection won't work/appear
+    // correctly. Currently we use our patched egui crate to
+    // solve this problem.
+    // style.visuals.selection.stroke = egui::Stroke::NONE;
+
+    style.visuals.widgets.inactive.bg_stroke = egui::Stroke::NONE;
+    style.visuals.widgets.inactive.fg_stroke = egui::Stroke::NONE;
+
+    style.visuals.text_cursor.stroke = egui::Stroke::new(4.0, style.visuals.text_color());
+}
+
 impl ContextComponent for SearchBar {
     type Props<'a> = SearchBarProps;
 
@@ -49,7 +66,7 @@ impl ContextComponent for SearchBar {
         let raw_search_query = &mut self.raw_search_query;
 
         let resp = egui::TopBottomPanel::top("search_bar")
-            .show_separator_line(false)
+            .show_separator_line(props.draw_separate_line)
             .frame(
                 egui::Frame::NONE
                     .inner_margin(egui::vec2(10.0, 6.0))
@@ -63,30 +80,7 @@ impl ContextComponent for SearchBar {
 
                 ui.scope(|ui| {
                     let style = ui.style_mut();
-                    // style.visuals.widgets.hovered.corner_radius =
-                    //     egui::CornerRadius::same(10);
-                    style.visuals.widgets.hovered.bg_stroke = egui::Stroke::NONE;
-                    style.visuals.widgets.hovered.fg_stroke = egui::Stroke::NONE;
-
-                    // style.visuals.widgets.active.corner_radius =
-                    //     egui::CornerRadius::same(10);
-                    style.visuals.widgets.active.bg_stroke = egui::Stroke::NONE;
-                    style.visuals.widgets.active.fg_stroke = egui::Stroke::NONE;
-                    
-                    // Note, focused text edit's border uses the same stroke
-                    // as selection, but we cannot directory set selection's stroke
-                    // to NONE otherwise the text selection won't work/appear
-                    // correctly. Currently we use our patched egui crate to
-                    // solve this problem.
-                    // style.visuals.selection.stroke = egui::Stroke::NONE;
-
-                    // style.visuals.widgets.inactive.corner_radius =
-                    //     egui::CornerRadius::same(10);
-                    style.visuals.widgets.inactive.bg_stroke = egui::Stroke::NONE;
-                    style.visuals.widgets.inactive.fg_stroke = egui::Stroke::NONE;
-
-                    style.visuals.text_cursor.stroke =
-                        egui::Stroke::new(4.0, style.visuals.text_color());
+                    setup_text_edit_style(style);
 
                     let resp = egui::TextEdit::singleline(raw_search_query)
                         .desired_width(f32::INFINITY)
