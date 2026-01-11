@@ -6,7 +6,7 @@ edition.workspace = true
 [dependencies]
 # Note, we are using an patched version, which is specified at the Cargo.toml
 # at project root 
-egui.version = "0.33.3"
+egui = { version = "0.33.3", features = [ "callstack", "accesskit"] }
 egui_extras = { version = "0.33.3", features = ["svg"] }
 egui-i18n = { version = "0.1",  features = ["fluent"] }
 
@@ -25,6 +25,8 @@ tokio.workspace = true
 rpc = { path = "../../crates/rpc" }
 config = { path = "../../crates/config" }
 tarpc.workspace = true
+strum.workspace = true
+derive_builder.workspace = true
 
 
 [dependencies.eframe]
@@ -34,7 +36,7 @@ features = [
 "accesskit",
 "glow",
 "wayland",
-"x11"
+"x11",
 ]
 
 [dev-dependencies]

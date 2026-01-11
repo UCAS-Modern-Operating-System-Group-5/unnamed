@@ -1,10 +1,11 @@
 use super::Scope;
 use crate::backend;
-use crate::components::{self, prelude::*};
+use crate::components::{self, prelude::*, StatusBarEvent};
 use crate::config::Config;
 use crate::constants;
 use crate::ui;
-use rpc::{Request, Response};
+use egui::Widget;
+use rpc::{Request, search::{SearchMode, SortMode}};
 use std::sync::mpsc;
 use tracing::{error, info};
 
@@ -18,6 +19,8 @@ pub struct App {
 
     tx_request: mpsc::Sender<Request>,
     rx_response: mpsc::Receiver<backend::BackendEvent>,
+
+    c: usize
 }
 
 #[derive(Default)]
@@ -27,12 +30,13 @@ pub struct State {
     /// Whether this application finishes initialization
     initialized: bool,
 
-    // Whether in Expand Mode
+    /// Whether in Expand Mode
     expand: bool,
     window_size: egui::Vec2,
-
-    // Window State
     dropped_files: Vec<egui::DroppedFile>,
+
+    search_mode: SearchMode,
+    sort_mode: SortMode
 }
 
 #[derive(Default)]
@@ -82,6 +86,8 @@ impl App {
             status_bar: Default::default(),
             tx_request,
             rx_response,
+
+            c: 0
         }
     }
 
@@ -129,11 +135,22 @@ impl App {
     pub fn render_status_bar(&mut self, ctx: &egui::Context) {
         let server_status =
             backend::ServerStatus::Online(backend::ServerWorkingStatus::Searching);
-        let props = components::StatusBarProps { server_status };
+        let props = components::StatusBarProps {
+            server_status,
+            search_mode: &self.s.search_mode,
+            sort_mode: &self.s.sort_mode
+        };
         let output = self.status_bar.render(ctx, props);
 
-        for _event in output.events {
-            // TODO handle status bar events
+        for event in output.events {
+            match event {
+                StatusBarEvent::RestartServer => {
+                    
+                },
+                StatusBarEvent::ChangeSortMode(sort_mode) => {
+                    self.s.sort_mode = sort_mode;
+                },
+            }
         }
     }
 
@@ -172,6 +189,7 @@ impl App {
     }
 }
 
+
 impl eframe::App for App {
     fn clear_color(&self, visuals: &egui::Visuals) -> [f32; 4] {
         // let mut color = egui::Color32::from(visuals.panel_fill);
@@ -179,7 +197,6 @@ impl eframe::App for App {
         // color.to_normalized_gamma_f32()
         egui::Color32::TRANSPARENT.to_normalized_gamma_f32()
     }
-
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if !self.s.initialized {
             self.search_bar.request_focus();
@@ -206,13 +223,16 @@ impl eframe::App for App {
 
         self.render_status_bar(ctx);
 
+        
         egui::CentralPanel::default()
             .frame(
                 egui::Frame::NONE.inner_margin(egui::vec2(4.0, 2.0))
                     .fill(ctx.style().visuals.panel_fill)
             )
             .show(ctx, |ui| {
-                ui.label("HI");
+                ui.horizontal(|ui| {
+                    ui.label("HI");
+                });
             });
     }
 }

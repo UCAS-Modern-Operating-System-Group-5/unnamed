@@ -11,6 +11,7 @@ mod config;
 mod constants;
 mod error;
 mod ui;
+mod widgets;
 
 use tracing::error;
 

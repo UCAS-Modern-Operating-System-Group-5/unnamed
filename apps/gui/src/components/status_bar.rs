@@ -1,20 +1,35 @@
 use super::ContextComponent;
 use crate::backend::ServerStatus;
+use crate::ui::icon::icon_image;
 use egui::{Response, Sense, TextStyle, Ui, Widget, pos2, vec2};
+use egui_i18n::tr;
+use rpc::search::{SearchMode, SortMode};
+use strum::{EnumCount, IntoEnumIterator};
 
-#[derive(Default)]
+const TEXT_STYLE_NAME: &str = "StatusBar";
+
 pub struct StatusBar {
     panel_height: f32,
 }
 
-pub struct StatusBarProps {
+impl Default for StatusBar {
+    fn default() -> Self {
+        Self { panel_height: 0.0 }
+    }
+}
+
+pub struct StatusBarProps<'a> {
     pub server_status: ServerStatus,
+    pub search_mode: &'a SearchMode,
+    pub sort_mode: &'a SortMode,
 }
 
 /// Events emitted by the status bar
 pub enum StatusBarEvent {
     /// User clicked on the restart button by the side of server status label
     RestartServer,
+
+    ChangeSortMode(SortMode),
 }
 
 // TODO show restart server button when server status is `offline`
@@ -37,7 +52,8 @@ impl Widget for StatusBarStatusWidget {
         let gap = ui.spacing().item_spacing.x;
 
         let text = format!("{}", self.status);
-        let font_id = TextStyle::Body.resolve(ui.style());
+        let font_id = TextStyle::Name(TEXT_STYLE_NAME.into()).resolve(ui.style());
+        // let font_id = TextStyle::Body.resolve(ui.style());
         let text_color = ui.visuals().text_color();
 
         // Layout the text without drawing it yet
@@ -52,11 +68,12 @@ impl Widget for StatusBarStatusWidget {
 
         if ui.is_rect_visible(rect) {
             let circle_center = pos2(rect.min.x + circle_radius, rect.center().y);
+            
             // TODO
             ui.painter().circle_filled(
                 circle_center,
                 circle_radius,
-                ui.style().visuals.error_fg_color
+                ui.style().visuals.error_fg_color,
             );
 
             let text_pos = pos2(
@@ -64,7 +81,8 @@ impl Widget for StatusBarStatusWidget {
                 rect.center().y - (galley.size().y / 2.0),
             );
 
-            ui.painter().galley(text_pos, galley, egui::Color32::PLACEHOLDER);
+            ui.painter()
+                .galley(text_pos, galley, egui::Color32::PLACEHOLDER);
         }
 
         response
@@ -82,8 +100,89 @@ pub struct StatusBarOutput {
     pub events: Vec<StatusBarEvent>,
 }
 
+impl StatusBar {
+    fn render_sort_mode_selector(
+        &mut self,
+        ui: &mut egui::Ui,
+        sort_mode: &SortMode,
+    ) -> Option<StatusBarEvent> {
+        // Note, we don't use combobox since it cannot vertically centered in the context
+        // where we use a different(larger) text style than TextStyle::Body
+        // https://github.com/emilk/egui/issues/7412
+        // (May not correct) Though the center position of menu_button changes(so the wight id
+        // changes). The change is not frequent, so the performance cost is bearable.
+        let mut selected = sort_mode.clone();
+        let label_text = format!("S:{}", tr!(&sort_mode.to_string()));
+
+        ui.menu_button(label_text, |ui| {
+            // FIXME should change to horizontal style when window height is too small
+            let style = ui.style_mut();
+            style.override_text_style = Some(TextStyle::Name(TEXT_STYLE_NAME.into()));
+
+            let menu_margin = egui::Frame::menu(style).total_margin();
+            let max_available_height =
+                ui.ctx().content_rect().height() - menu_margin.top - menu_margin.bottom;
+
+            let mut hidden = ui.new_child(egui::UiBuilder::new().invisible());
+            hidden.selectable_value(
+                &mut selected,
+                SortMode::AccessedTime,
+                tr!(&SortMode::AccessedTime.to_string()),
+            );
+            let single_entry_height = hidden.min_rect().height();
+
+            let row_num =
+                ((max_available_height / single_entry_height).floor() as usize).max(1);
+            let column_num = SortMode::COUNT.div_ceil(row_num);
+
+            egui::Grid::new("sort_mode_selector")
+                .num_columns(column_num)
+                .show(ui, |ui| {
+                    let modes = SortMode::iter().rev();
+
+                    for (i, mode) in modes.enumerate() {
+                        let is_selected = selected == mode;
+                        let label_text = tr!(&mode.to_string());
+
+                        let mut response =
+                            egui::Button::new(label_text).selected(is_selected).ui(ui);
+                        if response.clicked() && selected != mode {
+                            selected = mode.clone();
+                            response.mark_changed();
+                        }
+
+                        if (i + 1) % column_num == 0 {
+                            ui.end_row();
+                        }
+                    }
+                });
+        });
+
+        if &selected != sort_mode {
+            return Some(StatusBarEvent::ChangeSortMode(selected));
+        }
+
+        None
+    }
+}
+
+fn render_search_mode_button(ui: &mut egui::Ui, search_mode: &SearchMode) -> Response {
+    let (image, hint) = match search_mode {
+        SearchMode::Natural => (
+            icon_image!("sparkles.svg", None),
+            tr!("search-mode-toggle-button-switch-to-rule-mode-hint"),
+        ),
+        SearchMode::Rule => (
+            icon_image!("sliders-horizontal.svg", None),
+            tr!("search-mode-toggle-button-switch-to-natural-mode-hint"),
+        ),
+    };
+
+    ui.button(image).on_hover_text(hint)
+}
+
 impl ContextComponent for StatusBar {
-    type Props<'a> = StatusBarProps;
+    type Props<'a> = StatusBarProps<'a>;
     type Output = StatusBarOutput;
 
     fn render(&mut self, ctx: &egui::Context, props: Self::Props<'_>) -> Self::Output {
@@ -94,18 +193,31 @@ impl ContextComponent for StatusBar {
             .frame(
                 egui::Frame::NONE
                     .inner_margin(egui::vec2(4.0, 2.0))
-                    .fill(ctx.style().visuals.extreme_bg_color)
+                    .fill(ctx.style().visuals.extreme_bg_color),
             )
             .show(ctx, |ui| {
-                egui::Sides::new().shrink_left().show(
-                    ui,
-                    |ui| {
-                        ui.label("The Currently indexed file name");
-                    },
-                    |ui| {
-                        ui.add(StatusBarStatusWidget::new(props.server_status));
-                    },
-                );
+                // Here we don't use `Sides` container since it creates two child UI
+                // for left and right, causing icon and text doesn't appear to be the
+                // same size.
+                // Another way to handle this issue is to use sizing_pass and add space
+                // https://github.com/emilk/egui/discussions/2916#discussioncomment-14723556
+                let style = ui.style_mut();
+                style.override_text_style = Some(TextStyle::Name(TEXT_STYLE_NAME.into()));
+
+                ui.horizontal(|ui| {
+                    ui.add(StatusBarStatusWidget::new(props.server_status));
+                    ui.with_layout(
+                        egui::Layout::right_to_left(egui::Align::Center),
+                        |ui| {
+                            render_search_mode_button(ui, props.search_mode);
+                            if let Some(event) =
+                                self.render_sort_mode_selector(ui, props.sort_mode)
+                            {
+                                events.push(event);
+                            }
+                        },
+                    );
+                });
             });
 
         self.panel_height = resp.response.rect.size().y;
