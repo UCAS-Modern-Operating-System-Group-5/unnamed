@@ -31,7 +31,7 @@ pub enum SortMode {
     Relevance,
 }
 
-#[derive(Debug, Default, PartialEq, Serialize, Deserialize, EnumIter, EnumCount)]
+#[derive(Debug, Default, PartialEq, Serialize, Deserialize, EnumIter)]
 pub enum SearchMode {
     /// Natural language
     #[default]

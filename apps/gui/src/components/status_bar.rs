@@ -5,8 +5,7 @@ use egui::{Response, Sense, TextStyle, Ui, Widget, pos2, vec2};
 use egui_i18n::tr;
 use rpc::search::{SearchMode, SortMode};
 use strum::{EnumCount, IntoEnumIterator};
-
-const TEXT_STYLE_NAME: &str = "StatusBar";
+use crate::constants;
 
 pub struct StatusBar {
     panel_height: f32,
@@ -53,7 +52,7 @@ impl Widget for StatusBarStatusWidget {
         let gap = ui.spacing().item_spacing.x;
 
         let text = format!("{}", self.status);
-        let font_id = TextStyle::Name(TEXT_STYLE_NAME.into()).resolve(ui.style());
+        let font_id = TextStyle::Name(constants::TEXT_STYLE_STATUS_BAR.into()).resolve(ui.style());
         // let font_id = TextStyle::Body.resolve(ui.style());
         let text_color = ui.visuals().text_color();
 
@@ -125,7 +124,7 @@ impl StatusBar {
         ui.menu_button(label_text, |ui| {
             // FIXME should change to horizontal style when window height is too small
             let style = ui.style_mut();
-            style.override_text_style = Some(TextStyle::Name(TEXT_STYLE_NAME.into()));
+            style.override_text_style = Some(TextStyle::Name(constants::TEXT_STYLE_STATUS_BAR.into()));
 
             let menu_margin = egui::Frame::menu(style).total_margin();
             let max_available_height =
@@ -230,7 +229,7 @@ impl ContextComponent for StatusBar {
                 // Another way to handle this issue is to use sizing_pass and add space
                 // https://github.com/emilk/egui/discussions/2916#discussioncomment-14723556
                 let style = ui.style_mut();
-                style.override_text_style = Some(TextStyle::Name(TEXT_STYLE_NAME.into()));
+                style.override_text_style = Some(TextStyle::Name(constants::TEXT_STYLE_STATUS_BAR.into()));
 
                 ui.horizontal(|ui| {
                     ui.add(StatusBarStatusWidget::new(props.server_status));

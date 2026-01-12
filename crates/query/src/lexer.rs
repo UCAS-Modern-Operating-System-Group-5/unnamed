@@ -1,5 +1,10 @@
 pub use logos::Logos;
 
+pub mod prelude {
+    pub use super::Logos;
+}
+
+
 #[derive(Logos, Debug, PartialEq, Clone)]
 #[logos(skip r"[ \t\n\f]+")]
 pub enum Token {

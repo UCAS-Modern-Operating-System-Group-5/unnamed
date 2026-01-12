@@ -1,5 +1,7 @@
 use super::ContextComponent;
 use rpc::search::SearchMode;
+use crate::constants;
+use crate::util::MemoizedQueryHighligher;
 
 use egui_i18n::tr;
 
@@ -7,12 +9,12 @@ use egui_i18n::tr;
 pub struct SearchBar {
     raw_search_query: String,
     panel_height: f32,
-    focus: bool,
+    request_focus: bool,
+    query_highligher: MemoizedQueryHighligher
 }
 
-#[derive(Default)]
-pub struct SearchBarProps {
-    pub search_mode: SearchMode,
+pub struct SearchBarProps<'a> {
+    pub search_mode: &'a SearchMode,
     pub draw_separate_line: bool,
 }
 
@@ -31,7 +33,7 @@ impl SearchBar {
     }
 
     pub fn request_focus(&mut self) {
-        self.focus = true;
+        self.request_focus = true;
     }
 }
 
@@ -50,7 +52,7 @@ fn setup_text_edit_style(style: &mut egui::Style) {
 }
 
 impl ContextComponent for SearchBar {
-    type Props<'a> = SearchBarProps;
+    type Props<'a> = SearchBarProps<'a>;
 
     type Output = SearchBarOutput;
 
@@ -72,26 +74,35 @@ impl ContextComponent for SearchBar {
                     SearchMode::Rule => tr!("search-bar-rule-mode-hint"),
                 };
 
-                // dbg!(ui.style().visuals.weak_text_color());
-                // dbg!(ui.style().visuals.text_color());
-
                 ui.scope(|ui| {
                     let style = ui.style_mut();
                     setup_text_edit_style(style);
 
-                    let resp = egui::TextEdit::singleline(raw_search_query)
+                    let editor = egui::TextEdit::singleline(raw_search_query)
                         .desired_width(f32::INFINITY)
-                        .font(
-                            egui::TextStyle::Name("SearchBar".into()).resolve(ui.style()),
-                        )
+                        .font(egui::TextStyle::Name(constants::TEXT_STYLE_SEARCH_BAR.into()).resolve(ui.style()))
                         .background_color(egui::Color32::TRANSPARENT)
-                        .hint_text(hint_text)
-                        .show(ui);
+                        .hint_text(hint_text);
+                    
+                    let resp = if props.search_mode == &SearchMode::Rule {
+                        let mut layouter = |ui: &egui::Ui, buf: &dyn egui::TextBuffer, wrap_width: f32| {
+                            let mut layout_job = self.query_highligher.highlight(ui.style(), buf.as_str());
+                            layout_job.wrap.max_width = wrap_width;
+                            ui.fonts_mut(|f| f.layout_job(layout_job))
+                        };
 
-                    if self.focus {
+                        editor.layouter(&mut layouter).show(ui)
+                    } else {
+                        editor.show(ui)
+                    };
+
+
+                    if self.request_focus {
                         resp.response.request_focus();
-                        self.focus = false;
+                        self.request_focus = false;
                     }
+                    
+                    resp
                 });
             });
 

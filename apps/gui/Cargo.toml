@@ -24,6 +24,7 @@ toml.workspace = true
 tokio.workspace = true
 rpc = { path = "../../crates/rpc" }
 config = { path = "../../crates/config" }
+query = { path = "../../crates/query" }
 tarpc.workspace = true
 strum.workspace = true
 derive_builder.workspace = true

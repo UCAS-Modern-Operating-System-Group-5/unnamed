@@ -30,8 +30,7 @@ pub struct App {
 pub struct State {
     scope: Scope,
 
-    /// Whether this application finishes initialization
-    initialized: bool,
+    request_search_focus: bool,
 
     /// Whether in Expand Mode
     expand: bool,
@@ -74,6 +73,7 @@ impl App {
 
         let state = State {
             expand: if can_recenter { false } else { true },
+            request_search_focus: true,
             ..Default::default()
         };
 
@@ -124,7 +124,7 @@ impl App {
 
     pub fn render_search_bar(&mut self, ctx: &egui::Context) {
         let props = components::SearchBarProps {
-            search_mode: Default::default(),
+            search_mode: &self.s.search_mode,
             draw_separate_line: self.s.expand,
         };
         let output = self.search_bar.render(ctx, props);
@@ -151,8 +151,8 @@ impl App {
                     self.s.sort_mode = sort_mode;
                 }
                 StatusBarEvent::ChangeSearchMode(search_mode) => {
-                    dbg!(&search_mode);
                     self.s.search_mode = search_mode;
+                    self.s.request_search_focus = true;
                 },
             }
         }
@@ -201,10 +201,10 @@ impl eframe::App for App {
         egui::Color32::TRANSPARENT.to_normalized_gamma_f32()
     }
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        if !self.s.initialized {
+        if self.s.request_search_focus {
             self.search_bar.request_focus();
 
-            self.s.initialized = true;
+            self.s.request_search_focus = false;
         }
 
         if ctx.input_mut(|i| i.consume_key(egui::Modifiers::NONE, egui::Key::F11)) {
