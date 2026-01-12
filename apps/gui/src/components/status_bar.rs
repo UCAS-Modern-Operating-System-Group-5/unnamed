@@ -30,6 +30,7 @@ pub enum StatusBarEvent {
     RestartServer,
 
     ChangeSortMode(SortMode),
+    ChangeSearchMode(SearchMode),
 }
 
 // TODO show restart server button when server status is `offline`
@@ -68,8 +69,7 @@ impl Widget for StatusBarStatusWidget {
 
         if ui.is_rect_visible(rect) {
             let circle_center = pos2(rect.min.x + circle_radius, rect.center().y);
-            
-            // TODO
+            // TODO change to process indicator usually used in TUI app
             ui.painter().circle_filled(
                 circle_center,
                 circle_radius,
@@ -100,6 +100,11 @@ pub struct StatusBarOutput {
     pub events: Vec<StatusBarEvent>,
 }
 
+fn set_borderless_button_style(style: &mut egui::Style) {
+    style.visuals.widgets.inactive.bg_stroke = egui::Stroke::NONE;
+    style.visuals.widgets.active.bg_stroke = egui::Stroke::NONE;
+}
+
 impl StatusBar {
     fn render_sort_mode_selector(
         &mut self,
@@ -113,6 +118,9 @@ impl StatusBar {
         // changes). The change is not frequent, so the performance cost is bearable.
         let mut selected = sort_mode.clone();
         let label_text = format!("S:{}", tr!(&sort_mode.to_string()));
+
+        let style = ui.style_mut();
+        set_borderless_button_style(style);
 
         ui.menu_button(label_text, |ui| {
             // FIXME should change to horizontal style when window height is too small
@@ -146,6 +154,7 @@ impl StatusBar {
 
                         let mut response =
                             egui::Button::new(label_text).selected(is_selected).ui(ui);
+
                         if response.clicked() && selected != mode {
                             selected = mode.clone();
                             response.mark_changed();
@@ -166,7 +175,10 @@ impl StatusBar {
     }
 }
 
-fn render_search_mode_button(ui: &mut egui::Ui, search_mode: &SearchMode) -> Response {
+fn render_search_mode_button(
+    ui: &mut egui::Ui,
+    search_mode: &SearchMode,
+) -> Option<StatusBarEvent> {
     let (image, hint) = match search_mode {
         SearchMode::Natural => (
             icon_image!("sparkles.svg", None),
@@ -178,7 +190,23 @@ fn render_search_mode_button(ui: &mut egui::Ui, search_mode: &SearchMode) -> Res
         ),
     };
 
-    ui.button(image).on_hover_text(hint)
+    ui.scope(|ui| {
+        let style = ui.style_mut();
+        set_borderless_button_style(style);
+
+        if ui.button(image).on_hover_text(hint).clicked() {
+            let next_search_mode = SearchMode::iter()
+                .cycle()
+                .skip_while(|m| m != search_mode)
+                .skip(1)
+                .next()
+                .unwrap();
+
+            return Some(StatusBarEvent::ChangeSearchMode(next_search_mode));
+        }
+        None
+    })
+    .inner
 }
 
 impl ContextComponent for StatusBar {
@@ -209,7 +237,14 @@ impl ContextComponent for StatusBar {
                     ui.with_layout(
                         egui::Layout::right_to_left(egui::Align::Center),
                         |ui| {
-                            render_search_mode_button(ui, props.search_mode);
+                            if let Some(event) =
+                                render_search_mode_button(ui, props.search_mode)
+                            {
+                                events.push(event);
+                            }
+
+                            ui.add(egui::Separator::default().vertical().shrink(2.0));
+
                             if let Some(event) =
                                 self.render_sort_mode_selector(ui, props.sort_mode)
                             {

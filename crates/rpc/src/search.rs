@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use strum::{EnumCount, EnumIter};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SearchRequest {
@@ -11,12 +12,11 @@ pub struct SearchRequest {
     Debug,
     Default,
     PartialEq,
-    Eq,
     Serialize,
     Deserialize,
     strum::Display,
-    strum::EnumIter,
-    strum::EnumCount,
+    EnumIter,
+    EnumCount,
     Clone,
 )]
 pub enum SortMode {
@@ -31,7 +31,7 @@ pub enum SortMode {
     Relevance,
 }
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Default, PartialEq, Serialize, Deserialize, EnumIter, EnumCount)]
 pub enum SearchMode {
     /// Natural language
     #[default]

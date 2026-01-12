@@ -1,11 +1,14 @@
 use super::Scope;
 use crate::backend;
-use crate::components::{self, prelude::*, StatusBarEvent};
+use crate::components::{self, StatusBarEvent, prelude::*};
 use crate::config::Config;
 use crate::constants;
 use crate::ui;
 use egui::Widget;
-use rpc::{Request, search::{SearchMode, SortMode}};
+use rpc::{
+    Request,
+    search::{SearchMode, SortMode},
+};
 use std::sync::mpsc;
 use tracing::{error, info};
 
@@ -20,7 +23,7 @@ pub struct App {
     tx_request: mpsc::Sender<Request>,
     rx_response: mpsc::Receiver<backend::BackendEvent>,
 
-    c: usize
+    c: usize,
 }
 
 #[derive(Default)]
@@ -36,7 +39,7 @@ pub struct State {
     dropped_files: Vec<egui::DroppedFile>,
 
     search_mode: SearchMode,
-    sort_mode: SortMode
+    sort_mode: SortMode,
 }
 
 #[derive(Default)]
@@ -69,12 +72,10 @@ impl App {
         let can_recenter =
             egui::ViewportCommand::center_on_screen(&cc.egui_ctx).is_some();
 
-
         let state = State {
             expand: if can_recenter { false } else { true },
             ..Default::default()
         };
-
 
         Self {
             config,
@@ -87,13 +88,14 @@ impl App {
             tx_request,
             rx_response,
 
-            c: 0
+            c: 0,
         }
     }
 
     fn setup_i18n() {
         let en = String::from_utf8_lossy(include_bytes!("../../assets/trans/en.ftl"));
-        let zh = String::from_utf8_lossy(include_bytes!("../../assets/trans/zh-hans.ftl"));
+        let zh =
+            String::from_utf8_lossy(include_bytes!("../../assets/trans/zh-hans.ftl"));
 
         // Note, it should panic if we cannot display text on the UI
         egui_i18n::load_translations_from_text("en", en).unwrap();
@@ -123,7 +125,7 @@ impl App {
     pub fn render_search_bar(&mut self, ctx: &egui::Context) {
         let props = components::SearchBarProps {
             search_mode: Default::default(),
-            draw_separate_line: self.s.expand
+            draw_separate_line: self.s.expand,
         };
         let output = self.search_bar.render(ctx, props);
 
@@ -138,17 +140,19 @@ impl App {
         let props = components::StatusBarProps {
             server_status,
             search_mode: &self.s.search_mode,
-            sort_mode: &self.s.sort_mode
+            sort_mode: &self.s.sort_mode,
         };
         let output = self.status_bar.render(ctx, props);
 
         for event in output.events {
             match event {
-                StatusBarEvent::RestartServer => {
-                    
-                },
+                StatusBarEvent::RestartServer => {}
                 StatusBarEvent::ChangeSortMode(sort_mode) => {
                     self.s.sort_mode = sort_mode;
+                }
+                StatusBarEvent::ChangeSearchMode(search_mode) => {
+                    dbg!(&search_mode);
+                    self.s.search_mode = search_mode;
                 },
             }
         }
@@ -178,7 +182,7 @@ impl App {
 
         let height = self.status_bar.height() + self.search_bar.height()
             - ctx.style().visuals.widgets.noninteractive.bg_stroke.width;
-        
+
         ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::vec2(
             800.0, height,
         )));
@@ -188,7 +192,6 @@ impl App {
         }
     }
 }
-
 
 impl eframe::App for App {
     fn clear_color(&self, visuals: &egui::Visuals) -> [f32; 4] {
@@ -200,10 +203,10 @@ impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if !self.s.initialized {
             self.search_bar.request_focus();
-            
+
             self.s.initialized = true;
         }
-        
+
         if ctx.input_mut(|i| i.consume_key(egui::Modifiers::NONE, egui::Key::F11)) {
             let fullscreen = ctx.input(|i| i.viewport().fullscreen.unwrap_or(false));
             ctx.send_viewport_cmd(egui::ViewportCommand::Fullscreen(!fullscreen));
@@ -223,11 +226,11 @@ impl eframe::App for App {
 
         self.render_status_bar(ctx);
 
-        
         egui::CentralPanel::default()
             .frame(
-                egui::Frame::NONE.inner_margin(egui::vec2(4.0, 2.0))
-                    .fill(ctx.style().visuals.panel_fill)
+                egui::Frame::NONE
+                    .inner_margin(egui::vec2(4.0, 2.0))
+                    .fill(ctx.style().visuals.panel_fill),
             )
             .show(ctx, |ui| {
                 ui.horizontal(|ui| {
