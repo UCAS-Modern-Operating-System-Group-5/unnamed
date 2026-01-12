@@ -111,6 +111,15 @@ pub fn search_sync(
         .map(SearchResultItem::from)
         .collect();
     
+    // 应用 root_directories 过滤（关键！只返回这些目录下的文件）
+    if !req.root_directories.is_empty() {
+        filtered.retain(|item| {
+            req.root_directories.iter().any(|root| {
+                item.path.starts_with(root)
+            })
+        });
+    }
+    
     // 应用 include/exclude globs
     if !req.include_globs.is_empty() {
         filtered.retain(|item| {
