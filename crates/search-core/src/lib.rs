@@ -14,6 +14,7 @@ pub mod extract;
 pub mod indexer;
 pub mod models;
 pub mod registry;
+pub mod schema;
 pub mod search;
 
 // RPC 适配层（可选功能）
@@ -33,6 +34,7 @@ pub use indexer::{
 };
 pub use models::FileDoc;
 pub use registry::{FileRegistry, FileState, EventType, PendingEvent};
+pub use schema::{build_schema, IndexDocument, SchemaFields, FIELD_TITLE, FIELD_BODY, FIELD_PATH, FIELD_TAGS, FIELD_FILE_SIZE, FIELD_MODIFIED_TIME};
 pub use search::search_index;
 
 /// 搜索引擎统一入口

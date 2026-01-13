@@ -20,5 +20,7 @@ pub enum Commands {
     Index {
         /// 要索引的目录路径（可选，不提供则使用配置文件中的 watch_paths）
         root_path: Option<PathBuf>
-    }
+    },
+    /// Clear all caches (index + embedding cache)
+    ClearCache,
 }

@@ -20,27 +20,12 @@ use crate::cache::{EmbeddingCache, FileStatus};
 use crate::config::CONFIG;
 use crate::extract::extract_text;
 use crate::registry::{FileRegistry, EventType};
+use crate::schema::{build_schema, FIELD_TITLE, FIELD_BODY, FIELD_PATH, FIELD_TAGS, FIELD_FILE_SIZE, FIELD_MODIFIED_TIME};
 
 /// 初始化持久化索引
 pub fn init_persistent_index(index_path: &Path) -> Result<(Index, Schema, IndexReader)> {
-    let mut schema_builder = Schema::builder();
-
-    let text_options = TextOptions::default()
-        .set_indexing_options(
-            TextFieldIndexing::default()
-                .set_tokenizer("jieba")
-                .set_index_option(IndexRecordOption::WithFreqsAndPositions)
-        )
-        .set_stored();
-
-    schema_builder.add_text_field("title", text_options.clone());
-    schema_builder.add_text_field("body", text_options.clone());
-    schema_builder.add_text_field("path", STRING | STORED);
-    schema_builder.add_text_field("tags", text_options.clone());
-    schema_builder.add_u64_field("timestamp", FAST | STORED);
-    schema_builder.add_u64_field("file_size", FAST | STORED);
-
-    let schema = schema_builder.build();
+    // 使用统一的 schema 构建器
+    let schema = build_schema();
 
     if !index_path.exists() {
         fs::create_dir_all(index_path)?;
@@ -74,7 +59,7 @@ pub fn delete_from_index(
         .to_string_lossy()
         .to_string();
     
-    let path_field = schema.get_field("path").unwrap();
+    let path_field = schema.get_field(FIELD_PATH).unwrap();
     let mut index_writer: IndexWriter = index.writer(50_000_000)?;
     
     let path_term = Term::from_field_text(path_field, &path_str);
@@ -131,12 +116,12 @@ pub fn process_and_index(
     };
     let tags_str = keywords.join(" ");
 
-    let title_field = schema.get_field("title").unwrap();
-    let body_field = schema.get_field("body").unwrap();
-    let path_field = schema.get_field("path").unwrap();
-    let tags_field = schema.get_field("tags").unwrap();
-    let timestamp_field = schema.get_field("timestamp").unwrap();
-    let size_field = schema.get_field("file_size").unwrap();
+    let title_field = schema.get_field(FIELD_TITLE).unwrap();
+    let body_field = schema.get_field(FIELD_BODY).unwrap();
+    let path_field = schema.get_field(FIELD_PATH).unwrap();
+    let tags_field = schema.get_field(FIELD_TAGS).unwrap();
+    let modified_time_field = schema.get_field(FIELD_MODIFIED_TIME).unwrap();
+    let size_field = schema.get_field(FIELD_FILE_SIZE).unwrap();
     
     let mut index_writer: IndexWriter = index.writer(50_000_000)?;
 
@@ -150,7 +135,7 @@ pub fn process_and_index(
         body_field => doc_data.content.as_str(),
         path_field => doc_data.path.as_str(),
         tags_field => tags_str,
-        timestamp_field => file_timestamp,
+        modified_time_field => file_timestamp,
         size_field => file_size
     ))?;
 
@@ -258,9 +243,11 @@ fn scan_with_ripgrep_walker(
     let mut builder = WalkBuilder::new(watch_path);
     builder
         .hidden(!walker_config.skip_hidden)
-        .git_ignore(walker_config.respect_gitignore)
-        .git_global(walker_config.respect_gitignore)
-        .git_exclude(walker_config.respect_gitignore)
+        // 注意：用户明确指定要索引的目录，不应该被 .gitignore 排除
+        // 所以禁用 gitignore，但保留其他 ignore 规则
+        .git_ignore(false)
+        .git_global(false)
+        .git_exclude(false)
         .ignore(walker_config.respect_ignore)
         .follow_links(walker_config.follow_symlinks);
     
@@ -268,10 +255,14 @@ fn scan_with_ripgrep_walker(
         builder.max_depth(Some(walker_config.max_depth));
     }
     
+    tracing::debug!("开始遍历目录: {:?}", watch_path);
+    
     for result in builder.build() {
         match result {
             Ok(entry) => {
                 let path = entry.path();
+                tracing::debug!("发现条目: {:?}, is_dir={}, is_supported={}", 
+                    path, path.is_dir(), is_supported_file(path));
                 if path.is_dir() || !is_supported_file(path) {
                     continue;
                 }
@@ -337,6 +328,7 @@ fn process_file_entry(
         .to_string();
     
     let status = cache.check_file_status(&path_str, path);
+    tracing::debug!("文件状态检查: {:?} -> {:?}", path.file_name().unwrap_or_default(), status);
     
     match status {
         FileStatus::Unchanged => return,

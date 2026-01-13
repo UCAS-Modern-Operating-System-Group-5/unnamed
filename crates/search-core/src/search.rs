@@ -9,6 +9,7 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
 use crate::SearchHit;
+use crate::schema::{FIELD_TITLE, FIELD_BODY, FIELD_PATH, FIELD_TAGS};
 
 /// 排序模式
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -43,10 +44,10 @@ pub fn search_with_results(reader: &IndexReader, index: &Index, query_str: &str)
     let searcher = reader.searcher();
     
     let schema = index.schema();
-    let title_field = schema.get_field("title").unwrap();
-    let body_field = schema.get_field("body").unwrap();
-    let path_field = schema.get_field("path").unwrap();
-    let tags_field = schema.get_field("tags").ok();
+    let title_field = schema.get_field(FIELD_TITLE).unwrap();
+    let body_field = schema.get_field(FIELD_BODY).unwrap();
+    let path_field = schema.get_field(FIELD_PATH).unwrap();
+    let tags_field = schema.get_field(FIELD_TAGS).ok();
 
     let query_parser = QueryParser::for_index(index, vec![title_field, body_field]);
     

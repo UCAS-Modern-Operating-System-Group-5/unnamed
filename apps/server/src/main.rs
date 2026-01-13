@@ -28,6 +28,9 @@ async fn main() -> error::Result<()> {
             cli::Commands::Index { root_path } => {
                 Box::new(command::IndexCommand::new(cfg, root_path))
             }
+            cli::Commands::ClearCache => {
+                Box::new(command::ClearCacheCommand::new(cfg))
+            }
         };
         cmd.execute().await?;
     } else {
