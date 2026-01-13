@@ -122,7 +122,6 @@ impl StatusBar {
         set_borderless_button_style(style);
 
         ui.menu_button(label_text, |ui| {
-            // FIXME should change to horizontal style when window height is too small
             let style = ui.style_mut();
             style.override_text_style = Some(TextStyle::Name(constants::TEXT_STYLE_STATUS_BAR.into()));
 

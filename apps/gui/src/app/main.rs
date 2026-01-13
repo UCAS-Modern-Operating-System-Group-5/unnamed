@@ -1,12 +1,17 @@
 use super::Scope;
-use crate::backend;
-use crate::components::{self, StatusBarEvent, prelude::*};
+use crate::backend::{BackendEvent, ServerStatus, ServerWorkingStatus};
+use crate::component::{
+    SearchBar, SearchBarEvent, SearchBarProps, StatusBar, StatusBarEvent, StatusBarProps,
+    prelude::*,
+};
 use crate::config::Config;
-use crate::constants;
 use crate::ui;
-use egui::Widget;
+use crate::util::{
+    UniversalEventHandlerThread,
+    completion::{CompletionRequest, CompletionResponse},
+};
 use rpc::{
-    Request,
+    Request as RpcRequest,
     search::{SearchMode, SortMode},
 };
 use std::sync::mpsc;
@@ -17,11 +22,11 @@ pub struct App {
 
     s: State,
     ability: Ability,
-    search_bar: components::SearchBar,
-    status_bar: components::StatusBar,
+    search_bar: SearchBar,
+    status_bar: StatusBar,
 
     tx_request: mpsc::Sender<Request>,
-    rx_response: mpsc::Receiver<backend::BackendEvent>,
+    rx_response: mpsc::Receiver<Response>,
 
     c: usize,
 }
@@ -46,6 +51,19 @@ pub struct Ability {
     pub recenter: bool,
 }
 
+pub enum Request {
+    Backend(RpcRequest),
+    Completion(CompletionRequest),
+}
+
+pub enum Response {
+    SpawnUniversalEventHandlerThreadFailed,
+    /// Generic failure with reason
+    Failure(String),
+    Backend(BackendEvent),
+    Completion(CompletionResponse),
+}
+
 impl App {
     pub fn new(cc: &eframe::CreationContext<'_>, config: Config) -> Self {
         let (tx_request, rx_request) = mpsc::channel();
@@ -54,12 +72,13 @@ impl App {
             .runtime_dir
             .join(config::constants::UNIX_SOCKET_FILE_NAME);
 
-        backend::spawn_backend(
+        UniversalEventHandlerThread::new(
+            unix_socket_path,
             rx_request,
             tx_response,
             cc.egui_ctx.clone(),
-            unix_socket_path,
-        );
+        )
+        .spawn();
 
         ui::setup_ui(&cc.egui_ctx, &config.ui, config.app.background_alpha);
         Self::setup_i18n();
@@ -74,6 +93,7 @@ impl App {
         let state = State {
             expand: if can_recenter { false } else { true },
             request_search_focus: true,
+            // search_mode: SearchMode::Rule,
             ..Default::default()
         };
 
@@ -123,21 +143,47 @@ impl App {
     }
 
     pub fn render_search_bar(&mut self, ctx: &egui::Context) {
-        let props = components::SearchBarProps {
+        let props = SearchBarProps {
             search_mode: &self.s.search_mode,
             draw_separate_line: self.s.expand,
         };
         let output = self.search_bar.render(ctx, props);
-
-        for _event in output.events {
-            // TODO handle search bar events
+        for event in output.events {
+            match event {
+                SearchBarEvent::StartSearch(query) => {
+                    info!("Starting search: {}", query);
+                    // TODO: Send search request to backend
+                }
+                SearchBarEvent::RequestCompletion {
+                    session_id,
+                    query,
+                    cursor_pos,
+                } => {
+                    let _ = self.tx_request.send(Request::Completion(
+                        CompletionRequest::StartCompletion {
+                            session_id,
+                            query,
+                            cursor_pos,
+                        },
+                    ));
+                }
+                SearchBarEvent::ContinueCompletion { session_id } => {
+                    let _ = self.tx_request.send(Request::Completion(
+                        CompletionRequest::ContinueCompletion { session_id },
+                    ));
+                }
+                SearchBarEvent::CancelCompletion { session_id } => {
+                    let _ = self.tx_request.send(Request::Completion(
+                        CompletionRequest::CancelCompletion { session_id },
+                    ));
+                }
+            }
         }
     }
-
+    
     pub fn render_status_bar(&mut self, ctx: &egui::Context) {
-        let server_status =
-            backend::ServerStatus::Online(backend::ServerWorkingStatus::Searching);
-        let props = components::StatusBarProps {
+        let server_status = ServerStatus::Online(ServerWorkingStatus::Searching);
+        let props = StatusBarProps {
             server_status,
             search_mode: &self.s.search_mode,
             sort_mode: &self.s.sort_mode,
@@ -153,24 +199,61 @@ impl App {
                 StatusBarEvent::ChangeSearchMode(search_mode) => {
                     self.s.search_mode = search_mode;
                     self.s.request_search_focus = true;
-                },
+                }
             }
         }
     }
 
-    pub fn handle_backend_event(&self) {
+    pub fn handle_event(&mut self) {
         while let Ok(event) = self.rx_response.try_recv() {
             match event {
-                backend::BackendEvent::Connected => {
-                    info!("Connected to server");
-                    let _ = self.tx_request.send(Request::Ping);
+                Response::SpawnUniversalEventHandlerThreadFailed => {
+                    // TODO: handle
                 }
-                backend::BackendEvent::ConnectionFailed(e) => {
-                    error!("Connection to server failed: {e}");
+                Response::Failure(e) => {
+                    error!(e);
                 }
-                backend::BackendEvent::RpcResponse(response) => {
-                    info!("{response:?}");
+                Response::Backend(event) => {
+                    self.handle_backend_event(event);
                 }
+                Response::Completion(response) => {
+                    self.handle_completion_response(response);
+                }
+            }
+        }
+    }
+    
+    fn handle_completion_response(&mut self, response: CompletionResponse) {
+        match response {
+            CompletionResponse::Batch {
+                session_id,
+                items,
+                has_more,
+                total_so_far: _,
+            } => {
+                self.search_bar.receive_completion_batch(session_id, items, has_more);
+            }
+            CompletionResponse::Cancelled { session_id } => {
+                self.search_bar.completion_cancelled(session_id);
+            }
+        }
+    }
+
+    pub fn handle_backend_event(&self, event: BackendEvent) {
+        match event {
+            BackendEvent::Connected => {
+                info!("Connected to server");
+                let _ = self.tx_request.send(Request::Backend(RpcRequest::Ping));
+            }
+            BackendEvent::RpcFailure(e) => {
+                // TODO Display failture reason
+                error!(e)
+            }
+            BackendEvent::ConnectionFailed(e) => {
+                // error!("Connection to server failed: {e}");
+            }
+            BackendEvent::RpcResponse(response) => {
+                info!("{response:?}");
             }
         }
     }
@@ -214,7 +297,7 @@ impl eframe::App for App {
 
         // TODO first test it on my Arch Linux XFCE desktop
 
-        self.handle_backend_event();
+        self.handle_event();
 
         self.resize_window(ctx);
 

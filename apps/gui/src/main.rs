@@ -6,7 +6,7 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc; // Much faster allocator
 
 mod app;
 mod backend;
-mod components;
+mod component;
 mod config;
 mod constants;
 mod error;

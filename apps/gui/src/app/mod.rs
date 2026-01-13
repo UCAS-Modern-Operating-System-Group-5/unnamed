@@ -5,7 +5,7 @@ mod scope;
 mod key;
 
 
-pub use main::App;
+pub use main::{App, Request, Response};
 pub use config::AppConfig;
 pub use user_command::UserCommand;
 pub use scope::Scope;

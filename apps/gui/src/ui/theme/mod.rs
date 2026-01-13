@@ -17,6 +17,7 @@ pub trait ColorPalette {
     fn on_primary(&self) -> Color32;
 
     fn secondary(&self) -> Color32;
+    #[allow(dead_code)]
     fn on_secondary(&self) -> Color32;
 
     fn surface(&self) -> Color32; // Main background
@@ -33,6 +34,7 @@ pub trait ColorPalette {
 }
 
 pub struct Theme {
+    #[allow(dead_code)]
     pub name: String,
     pub is_dark: bool,
     pub visuals: Visuals,
@@ -115,7 +117,7 @@ impl Theme {
                 hovered: WidgetVisuals {
                     // Hover states usually need to be more opaque to be seen clearly
                     bg_fill: palette.hover().gamma_multiply(0.9),
-                    weak_bg_fill: palette.hover().gamma_multiply(0.9),
+                    weak_bg_fill: palette.hover().gamma_multiply(0.5),
                     bg_stroke: Stroke::new(1.0, palette.primary()),
                     fg_stroke: Stroke::new(1.0, palette.on_hover()),
                     corner_radius: common_rounding,
@@ -150,6 +152,8 @@ impl Theme {
             visuals,
         }
     }
+
+    #[allow(dead_code)]
     pub fn apply(self, ctx: &Context) {
         ctx.set_visuals(self.visuals);
     }
