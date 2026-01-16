@@ -403,14 +403,54 @@ pub fn start_file_watcher(
 
         tracing::info!("文件监控已启动: {:?}", watch_path);
 
-        // 等待扫描完成
-        let _ = scan_complete_rx.recv();
-        tracing::info!("扫描完成，开始处理实时事件");
+        // 等待扫描完成，期间收集事件到 pending_events
+        loop {
+            // 非阻塞检查扫描是否完成
+            match scan_complete_rx.try_recv() {
+                Ok(()) => {
+                    tracing::info!("扫描完成，开始处理实时事件");
+                    break;
+                }
+                Err(std::sync::mpsc::TryRecvError::Empty) => {
+                    // 扫描未完成，收集事件到待处理队列
+                    match rx.recv_timeout(std::time::Duration::from_millis(100)) {
+                        Ok(res) => {
+                            if let Ok(event) = res {
+                                let event_type = match event.kind {
+                                    EventKind::Create(_) => Some(EventType::Create),
+                                    EventKind::Modify(notify::event::ModifyKind::Data(_)) => Some(EventType::Modify),
+                                    EventKind::Remove(_) => Some(EventType::Delete),
+                                    _ => None,
+                                };
+                                if let Some(et) = event_type {
+                                    for path in event.paths {
+                                        if is_supported_file(&path) {
+                                            registry.add_pending_event(path, et.clone());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        Err(std::sync::mpsc::RecvTimeoutError::Timeout) => continue,
+                        Err(std::sync::mpsc::RecvTimeoutError::Disconnected) => return,
+                    }
+                }
+                Err(std::sync::mpsc::TryRecvError::Disconnected) => return,
+            }
+        }
 
-        // 处理扫描期间的待处理事件
+        // 处理扫描期间的待处理事件（去重：只处理扫描后修改的文件）
         let pending_events = registry.complete_scan();
         for event in pending_events {
             if is_supported_file(&event.path) {
+                // 检查文件是否在扫描时已经处理过且未再修改
+                if let Some(file_mod_time) = get_modified_time(&event.path) {
+                    if registry.is_file_processed(&event.path, file_mod_time) {
+                        tracing::debug!("跳过已处理的文件: {:?}", event.path);
+                        continue;
+                    }
+                }
+                
                 match event.event_type {
                     EventType::Create | EventType::Modify => {
                         let _ = process_and_index(&event.path, &index, &schema, &bert, &cache);
@@ -427,6 +467,8 @@ pub fn start_file_watcher(
         for res in rx {
             match res {
                 Ok(event) => {
+                    tracing::debug!("收到文件事件: {:?}", event);
+                    
                     let event_type = match event.kind {
                         EventKind::Create(_) => Some(EventType::Create),
                         EventKind::Modify(notify::event::ModifyKind::Data(_)) => Some(EventType::Modify),
@@ -443,21 +485,32 @@ pub fn start_file_watcher(
                         if !is_supported_file(&path) {
                             continue;
                         }
+                        
+                        // 使用 registry 防止重复处理
+                        let path_buf = path.to_path_buf();
+                        if let Some(modified_time) = get_modified_time(&path) {
+                            if !registry.try_start_processing(&path_buf, modified_time) {
+                                tracing::debug!("跳过正在处理或已处理的文件: {:?}", path);
+                                continue;
+                            }
+                        }
 
                         match event_type {
                             EventType::Create | EventType::Modify => {
                                 if !path.exists() {
                                     let _ = delete_from_index(&path, &index, &schema, Some(&cache));
-                                    registry.mark_deleted(&path);
+                                    registry.mark_deleted(&path_buf);
                                 } else {
                                     let _ = process_and_index(&path, &index, &schema, &bert, &cache);
                                 }
                             }
                             EventType::Delete => {
                                 let _ = delete_from_index(&path, &index, &schema, Some(&cache));
-                                registry.mark_deleted(&path);
+                                registry.mark_deleted(&path_buf);
                             }
                         }
+                        
+                        registry.finish_processing(&path_buf);
                     }
                 }
                 Err(e) => tracing::error!("Watch error: {:?}", e),

@@ -7,6 +7,8 @@
 //! - 实时文件监控
 //! - 增量索引
 
+use std::sync::Arc;
+
 pub mod ai;
 pub mod cache;
 pub mod config;
@@ -42,8 +44,8 @@ pub struct SearchEngine {
     pub index: tantivy::Index,
     pub schema: tantivy::schema::Schema,
     pub reader: tantivy::IndexReader,
-    pub bert: BertModel,
-    pub cache: EmbeddingCache,
+    pub bert: Arc<BertModel>,
+    pub cache: Arc<EmbeddingCache>,
     pub registry: FileRegistry,
     pub config: SearchConfig,
 }
@@ -59,12 +61,12 @@ impl SearchEngine {
         
         // 加载 AI 模型
         println!(" [AI] 正在加载 BERT 模型 (首次运行需下载)...");
-        let bert = BertModel::new()?;
+        let bert = Arc::new(BertModel::new()?);
         println!(" [AI] 模型加载完毕！");
         
         // 初始化缓存
         let cache_path = Path::new(&config.cache_path);
-        let cache = EmbeddingCache::new(cache_path)?;
+        let cache = Arc::new(EmbeddingCache::new(cache_path)?);
         let (count, size) = cache.stats();
         println!(" [Cache] 缓存统计: {} 条记录, {} 字节", count, size);
         
@@ -82,14 +84,54 @@ impl SearchEngine {
         })
     }
     
-    /// 执行搜索
+    /// 执行搜索（传统全文搜索）
     pub fn search(&self, query: &str) -> anyhow::Result<Vec<SearchHit>> {
         search::search_with_results(&self.reader, &self.index, query)
     }
     
+    /// 混合搜索：结合传统全文搜索和语义向量搜索
+    /// 
+    /// # 参数
+    /// - `query`: 搜索查询字符串
+    /// - `use_semantic`: 是否使用语义搜索
+    /// - `text_weight`: 传统搜索权重（0.0-1.0）
+    /// - `semantic_weight`: 语义搜索权重（0.0-1.0）
+    /// - `limit`: 返回结果数量上限
+    pub fn hybrid_search(
+        &self,
+        query: &str,
+        use_semantic: bool,
+        text_weight: f32,
+        semantic_weight: f32,
+        limit: usize,
+    ) -> anyhow::Result<Vec<SearchHit>> {
+        if !use_semantic {
+            // 只使用传统搜索
+            let mut results = self.search(query)?;
+            results.truncate(limit);
+            return Ok(results);
+        }
+        
+        // 获取查询的向量表示
+        let query_embedding = self.bert.get_embedding(query).ok();
+        
+        search::hybrid_search(
+            &self.reader,
+            &self.index,
+            query,
+            query_embedding.as_deref(),
+            text_weight,
+            semantic_weight,
+            limit,
+        )
+    }
+    
     /// 使用 AI 优化查询
     pub fn refine_query(&self, query: &str) -> String {
-        self.bert.refine_query(query)
+        let refined = self.bert.refine_query(query);
+        tracing::debug!("[AI 查询优化] 原始查询: '{}'", query);
+        tracing::debug!("[AI 查询优化] 优化后: '{}'", refined);
+        refined
     }
     
     /// 索引单个文件

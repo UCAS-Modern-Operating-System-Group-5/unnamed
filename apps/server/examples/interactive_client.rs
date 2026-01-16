@@ -10,6 +10,22 @@ use tarpc::{client, context, tokio_serde::formats::Bincode};
 use std::path::PathBuf;
 use std::time::Duration;
 use std::io::{self, Write};
+use serde::Deserialize;
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+struct ServerConfig {
+    #[serde(default)]
+    watch_paths: Vec<PathBuf>,
+}
+
+fn load_server_config() -> Option<PathBuf> {
+    let strategy = config::create_strategy().ok()?;
+    let config_path = strategy.config_dir().join(config::constants::SERVER_CONFIG_FILE_NAME);
+    let content = std::fs::read_to_string(&config_path).ok()?;
+    let config: ServerConfig = toml::from_str(&content).ok()?;
+    config.watch_paths.first().cloned()
+}
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -69,26 +85,37 @@ async fn search_async(client: &WorldClient) -> anyhow::Result<()> {
     println!("📋 配置搜索参数");
     println!("{}", "-".repeat(60));
     
+    // 从配置文件读取默认搜索目录
+    let default_dir = load_server_config()
+        .unwrap_or_else(|| PathBuf::from("/Users/jun/Documents"));
+    
     // 获取搜索目录
-    print!("搜索目录 [默认: /Users/jun/Documents]: ");
+    print!("搜索目录 [默认: {}]: ", default_dir.display());
     io::stdout().flush()?;
     let mut dir = String::new();
     io::stdin().read_line(&mut dir)?;
     let search_dir = if dir.trim().is_empty() {
-        PathBuf::from("/Users/jun/Documents")
+        default_dir
     } else {
         PathBuf::from(dir.trim())
     };
     
-    // 获取搜索关键词
-    print!("搜索关键词（必填）: ");
+    // 选择搜索模式
+    print!("搜索模式 [1=传统关键词 / 2=AI语义搜索，默认: 1]: ");
     io::stdout().flush()?;
-    let mut keywords = String::new();
-    io::stdin().read_line(&mut keywords)?;
-    let keywords_str = keywords.trim();
+    let mut mode = String::new();
+    io::stdin().read_line(&mut mode)?;
+    let use_semantic = mode.trim() == "2";
     
-    if keywords_str.is_empty() {
-        println!("⚠ 关键词不能为空\n");
+    // 获取搜索查询
+    print!("搜索查询（必填）: ");
+    io::stdout().flush()?;
+    let mut query_input = String::new();
+    io::stdin().read_line(&mut query_input)?;
+    let query_str = query_input.trim();
+    
+    if query_str.is_empty() {
+        println!("⚠ 查询不能为空\n");
         return Ok(());
     }
     
@@ -132,11 +159,17 @@ async fn search_async(client: &WorldClient) -> anyhow::Result<()> {
     println!("{}", "-".repeat(60));
     
     // 构建搜索请求
+    let (keywords_vec, semantic_vec) = if use_semantic {
+        (vec![], vec![query_str.to_string()])
+    } else {
+        (vec![query_str.to_string()], vec![])
+    };
+    
     let req = SearchRequest {
         root_directories: vec![search_dir.clone()],
         regular_expressions: vec![],
-        keywords: vec![keywords_str.to_string()],
-        semantic_queries: vec![],
+        keywords: keywords_vec,
+        semantic_queries: semantic_vec,
         semantic_threshold: None,
         include_globs,
         exclude_globs,
@@ -149,7 +182,8 @@ async fn search_async(client: &WorldClient) -> anyhow::Result<()> {
     };
     
     println!("📁 搜索目录: {:?}", search_dir);
-    println!("🔑 关键词: {}", keywords_str);
+    println!("🔍 搜索模式: {}", if use_semantic { "AI语义搜索" } else { "传统关键词" });
+    println!("🔑 查询: {}", query_str);
     if !req.include_globs.is_empty() {
         println!("📋 包含: {:?}", req.include_globs);
     }
@@ -247,26 +281,37 @@ async fn search_sync(client: &WorldClient) -> anyhow::Result<()> {
     println!("📋 配置搜索参数（同步模式）");
     println!("{}", "-".repeat(60));
     
+    // 从配置文件读取默认搜索目录
+    let default_dir = load_server_config()
+        .unwrap_or_else(|| PathBuf::from("/Users/jun/Documents"));
+    
     // 获取搜索目录
-    print!("搜索目录 [默认: /Users/jun/Documents]: ");
+    print!("搜索目录 [默认: {}]: ", default_dir.display());
     io::stdout().flush()?;
     let mut dir = String::new();
     io::stdin().read_line(&mut dir)?;
     let search_dir = if dir.trim().is_empty() {
-        PathBuf::from("/Users/jun/Documents")
+        default_dir
     } else {
         PathBuf::from(dir.trim())
     };
     
-    // 获取搜索关键词
-    print!("搜索关键词（必填）: ");
+    // 选择搜索模式
+    print!("搜索模式 [1=传统关键词 / 2=AI语义搜索，默认: 1]: ");
     io::stdout().flush()?;
-    let mut keywords = String::new();
-    io::stdin().read_line(&mut keywords)?;
-    let keywords_str = keywords.trim();
+    let mut mode = String::new();
+    io::stdin().read_line(&mut mode)?;
+    let use_semantic = mode.trim() == "2";
     
-    if keywords_str.is_empty() {
-        println!("⚠ 关键词不能为空\n");
+    // 获取搜索查询
+    print!("搜索查询（必填）: ");
+    io::stdout().flush()?;
+    let mut query_input = String::new();
+    io::stdin().read_line(&mut query_input)?;
+    let query_str = query_input.trim();
+    
+    if query_str.is_empty() {
+        println!("⚠ 查询不能为空\n");
         return Ok(());
     }
     
@@ -283,14 +328,22 @@ async fn search_sync(client: &WorldClient) -> anyhow::Result<()> {
     
     println!("\n{}", "-".repeat(60));
     println!("🚀 开始搜索（请稍候，等待搜索完成...）");
+    println!("📝 搜索模式: {}", if use_semantic { "AI语义搜索" } else { "传统关键词" });
+    println!("🔍 查询: {}", query_str);
     println!("{}", "-".repeat(60));
     
-    // 构建搜索请求
+    // 构建搜索请求（根据模式选择填充 keywords 或 semantic_queries）
+    let (keywords_vec, semantic_vec) = if use_semantic {
+        (vec![], vec![query_str.to_string()])
+    } else {
+        (vec![query_str.to_string()], vec![])
+    };
+    
     let req = SearchRequest {
         root_directories: vec![search_dir.clone()],
         regular_expressions: vec![],
-        keywords: vec![keywords_str.to_string()],
-        semantic_queries: vec![],
+        keywords: keywords_vec,
+        semantic_queries: semantic_vec,
         semantic_threshold: None,
         include_globs: vec![],
         exclude_globs: vec![],

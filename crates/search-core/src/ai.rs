@@ -70,7 +70,8 @@ impl BertModel {
         })
     }
 
-    fn get_embedding(&self, text: &str) -> Result<Vec<f32>> {
+    /// 获取文本的向量表示（公开方法）
+    pub fn get_embedding(&self, text: &str) -> Result<Vec<f32>> {
         let tokens = self.tokenizer.encode(text, true).map_err(anyhow::Error::msg)?;
         
         let token_ids = Tensor::new(tokens.get_ids(), &self.device)?.unsqueeze(0)?;
@@ -125,6 +126,9 @@ impl BertModel {
             .into_iter()
             .collect();
 
+        tracing::debug!("[BERT 分词] 输入: '{}'", truncated_text);
+        tracing::debug!("[BERT 分词] 候选词: {:?} (共 {} 个)", candidates, candidates.len());
+
         if candidates.is_empty() {
             return Ok(vec![]);
         }
@@ -144,7 +148,10 @@ impl BertModel {
 
         let keywords = scored_candidates.into_iter()
             .take(top_k)
-            .map(|(_, word)| word)
+            .map(|(score, word)| {
+                tracing::debug!("[BERT 关键词] {} (相似度: {:.4})", word, score);
+                word
+            })
             .collect();
 
         Ok(keywords)

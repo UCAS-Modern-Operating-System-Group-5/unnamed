@@ -5,6 +5,7 @@ use crate::session::SessionManager;
 use futures::{future, prelude::*};
 use std::fs;
 use std::sync::Arc;
+use std::path::PathBuf;
 use tracing::info;
 
 use rpc::{
@@ -17,7 +18,7 @@ use tarpc::{
     tokio_serde::formats::Bincode
 };
 
-use search_core::{SearchConfig, SearchEngine, rpc_compat};
+use search_core::{SearchConfig, SearchEngine, rpc_compat, start_file_watcher};
 
 async fn spawn(fut: impl Future<Output = ()> + Send + 'static) {
     tokio::spawn(fut);
@@ -192,6 +193,36 @@ impl Command for ServeCommand {
         
         // 创建会话管理器 (30分钟超时)
         let sessions = Arc::new(SessionManager::new(1800));
+        
+        // 启动文件监控（如果配置了 watch_paths）
+        let _watcher_handles: Vec<_> = self.config.watch_paths.iter()
+            .filter(|p| p.exists())
+            .map(|watch_path| {
+                info!("启动文件监控: {:?}", watch_path);
+                
+                let scan_complete_tx = start_file_watcher(
+                    watch_path.clone(),
+                    engine.index.clone(),
+                    engine.schema.clone(),
+                    engine.bert.clone(),
+                    engine.cache.clone(),
+                    engine.registry.clone(),
+                );
+                
+                // 执行初始扫描
+                let _ = engine.scan_directory(watch_path);
+                
+                // 通知监控线程扫描完成
+                let _ = scan_complete_tx.send(());
+                
+                scan_complete_tx
+            })
+            .collect();
+        
+        if self.config.watch_paths.is_empty() {
+            info!("⚠️  未配置 watch-paths，文件监控未启动");
+            info!("💡 编辑 ~/.config/unnamed/server.toml 添加要监控的目录");
+        }
         
         info!("搜索引擎初始化完成");
         info!("监听 {:?}", unix_socket_path);

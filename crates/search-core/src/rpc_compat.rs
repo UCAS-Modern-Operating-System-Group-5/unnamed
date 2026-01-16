@@ -29,6 +29,9 @@ pub fn handle_search_request(
 
 /// 构建查询字符串
 fn build_query_string(req: &RpcSearchRequest) -> String {
+    tracing::debug!("[请求解析] keywords: {:?}, semantic_queries: {:?}", 
+                    req.keywords, req.semantic_queries);
+    
     let mut parts = Vec::new();
     
     // 关键词搜索
@@ -41,7 +44,9 @@ fn build_query_string(req: &RpcSearchRequest) -> String {
         parts.push(semantic.clone());
     }
     
-    parts.join(" ")
+    let query = parts.join(" ");
+    tracing::debug!("[请求解析] 合并后的查询字符串: '{}'", query);
+    query
 }
 
 /// 从 RPC SortMode 转换
@@ -96,14 +101,35 @@ pub fn search_sync(
     
     // 使用 AI 优化查询
     let refined_query = if !req.semantic_queries.is_empty() {
-        engine.refine_query(&query)
+        tracing::info!("[搜索] 使用语义查询模式，原始查询: '{}'", query);
+        let refined = engine.refine_query(&query);
+        tracing::info!("[搜索] AI 提取的关键词: '{}'", refined);
+        refined
     } else {
-        query
+        tracing::info!("[搜索] 使用传统查询模式: '{}'", query);
+        query.clone()
     };
     
     // 执行搜索
-    let results = engine.search(&refined_query)
-        .map_err(|e| e.to_string())?;
+    // 如果有语义查询，使用混合搜索，否则使用传统搜索
+    let results = if !req.semantic_queries.is_empty() {
+        tracing::info!("[搜索] 使用混合搜索模式");
+        // 混合搜索：结合传统全文搜索和简化的语义匹配
+        let use_semantic = true;
+        let text_weight = 0.5;  // 传统搜索权重
+        let semantic_weight = 0.5;  // 语义搜索权重
+        let limit = req.max_results.unwrap_or(100);
+        
+        engine.hybrid_search(&refined_query, use_semantic, text_weight, semantic_weight, limit)
+            .map_err(|e| e.to_string())?
+    } else {
+        tracing::info!("[搜索] 使用纯传统搜索模式");
+        // 纯传统搜索
+        engine.search(&refined_query)
+            .map_err(|e| e.to_string())?
+    };
+    
+    tracing::info!("[搜索] 执行完成，原始结果数: {}", results.len());
     
     // 应用过滤器
     let mut filtered: Vec<SearchResultItem> = results
