@@ -4,7 +4,14 @@ use serde::Deserialize;
 #[serde(rename_all = "kebab-case")]
 pub enum UserCommand {
     QuitApplication,
+    ToggleFullScreen,
+    ToggleSearchMode,
+    
     NextItem,
-    PrevItem
+    PrevItem,
+    
+    CancelCompletion,
+    ApplyCompletion,
+    
+    StartSearch
 }
-

@@ -2,19 +2,20 @@ use super::ContextComponent;
 use crate::constants;
 use crate::util::MemoizedQueryHighligher;
 use crate::util::completion::{CompletionItem, CompletionSessionId, CompletionState};
-use egui::{Sense, text_edit::TextEditOutput};
+use egui::{Sense, text_edit::TextEditOutput, Id};
 use rpc::search::SearchMode;
+use crate::app::{UserCommand, Scope};
 
 use egui_i18n::tr;
 use std::time::{Duration, Instant};
 
 const COMPLETION_VISIBLE_ITEMS_NUM: usize = 10;
 
-#[derive(Default)]
 pub struct SearchBar {
+    id: Id,
+    
     raw_search_query: String,
     panel_height: f32,
-    request_focus: bool,
     query_highligher: MemoizedQueryHighligher,
 
     completion: CompletionState,
@@ -29,8 +30,15 @@ pub struct SearchBar {
     // The cursor which is set when we don't want completion UI
     ignore_cursor: Option<usize>,
 
+    should_focus: bool,
+    should_start_search: bool,
+    should_cancel_completion: bool,
     should_apply_completion: bool,
 }
+
+// pub struct SearchBarState {
+    
+// }
 
 pub struct SearchBarProps<'a> {
     pub search_mode: &'a SearchMode,
@@ -60,16 +68,43 @@ pub enum SearchBarEvent {
 }
 
 impl SearchBar {
+    pub fn new(id: Id) -> Self {
+        Self {
+            id,
+            raw_search_query: String::new(),
+            panel_height: 0.0,
+            query_highligher: Default::default(),
+            completion: Default::default(),
+            last_query: String::new(),
+            last_cursor_pos: 0,
+            last_change_time: None,
+            pending_completion_request: false,
+            current_cursor: 0,
+            ignore_cursor: None,
+            should_focus: false,
+            should_start_search: false,
+            should_cancel_completion: false,
+            should_apply_completion: false,
+        }
+    }
+
+    pub fn id(&self) -> Id {
+        self.id
+    }
+
     pub fn height(&self) -> f32 {
         self.panel_height
     }
 
     pub fn request_focus(&mut self) {
-        self.request_focus = true;
+        self.should_focus = true;
     }
 
-    pub fn query(&self) -> &str {
-        &self.raw_search_query
+    pub fn current_scope(&self) -> Scope {
+        if self.should_handle_completion() {
+            return Scope::SearchBarCompletion;
+        }
+        Scope::SearchBar
     }
 
     /// Call this when receiving completion response from backend
@@ -85,6 +120,43 @@ impl SearchBar {
     /// Call this when completion is cancelled
     pub fn completion_cancelled(&mut self, session_id: CompletionSessionId) {
         self.completion.cancel(session_id);
+    }
+
+    /// Scope can only be Scope::SearchBar or Scope::SearchBarCompletion
+    pub fn handle_user_command(&mut self, scope: &Scope, cmd: &UserCommand) -> bool {
+        match scope {
+            Scope::SearchBar => {
+                match cmd {
+                    UserCommand::StartSearch => {
+                        self.should_start_search = true;
+                        true
+                    },
+                    _ => false
+                }
+            },
+            Scope::SearchBarCompletion => {
+                match cmd {
+                    UserCommand::NextItem => {
+                        self.completion.select_next();
+                        true
+                    },
+                    UserCommand::PrevItem => {
+                        self.completion.select_prev();
+                        true
+                    },
+                    UserCommand::ApplyCompletion => {
+                        self.should_apply_completion = true;
+                        true
+                    },
+                    UserCommand::CancelCompletion => {
+                        self.should_cancel_completion = true;
+                        true
+                    }
+                    _ => false
+                }
+            },
+            _ => unreachable!(),
+        }
     }
 
     /// Apply selected completion item
@@ -112,7 +184,7 @@ impl SearchBar {
                     .cursor
                     .set_char_range(Some(egui::text::CCursorRange::one(ccursor)));
                 state.store(ctx, text_edit_id);
-                s.request_focus = true;
+                s.should_focus = true;
             }
         }
 
@@ -128,7 +200,7 @@ impl SearchBar {
         }
     }
 
-    pub fn should_handle_completion(&mut self) -> bool {
+    pub fn should_handle_completion(&self) -> bool {
         if self.ignore_cursor.is_some_and(|c| c == self.current_cursor) {
             return false;
         }
@@ -165,38 +237,6 @@ impl SearchBar {
         false
     }
 
-    fn handle_completion_keyboard(
-        &mut self,
-        ctx: &egui::Context,
-    ) -> Option<SearchBarEvent> {
-        if !self.should_handle_completion() {
-            return None;
-        }
-
-        let mut event = None;
-
-        ctx.input_mut(|input| {
-            if input.consume_key(egui::Modifiers::NONE, egui::Key::Escape) {
-                self.ignore_cursor = Some(self.current_cursor);
-                if let Some(session_id) = self.completion.session_id {
-                    event = Some(SearchBarEvent::CancelCompletion { session_id });
-                }
-                self.completion.clear();
-            } else if input.consume_key(egui::Modifiers::NONE, egui::Key::ArrowDown) {
-                self.completion.select_next();
-            } else if input.consume_key(egui::Modifiers::NONE, egui::Key::ArrowUp) {
-                self.completion.select_prev();
-            } else if input.consume_key(egui::Modifiers::NONE, egui::Key::Tab) {
-                self.should_apply_completion = true;
-            } else if self.completion.selected.is_some()
-                && input.consume_key(egui::Modifiers::NONE, egui::Key::Enter)
-            {
-                self.should_apply_completion = true;
-            }
-        });
-        event
-    }
-
     // TODO In non-expanded mode, height is limited
     /// Render completion popup using egui::Popup (like egui_code_editor)
     fn render_completion_popup(
@@ -219,7 +259,7 @@ impl SearchBar {
 
         let mut event = None;
 
-        let popup_id = egui::Id::new(constants::ID_SEARCH_BAR_COMPLETION_POPUP);
+        let popup_id = Id::new(constants::ID_SEARCH_BAR_COMPLETION_POPUP);
         let text_edit_rect = text_edit_output.response.rect;
         let layer_id = text_edit_output.response.layer_id;
         let rect = if cursor.index == 0 {
@@ -313,10 +353,13 @@ impl ContextComponent for SearchBar {
     fn render(&mut self, ctx: &egui::Context, props: Self::Props<'_>) -> Self::Output {
         let mut events = vec![];
 
-        if props.search_mode == &SearchMode::Rule {
-            if let Some(event) = self.handle_completion_keyboard(ctx) {
-                events.push(event);
+        if self.should_cancel_completion {
+            self.ignore_cursor = Some(self.current_cursor);
+            if let Some(session_id) = self.completion.session_id {
+                events.push(SearchBarEvent::CancelCompletion { session_id });
             }
+            self.completion.clear();
+
         }
 
         let resp = egui::TopBottomPanel::top("search_bar")
@@ -337,6 +380,8 @@ impl ContextComponent for SearchBar {
                     setup_text_edit_style(style);
 
                     let editor = egui::TextEdit::singleline(&mut self.raw_search_query)
+                        .id(self.id)
+                        .lock_focus(true)
                         .desired_width(f32::INFINITY)
                         .font(
                             egui::TextStyle::Name(
@@ -405,19 +450,16 @@ impl ContextComponent for SearchBar {
                         }
                     }
 
-                    // Handle Enter key for search (only if no completion selected)
-                    if output.response.lost_focus()
-                        && ui.input(|i| i.key_pressed(egui::Key::Enter))
-                        && self.completion.selected.is_none()
-                    {
+                    if self.should_start_search {
                         events.push(SearchBarEvent::StartSearch(
                             self.raw_search_query.clone(),
                         ));
+                        self.should_start_search = false;
                     }
 
-                    if self.request_focus {
+                    if self.should_focus {
                         output.response.request_focus();
-                        self.request_focus = false;
+                        self.should_focus = false;
                     }
 
                     output

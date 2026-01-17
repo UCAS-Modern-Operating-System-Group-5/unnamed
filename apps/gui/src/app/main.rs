@@ -1,4 +1,6 @@
+use crate::constants;
 use super::Scope;
+use super::{KeyHandler, UserCommand};
 use crate::backend::{BackendEvent, ServerStatus, ServerWorkingStatus};
 use crate::component::{
     SearchBar, SearchBarEvent, SearchBarProps, StatusBar, StatusBarEvent, StatusBarProps,
@@ -16,11 +18,15 @@ use rpc::{
 };
 use std::sync::mpsc;
 use tracing::{error, info};
+use strum::{EnumCount, IntoEnumIterator};
+
 
 pub struct App {
-    config: Config,
-
+    // config: Config,
     s: State,
+
+    key_handler: KeyHandler,
+
     ability: Ability,
     search_bar: SearchBar,
     status_bar: StatusBar,
@@ -33,15 +39,12 @@ pub struct App {
 
 #[derive(Default)]
 pub struct State {
-    scope: Scope,
-
     request_search_focus: bool,
 
     /// Whether in Expand Mode
     expand: bool,
-    window_size: egui::Vec2,
-    dropped_files: Vec<egui::DroppedFile>,
-
+    // window_size: egui::Vec2,
+    // dropped_files: Vec<egui::DroppedFile>,
     search_mode: SearchMode,
     sort_mode: SortMode,
 }
@@ -98,17 +101,87 @@ impl App {
         };
 
         Self {
-            config,
             s: state,
+            key_handler: KeyHandler::new(config.keys),
             ability: Ability {
                 recenter: can_recenter,
             },
-            search_bar: Default::default(),
+            search_bar: SearchBar::new(egui::Id::new(constants::ID_SEARCH_BAR_INPUT)),
             status_bar: Default::default(),
             tx_request,
             rx_response,
 
             c: 0,
+        }
+    }
+
+    /// Tweaking Egui's beheavior to make it suitable for this application.
+    /// For example, Egui will always move focus when user pressing TAB even if
+    /// We have consumed the TAB key. We need to tweak this beheavior.
+    fn tweakingEguiBebeavior(&self, ctx: &egui::Context) {
+        // Make TAB key don't move focus
+        // Reference: https://github.com/emilk/egui/issues/5878#issuecomment-3316326257
+        if let Some(focused_widget) = ctx.memory(|i| i.focused()) {
+            ctx.memory_mut(|mem| {
+                mem.set_focus_lock_filter(
+                    focused_widget,
+                    egui::EventFilter {
+                        tab: true,
+                        ..Default::default()
+                    },
+                );
+            });
+        }
+    }
+
+    fn current_scope(&self, ctx: &egui::Context) -> Scope {
+        ctx.memory(|mem| match mem.focused() {
+            Some(id) if id == self.search_bar.id() => self.search_bar.current_scope(),
+            Some(_) => Scope::Main,
+            None => Scope::Global,
+        })
+    }
+
+    fn handle_key(&mut self, ctx: &egui::Context) {
+        let cur_scope = self.current_scope(ctx);
+        for (scope, cmd) in self.key_handler.handle(ctx, &cur_scope) {
+            let handled = match scope {
+                Scope::Global => false,
+                Scope::Main => false,
+                Scope::SearchBar | Scope::SearchBarCompletion => {
+                    self.search_bar.handle_user_command(&scope, &cmd)
+                }
+            };
+
+            if !handled {
+                self.handle_user_command(ctx, cmd);
+            }
+        }
+
+        // for scope in cur_scope.hierarchy() {
+        //     if let Some(self.config.)
+        // }
+    }
+
+    /// Handle user command at Global scope.
+    fn handle_user_command(&mut self, ctx: &egui::Context, cmd: UserCommand) {
+        match cmd {
+            UserCommand::QuitApplication => {
+                ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+            }
+            UserCommand::ToggleFullScreen => {
+                let fullscreen = ctx.input(|i| i.viewport().fullscreen.unwrap_or(false));
+                ctx.send_viewport_cmd(egui::ViewportCommand::Fullscreen(!fullscreen));
+            }
+            UserCommand::ToggleSearchMode => {
+                self.s.search_mode = SearchMode::iter()
+                    .cycle()
+                    .skip_while(|m| m != &self.s.search_mode)
+                    .skip(1)
+                    .next()
+                    .unwrap();
+            }
+            _ => {}
         }
     }
 
@@ -180,7 +253,7 @@ impl App {
             }
         }
     }
-    
+
     pub fn render_status_bar(&mut self, ctx: &egui::Context) {
         let server_status = ServerStatus::Online(ServerWorkingStatus::Searching);
         let props = StatusBarProps {
@@ -222,7 +295,7 @@ impl App {
             }
         }
     }
-    
+
     fn handle_completion_response(&mut self, response: CompletionResponse) {
         match response {
             CompletionResponse::Batch {
@@ -231,7 +304,8 @@ impl App {
                 has_more,
                 total_so_far: _,
             } => {
-                self.search_bar.receive_completion_batch(session_id, items, has_more);
+                self.search_bar
+                    .receive_completion_batch(session_id, items, has_more);
             }
             CompletionResponse::Cancelled { session_id } => {
                 self.search_bar.completion_cancelled(session_id);
@@ -289,24 +363,17 @@ impl eframe::App for App {
 
             self.s.request_search_focus = false;
         }
-
-        if ctx.input_mut(|i| i.consume_key(egui::Modifiers::NONE, egui::Key::F11)) {
-            let fullscreen = ctx.input(|i| i.viewport().fullscreen.unwrap_or(false));
-            ctx.send_viewport_cmd(egui::ViewportCommand::Fullscreen(!fullscreen));
-        }
+        
+        self.tweakingEguiBebeavior(ctx);
+        self.handle_key(ctx);
 
         // TODO first test it on my Arch Linux XFCE desktop
 
         self.handle_event();
-
         self.resize_window(ctx);
-
         self.update_window_title(ctx);
-
         self.handle_file_drop(ctx);
-
         self.render_search_bar(ctx);
-
         self.render_status_bar(ctx);
 
         egui::CentralPanel::default()

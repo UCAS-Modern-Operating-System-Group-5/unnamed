@@ -1,5 +1,6 @@
 pub const APP_ID: &str = "unnamed";
 
+pub const ID_SEARCH_BAR_INPUT: &str = "search_bar_input";
 pub const ID_SEARCH_BAR_COMPLETION_POPUP: &str = "search_bar_completion_popup";
 
 pub const COMPLETION_BATCH_SIZE: usize = 20;
