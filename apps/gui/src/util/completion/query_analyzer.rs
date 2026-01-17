@@ -1,3 +1,7 @@
+// FIXME support non-ascii characters
+// thread 'tokio-runtime-worker' (296782) panicked at apps/gui/src/util/completion/query_analyzer.rs:35:37:
+// byte index 32 is not a char boundary; it is inside '结' (bytes 31..34) of `root:~/Documents/archive/星火结项材料.
+
 use query::lexer::{Token, prelude::*};
 
 #[derive(Debug, Clone)]
