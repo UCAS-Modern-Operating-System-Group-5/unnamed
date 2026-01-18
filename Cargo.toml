@@ -29,7 +29,7 @@ etcetera = "0.11"
 strum = { version = "0.27", features = ["derive"] }
 derive_builder.version = "0.20"
 regex.version = "1"
-ignore.version = "0.4"
+ignore = "0.4"
 
 [workspace.dependencies.tarpc]
 version = "0.37"
@@ -39,7 +39,6 @@ features = [
 "serde-transport-bincode",
 "unix"
 ]
-
 
 [patch.crates-io]
 egui = { git = 'https://github.com/UCAS-Modern-Operating-System-Group-5/egui.git' }

@@ -1,0 +1,54 @@
+[package]
+name = "search-core"
+version = "0.1.0"
+edition.workspace = true
+description = "Core search engine with AI semantic capabilities"
+
+[dependencies]
+# 基础工具
+anyhow.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+
+# 搜索引擎
+tantivy = "0.25"
+tantivy-jieba = "0.17"
+jieba-rs = "0.8"
+
+# AI 模型 (Candle 纯 Rust)
+candle-core = "0.8.2"
+candle-nn = "0.8.2"
+candle-transformers = "0.8.2"
+tokenizers = { version = "0.20", default-features = false, features = ["onig"] }
+hf-hub = { version = "0.4", default-features = false, features = ["ureq"] }
+
+# 文件监控
+notify = "6.0"
+walkdir = "2.3"
+ignore.workspace = true
+
+# 文本提取
+pdf-extract = "0.10"
+
+# 缓存
+sled = "0.34"
+bincode = "1.3"
+
+# 工具
+once_cell = "1.19"
+toml.workspace = true
+regex.workspace = true
+glob = "0.3"
+
+# RPC 类型 (可选依赖，用于适配层)
+rpc = { path = "../rpc", optional = true }
+
+[features]
+default = []
+rpc-compat = ["rpc"]
+
+[dev-dependencies]
+tempfile = "3.10"

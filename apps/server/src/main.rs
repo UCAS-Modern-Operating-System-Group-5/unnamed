@@ -4,6 +4,7 @@ mod config;
 mod constants;
 mod error;
 mod indexer;
+mod session;
 
 use error::WrapErr;
 
@@ -26,6 +27,9 @@ async fn main() -> error::Result<()> {
             cli::Commands::Serve => Box::new(command::ServeCommand::new(cfg)),
             cli::Commands::Index { root_path } => {
                 Box::new(command::IndexCommand::new(cfg, root_path))
+            }
+            cli::Commands::ClearCache => {
+                Box::new(command::ClearCacheCommand::new(cfg))
             }
         };
         cmd.execute().await?;

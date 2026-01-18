@@ -1,0 +1,16 @@
+# Server 配置文件示例
+# 
+# 放置在: ~/.config/unnamed/server.toml (Linux/macOS)
+# 或者: %APPDATA%\mcst\unnamed\config\server.toml (Windows)
+
+# 要监控和索引的目录列表
+watch-paths = [
+    "/Users/yourname/Documents",
+    "/Users/yourname/Projects",
+]
+
+# 可选：指定运行时目录
+# runtime-dir = "/custom/runtime/path"
+
+# 可选：指定缓存目录
+# cache-dir = "/custom/cache/path"
