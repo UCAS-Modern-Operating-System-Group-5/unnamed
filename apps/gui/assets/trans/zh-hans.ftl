@@ -12,3 +12,11 @@ ModifiedTime = 修改时间
 Extension = 文件类型
 Relevance = 相关度
 
+query-field-root = 搜索根目录
+query-field-key = 关键词匹配
+query-field-r = 正则表达式模式
+query-field-glob = Glob/文件名模式
+query-field-atime = 访问时间范围
+query-field-mtime = 修改时间范围
+query-field-ctime = 创建时间范围
+query-field-s = 文件大小范围

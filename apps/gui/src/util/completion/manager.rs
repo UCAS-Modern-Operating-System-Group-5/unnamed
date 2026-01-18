@@ -5,6 +5,7 @@ use super::{
     query_analyzer::{CompletionContext, QueryAnalyzer},
     session::CompletionSession,
 };
+use egui_i18n::tr;
 use std::path::PathBuf;
 use std::pin::Pin;
 use std::sync::Arc;
@@ -101,35 +102,22 @@ impl CompletionManager {
             CompletionContext::Empty => Box::pin(tokio_stream::empty()),
 
             CompletionContext::PartialFieldOrTerm { text, start_pos } => {
-                let field_completions =
-                    self.field_name_completions(&text, start_pos..cursor_pos);
-
-                if text.starts_with('~') || text.contains('/') {
-                    let path_stream = self.path_completer.complete(&text).await;
-                    let path_stream =
-                        WrapperRangeStream::new(path_stream, start_pos..cursor_pos);
-
-                    let combined =
-                        tokio_stream::iter(field_completions).chain(path_stream);
-                    Box::pin(combined)
-                } else {
-                    Box::pin(tokio_stream::iter(field_completions))
-                }
+                Box::pin(tokio_stream::iter(
+                    self.field_name_completions(&text, start_pos..cursor_pos),
+                ))
             }
 
             CompletionContext::FieldValue {
                 field,
                 value,
                 value_start,
-            } => {
-                match field.as_str() {
-                    "root" => {
-                        let stream = self.path_completer.complete(&value).await;
-                        Box::pin(WrapperRangeStream::new(stream, value_start..cursor_pos))
-                    }
-                    _ => Box::pin(tokio_stream::empty()),
+            } => match field.as_str() {
+                "root" => {
+                    let stream = self.path_completer.complete(&value).await;
+                    Box::pin(WrapperRangeStream::new(stream, value_start..cursor_pos))
                 }
-            }
+                _ => Box::pin(tokio_stream::empty()),
+            },
 
             CompletionContext::AfterTerm
             | CompletionContext::AfterOperator
@@ -141,37 +129,30 @@ impl CompletionManager {
         }
     }
 
-    // TODO i18n support
     fn field_name_completions(
         &self,
         partial: &str,
         range: ReplacementRange,
     ) -> Vec<CompletionItem> {
-        const FIELDS: &[(&str, &str)] = &[
-            ("r:", "regexp"),
-            ("key:", "Keyword"),
-            ("root:", "Search root directory"),
-            ("in:", "Include (glob)"),
-            ("ext:", "Exclude (glob)"),
-            ("atime:", "Access time range"),
-            ("ctime:", "Create time range"),
-            ("mtime:", "Modified time range"),
-            ("size:", "File size range"),
-            ("num:", "Number of results"),
-        ];
-
         let partial_lower = partial.to_lowercase();
 
-        FIELDS
+        query::FIELD_DEFINITIONS
             .iter()
-            .filter(|(name, _)| name.starts_with(&partial_lower))
-            .map(|(name, desc)| CompletionItem {
-                label: format!("{} - {}", name, desc),
-                replacement: Replacement {
-                    range: range.clone(),
-                    text: name.to_string(),
-                },
-                source: CompletionSource::Keyword,
+            .filter(|fd| fd.aliases.iter().any(|a| a.starts_with(&partial_lower)))
+            .map(|fd| {
+                let primary_aliase = fd.aliases[0];
+                CompletionItem {
+                    label: format!(
+                        "{} - {}",
+                        primary_aliase,
+                        tr!(&format!("query-field-{}", primary_aliase))
+                    ),
+                    replacement: Replacement {
+                        range: range.clone(),
+                        text: format!("{}:", primary_aliase),
+                    },
+                    source: CompletionSource::Keyword,
+                }
             })
             .collect()
     }

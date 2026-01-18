@@ -4,7 +4,7 @@ use egui::{
     Color32,
     text::{LayoutJob, TextFormat},
 };
-use query::lexer::{Token, prelude::*};
+use query::lexer::{Token, QueryLexer};
 
 /// A simple search query highligher which memoizing previous output to save CPU
 /// In practice, a search query is short and and it should be fast enough not to
@@ -37,7 +37,7 @@ fn highlight_query(egui_style: &egui::Style, text: &str) -> LayoutJob {
     let error_color = egui_style.visuals.error_fg_color;
     let font_id = egui::TextStyle::Name(constants::TEXT_STYLE_SEARCH_BAR.into()).resolve(egui_style);
     
-    let tokens: Vec<_> = Token::lexer(text).spanned().collect();
+    let tokens: Vec<_> = QueryLexer::new(text).spanned().collect();
     let mut last_end = 0;
     for (i, (token_result, span)) in tokens.iter().enumerate() {
         // Handle whitespace, which is ignored by our lexer

@@ -2,7 +2,7 @@
 // thread 'tokio-runtime-worker' (296782) panicked at apps/gui/src/util/completion/query_analyzer.rs:35:37:
 // byte index 32 is not a char boundary; it is inside '结' (bytes 31..34) of `root:~/Documents/archive/星火结项材料.
 
-use query::lexer::{Token, prelude::*};
+use query::lexer::{Token, QueryLexer};
 
 #[derive(Debug, Clone)]
 pub enum CompletionContext {
@@ -46,7 +46,7 @@ impl QueryAnalyzer {
             return CompletionContext::InQuotedString;
         }
 
-        let lexer = Token::lexer(query_to_cursor);
+        let lexer = QueryLexer::new(query_to_cursor);
         let tokens: Vec<(Token, std::ops::Range<usize>)> = lexer
             .spanned()
             .filter_map(|(result, span)| result.ok().map(|t| (t, span)))
