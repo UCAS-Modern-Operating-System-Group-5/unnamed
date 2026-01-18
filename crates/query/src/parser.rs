@@ -28,18 +28,27 @@ pub struct ParsedTerm {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum ParsedTermValue {
-    /// Plain text
+    /// Plain text e.g. `abc`
     Text(String),
 
-    /// Quoted text (includes the quotes)
+    /// Quoted text (Not includes quotes) e.g. `a\"b c`
     QuotedText(String),
 }
 
 impl ParsedTermValue {
-    pub fn as_str(&self) -> &str {
+    pub fn raw_str(&self) -> &str {
         match self {
             ParsedTermValue::Text(s) => s,
             ParsedTermValue::QuotedText(s) => s,
+        }
+    }
+
+    /// Return the string inside the value with escaped quotes interpretation for
+    /// QuotedText. e.g. `a\"b` -> `ab`.
+    pub fn to_string(&self) -> String {
+        match self {
+            ParsedTermValue::Text(s) => s.into(),
+            ParsedTermValue::QuotedText(s) => s.replace(r#"\""#, r#"""#),
         }
     }
 }
@@ -56,14 +65,14 @@ impl ParsedTermValue {
 /// term        := (field ':')? value
 /// value       := Text | QuotedText
 /// ```
-pub fn parser<'tokens, I>(
-) -> impl Parser<'tokens, I, Spanned<ParsedQuery>, extra::Err<Rich<'tokens, Token>>>
+pub fn parser<'tokens, I>()
+-> impl Parser<'tokens, I, Spanned<ParsedQuery>, extra::Err<Rich<'tokens, Token>>>
 where
     I: ValueInput<'tokens, Token = Token, Span = SimpleSpan>,
 {
     recursive(|query| {
-        let field_with_span = select! { Token::Text(s) => s }
-            .map_with(|s, e| (s, e.span()));
+        let field_with_span =
+            select! { Token::Text(s) => s }.map_with(|s, e| (s, e.span()));
 
         let value_with_span = select! {
             Token::Text(s) => ParsedTermValue::Text(s),
@@ -73,19 +82,21 @@ where
 
         let term = field_with_span
             .clone()
-            .then(just(Token::Colon).ignore_then(value_with_span.clone()).or_not())
-            .map(|(field_spanned, value_opt)| {
-                match value_opt {
-                    Some(value) => ParsedTerm {
-                        field: Some(field_spanned),
-                        value,
-                    },
-                    None => {
-                        let (text, span) = field_spanned;
-                        ParsedTerm {
-                            field: None,
-                            value: (ParsedTermValue::Text(text), span),
-                        }
+            .then(
+                just(Token::Colon)
+                    .ignore_then(value_with_span.clone())
+                    .or_not(),
+            )
+            .map(|(field_spanned, value_opt)| match value_opt {
+                Some(value) => ParsedTerm {
+                    field: Some(field_spanned),
+                    value,
+                },
+                None => {
+                    let (text, span) = field_spanned;
+                    ParsedTerm {
+                        field: None,
+                        value: (ParsedTermValue::Text(text), span),
                     }
                 }
             })
@@ -103,33 +114,31 @@ where
             .clone()
             .delimited_by(just(Token::LParen), just(Token::RParen)));
 
-        let not_expr = just(Token::Not)
-            .map_with(|_, e| e.span())
-            .repeated()
-            .foldr(atom, |not_span: SimpleSpan, (q, q_span): Spanned<ParsedQuery>| {
+        let not_expr = just(Token::Not).map_with(|_, e| e.span()).repeated().foldr(
+            atom,
+            |not_span: SimpleSpan, (q, q_span): Spanned<ParsedQuery>| {
                 let combined_span = (not_span.start..q_span.end).into();
                 (ParsedQuery::Not(Box::new((q, q_span))), combined_span)
-            });
+            },
+        );
 
-        let and_expr = not_expr
-            .clone()
-            .foldl(
-                choice((
-                    just(Token::And).ignore_then(not_expr.clone()),
-                    not_expr.clone(),
-                ))
-                .repeated(),
-                |lhs: Spanned<ParsedQuery>, rhs: Spanned<ParsedQuery>| {
-                    let span = (lhs.1.start..rhs.1.end).into();
-                    match lhs {
-                        (ParsedQuery::And(mut v), _) => {
-                            v.push(rhs);
-                            (ParsedQuery::And(v), span)
-                        }
-                        _ => (ParsedQuery::And(vec![lhs, rhs]), span),
+        let and_expr = not_expr.clone().foldl(
+            choice((
+                just(Token::And).ignore_then(not_expr.clone()),
+                not_expr.clone(),
+            ))
+            .repeated(),
+            |lhs: Spanned<ParsedQuery>, rhs: Spanned<ParsedQuery>| {
+                let span = (lhs.1.start..rhs.1.end).into();
+                match lhs {
+                    (ParsedQuery::And(mut v), _) => {
+                        v.push(rhs);
+                        (ParsedQuery::And(v), span)
                     }
-                },
-            );
+                    _ => (ParsedQuery::And(vec![lhs, rhs]), span),
+                }
+            },
+        );
 
         and_expr.clone().foldl(
             just(Token::Or).ignore_then(and_expr).repeated(),
@@ -151,12 +160,9 @@ where
 pub fn parse_query(input: &str) -> Result<Spanned<ParsedQuery>, Vec<Rich<'_, Token>>> {
     use chumsky::input::Stream;
 
-    let token_iter = QueryLexer::new(input).spanned().map(|(tok, span)| {
-        (
-            tok.expect("Lexer error"),
-            SimpleSpan::from(span),
-        )
-    });
+    let token_iter = QueryLexer::new(input)
+        .spanned()
+        .map(|(tok, span)| (tok.expect("Lexer error"), SimpleSpan::from(span)));
 
     let token_stream = Stream::from_iter(token_iter)
         .map((0..input.len()).into(), |(t, s): (_, _)| (t, s));
@@ -174,7 +180,7 @@ mod tests {
         assert!(matches!(result.0, ParsedQuery::Term(_)));
         if let ParsedQuery::Term(term) = &result.0 {
             assert!(term.field.is_none());
-            assert_eq!(term.value.0.as_str(), "hello");
+            assert_eq!(term.value.0.raw_str(), "hello");
         }
     }
 
@@ -183,7 +189,7 @@ mod tests {
         let result = parse_query(r#""hello world""#).unwrap();
         if let ParsedQuery::Term(term) = &result.0 {
             assert!(term.field.is_none());
-            assert_eq!(term.value.0.as_str(), "hello world");
+            assert_eq!(term.value.0.raw_str(), "hello world");
         }
     }
 
@@ -192,11 +198,11 @@ mod tests {
         let result = parse_query("title:hello").unwrap();
         if let ParsedQuery::Term(term) = &result.0 {
             assert_eq!(term.field.as_ref().unwrap().0, "title");
-            assert_eq!(term.value.0.as_str(), "hello");
+            assert_eq!(term.value.0.raw_str(), "hello");
         }
     }
 
-#[test]
+    #[test]
     fn test_complex_query_with_spans() {
         let input = r#"(!glob:!*.rs || regexp:"*.py") root:/etc"#;
         let result = parse_query(input).unwrap();
@@ -244,7 +250,7 @@ mod tests {
         assert_eq!(field_span.end, 6);
 
         // Value "!*.rs"
-        assert_eq!(term.value.0.as_str(), "!*.rs");
+        assert_eq!(term.value.0.raw_str(), "!*.rs");
         assert_eq!(term.value.1.start, 7);
         assert_eq!(term.value.1.end, 12);
 
@@ -263,7 +269,7 @@ mod tests {
         assert_eq!(regexp_field_span.end, 22);
 
         // Quoted text
-        assert_eq!(regexp_term.value.0.as_str(), "*.py");
+        assert_eq!(regexp_term.value.0.raw_str(), "*.py");
         // The span includes the quotes
         assert_eq!(regexp_term.value.1.start, 23);
         assert_eq!(regexp_term.value.1.end, 29);
@@ -282,10 +288,10 @@ mod tests {
         assert_eq!(root_field_span.start, 31);
         assert_eq!(root_field_span.end, 35);
 
-        assert_eq!(root_term.value.0.as_str(), "/etc");
+        assert_eq!(root_term.value.0.raw_str(), "/etc");
         assert_eq!(root_term.value.1.start, 36);
         assert_eq!(root_term.value.1.end, 40);
-}
+    }
 
     #[test]
     fn test_span_info_preserved() {
@@ -357,18 +363,23 @@ mod tests {
     }
 
     #[test]
-    fn test_complex_query() {
+    fn test_complex_query0() {
         let result = parse_query(r#"(!r:*.rs || regexp:"*.py") root:/etc"#).unwrap();
-        
+
         // Should be And at top level
         if let ParsedQuery::And(items) = &result.0 {
             assert_eq!(items.len(), 2);
-            // First item should be the Or group
             assert!(matches!(&items[0].0, ParsedQuery::Or(_)));
-            // Second item should be the root term
             assert!(matches!(&items[1].0, ParsedQuery::Term(_)));
         } else {
             panic!("Expected And at top level");
         }
+    }
+
+    #[test]
+    fn test_complex_query1() {
+        let result =
+            parse_query("(size:>100MB AND mtime:>30d) OR (name:*.tmp AND mtime:>7d)");
+        assert!(result.is_ok());
     }
 }

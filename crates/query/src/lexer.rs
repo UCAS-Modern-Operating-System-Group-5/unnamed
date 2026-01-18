@@ -43,11 +43,17 @@ enum ValueToken {
     #[regex(r#""([^"\\]|\\.)*""#)]
     Quoted,
 
-    #[regex(r#"[^ \t\n\f"]+"#)]
+    #[regex(r#"[^ \t\n\f"())]+"#)]
     Text,
 
     #[regex(r"[ \t\n\f]+")]
     Whitespace,
+
+    #[token("(")]
+    LParen,
+    
+    #[token(")")]
+    RParen,
 }
 
 /// The public token type
@@ -122,6 +128,16 @@ impl<'source> Iterator for QueryLexer<'source> {
                     self.lexer = value_lexer.morph();
                     self.next()
                 }
+                Ok(ValueToken::LParen) => {
+                    self.current_span = value_lexer.span();
+                    self.lexer = value_lexer.morph();
+                    Some(Ok(Token::LParen))
+                }
+                Ok(ValueToken::RParen) => {
+                    self.current_span = value_lexer.span();
+                    self.lexer = value_lexer.morph();
+                    Some(Ok(Token::RParen))
+                }
                 Err(_) => {
                     self.current_span = value_lexer.span();
                     self.lexer = value_lexer.morph();
@@ -193,12 +209,14 @@ mod test {
 
     #[test]
     fn test_op_after_colon() {
-        let input = r#"r:(1AND)"#;
+        let input = r#"(r:1AND)"#;
         let tokens: Vec<_> = QueryLexer::new(input).collect();
         assert_eq!(tokens, vec![
+            Ok(Token::LParen),
             Ok(Token::Text("r".into())),
             Ok(Token::Colon),
-            Ok(Token::Text(r#"(1AND)"#.into()))
+            Ok(Token::Text(r#"1AND"#.into())),
+            Ok(Token::RParen),
         ]);
     }
 
@@ -286,7 +304,6 @@ mod test {
             .filter_map(|(result, span)| result.ok().map(|t| (t, span)))
             .collect();
 
-        // Verify that spans correctly index into original input
         for (token, span) in &tokens {
             let slice = &input[span.clone()];
             match token {
