@@ -263,7 +263,7 @@ mod tests {
 
     fn create_mock_hit(path: &str, score: f32) -> SearchHit {
         SearchHit {
-            file_path: PathBuf::from(path),
+            abs_file_path: PathBuf::from(path),
             score,
             snippet: "test snippet".to_string(),
             file_size: 1024,

@@ -87,7 +87,7 @@ async fn main() -> anyhow::Result<()> {
                 break;
             }
             
-            let fetch = client.fetch_results(context::current(), session_id, offset, limit).await?;
+            let fetch = client.fetch_search_results(context::current(), session_id, offset, limit).await?;
             
             if let Some(result) = fetch {
                 // 只在有新结果或状态变化时打印
@@ -107,7 +107,7 @@ async fn main() -> anyhow::Result<()> {
                     println!("本次返回: {} 个, has_more: {}", result.hits.len(), result.has_more);
                     
                     for (i, hit) in result.hits.iter().enumerate() {
-                        println!("  {}. {:?} (score: {:.2})", offset + i + 1, hit.file_path, hit.score);
+                        println!("  {}. {:?} (score: {:.2})", offset + i + 1, hit.abs_file_path, hit.score);
                     }
                 } else if status_changed {
                     // 状态变化但没有新结果时简单提示

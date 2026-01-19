@@ -35,11 +35,14 @@ pub enum Term {
     Size(SizeRange),
 }
 
+
 #[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 pub struct ValidationError {
     pub span: Span,
     pub kind: ValidationErrorKind,
 }
+
 
 impl ValidationError {
     pub fn new(span: Span, kind: ValidationErrorKind) -> Self {
@@ -65,6 +68,7 @@ impl fmt::Display for ValidationError {
 impl std::error::Error for ValidationError {}
 
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 pub enum ValidationErrorKind {
     UnknownField { field: String },
     InvalidRegex { pattern: String, reason: String },

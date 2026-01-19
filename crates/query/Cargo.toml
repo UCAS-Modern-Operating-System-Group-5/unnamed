@@ -10,3 +10,8 @@ rstest.workspace = true
 regex.workspace = true
 ignore.workspace = true
 chrono.version = "0.4"
+serde = { workspace = true, optional = true }
+
+
+[features]
+serde = [ "dep:serde", "chumsky/serde" ]
