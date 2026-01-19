@@ -7,10 +7,14 @@ use std::fs;
 use std::sync::Arc;
 use std::path::PathBuf;
 use tracing::info;
+use uuid::Uuid;
 
 use rpc::{
     World,
-    search::{SearchRequest, SearchResult, StartSearchResult, FetchResults, PagedResults, SearchHit}
+    search::{
+        SearchRequest, FetchSearchResultsRequest, FetchResults, 
+        SearchHit, SearchStatus, SearchErrorKind, SResult, SearchMode
+    }
 };
 use tarpc::{
     context::Context,
@@ -34,12 +38,19 @@ impl Server {
     /// 将内部 SearchResultItem 转换为 RPC SearchHit
     fn convert_to_hits(results: Vec<rpc_compat::SearchResultItem>) -> Vec<SearchHit> {
         results.into_iter().map(|hit| {
+            let modified_secs = hit.modified_time
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs())
+                .unwrap_or(0);
+            
             SearchHit {
-                abs_file_path: hit.path,
-                score: hit.score,
-                snippet: hit.preview,
+                file_path: hit.path,
+                score: Some(hit.score),
+                preview: hit.preview,
                 file_size: hit.file_size,
-                modified_time: hit.modified_time,
+                access_time: 0,  // TODO: 从索引获取
+                modified_time: modified_secs,
+                create_time: 0,  // TODO: 从索引获取
             }
         }).collect()
     }
@@ -50,33 +61,67 @@ impl World for Server {
         "Pong".to_string()
     }
 
-    // ============ 新 API: 异步流式搜索 ============
-
-    async fn start_search_async(self, _c: Context, req: SearchRequest) -> StartSearchResult {
-        info!("收到异步搜索请求: {:?}", req.keywords);
+    async fn start_search(self, _c: Context, req: SearchRequest) -> SResult<Uuid> {
+        info!("收到搜索请求: query='{}', mode={:?}", req.query, req.search_mode);
+        
+        if req.query.is_empty() {
+            return Err(SearchErrorKind::InvalidQuery(
+                query::ValidationError::new(
+                    query::empty_span(),
+                    query::ValidationErrorKind::EmptyValue,
+                )
+            ));
+        }
         
         // 创建异步会话（立即返回）
         let session_id = self.sessions.create_async_session();
-        info!("创建异步搜索会话: {}", session_id);
+        info!("创建搜索会话: {}", session_id);
         
         // 后台执行搜索
         let engine = self.engine.clone();
         let sessions = self.sessions.clone();
-        let req_clone = req;
+        let query_str = req.query.clone();
+        let search_mode = req.search_mode;
         
         let handle = tokio::spawn(async move {
-            match rpc_compat::search_sync(&engine, &req_clone) {
+            let limit = 1000;  // 默认最大结果数
+            
+            let result = match search_mode {
+                SearchMode::Rule => {
+                    rpc_compat::search_with_query_dsl(&engine, &query_str, limit)
+                }
+                SearchMode::Natural => {
+                    rpc_compat::search_with_semantic(&engine, &query_str, limit)
+                }
+            };
+            
+            match result {
                 Ok(results) => {
                     let hits = Self::convert_to_hits(results);
-                    info!("异步搜索完成，找到 {} 个结果", hits.len());
+                    info!("搜索完成，找到 {} 个结果", hits.len());
                     
                     // 追加结果并标记完成
                     sessions.append_results(session_id, hits);
                     sessions.mark_completed(session_id);
                 }
                 Err(e) => {
-                    info!("异步搜索失败: {}", e);
-                    sessions.mark_failed(session_id, e);
+                    info!("搜索失败: {}", e);
+                    // 将错误转换为 SearchErrorKind
+                    let error_kind = match e {
+                        rpc_compat::QuerySearchError::ParseError(msg) |
+                        rpc_compat::QuerySearchError::ValidationError(msg) => {
+                            SearchErrorKind::InvalidQuery(
+                                query::ValidationError::new(
+                                    query::empty_span(),
+                                    query::ValidationErrorKind::InvalidRange { reason: msg },
+                                )
+                            )
+                        }
+                        rpc_compat::QuerySearchError::ExecutionError(_) => {
+                            SearchErrorKind::OperateOnAlreadyFailedSearch
+                        }
+                    };
+                    sessions.mark_failed(session_id, error_kind);
                 }
             }
         });
@@ -84,23 +129,36 @@ impl World for Server {
         // 保存任务句柄（用于取消）
         self.sessions.set_task_handle(session_id, handle);
         
-        StartSearchResult::Started { session_id }
+        Ok(session_id)
+    }
+
+    async fn search_status(self, _c: Context, session_id: Uuid) -> SResult<SearchStatus> {
+        info!("查询搜索状态: session={}", session_id);
+        
+        self.sessions.get_status(session_id)
+            .ok_or(SearchErrorKind::SessionNotExists)
     }
 
     async fn fetch_search_results(
         self, 
         _c: Context, 
-        session_id: usize, 
-        offset: usize, 
-        limit: usize
-    ) -> Option<FetchResults> {
-        info!("获取搜索结果: session={}, offset={}, limit={}", session_id, offset, limit);
-        self.sessions.fetch_results(session_id, offset, limit)
+        req: FetchSearchResultsRequest,
+    ) -> SResult<FetchResults> {
+        info!("获取搜索结果: session={}, offset={}, limit={}", 
+              req.session_id, req.offset, req.limit);
+        
+        self.sessions.fetch_results(req.session_id, req.offset, req.limit)
+            .ok_or(SearchErrorKind::SessionNotExists)
     }
 
-    async fn cancel_search(self, _c: Context, session_id: usize) -> bool {
+    async fn cancel_search(self, _c: Context, session_id: Uuid) -> SResult<()> {
         info!("取消搜索会话: {}", session_id);
-        self.sessions.cancel_session(session_id)
+        
+        if self.sessions.cancel_session(session_id) {
+            Ok(())
+        } else {
+            Err(SearchErrorKind::SessionNotExists)
+        }
     }
 }
 

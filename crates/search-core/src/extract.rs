@@ -5,7 +5,6 @@ use std::fs;
 use std::path::Path;
 use std::time::Duration;
 use anyhow::{Result, Context};
-use encoding_rs::{Encoding, UTF_8, GBK, GB18030};
 use chardetng::EncodingDetector;
 
 use crate::models::FileDoc;
@@ -38,6 +37,59 @@ fn read_text_with_encoding_detection(path: &Path) -> Result<String> {
     Ok(decoded.into_owned())
 }
 
+/// 从 DOCX 文件提取文本内容
+fn extract_docx_text(path: &Path) -> Result<String> {
+    use docx_rs::*;
+    
+    let bytes = fs::read(path)?;
+    let docx = read_docx(&bytes)
+        .map_err(|e| anyhow::anyhow!("无法解析 DOCX 文件: {:?}", e))?;
+    
+    let mut text_content = String::new();
+    
+    // 遍历文档内容提取文本
+    for child in docx.document.children {
+        if let DocumentChild::Paragraph(paragraph) = child {
+            for p_child in paragraph.children {
+                if let ParagraphChild::Run(run) = p_child {
+                    for r_child in run.children {
+                        if let RunChild::Text(text) = r_child {
+                            text_content.push_str(&text.text);
+                        }
+                    }
+                }
+            }
+            text_content.push('\n');
+        } else if let DocumentChild::Table(table) = child {
+            // 处理表格内容
+            for row in table.rows {
+                let TableChild::TableRow(tr) = row;
+                for cell in tr.cells {
+                    let TableRowChild::TableCell(tc) = cell;
+                    for tc_child in tc.children {
+                        if let TableCellContent::Paragraph(paragraph) = tc_child {
+                            for p_child in paragraph.children {
+                                if let ParagraphChild::Run(run) = p_child {
+                                    for r_child in run.children {
+                                        if let RunChild::Text(text) = r_child {
+                                            text_content.push_str(&text.text);
+                                            text_content.push(' ');
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    text_content.push('\t');
+                }
+                text_content.push('\n');
+            }
+        }
+    }
+    
+    Ok(text_content.trim().to_string())
+}
+
 /// 从文件提取文本内容
 pub fn extract_text(path: &Path) -> Result<FileDoc> {
     // 简单的防抖动：如果是刚创建的文件，可能还在写入中
@@ -50,11 +102,14 @@ pub fn extract_text(path: &Path) -> Result<FileDoc> {
     tracing::debug!("正在解析文件: {:?}", path);
 
     let content = match extension {
-        "txt" | "md" | "rs" | "toml" | "json" | "yaml" | "yml" => {
+        "txt" | "md" | "markdown" | "rs" | "toml" | "json" | "yaml" | "yml" => {
             read_text_with_encoding_detection(path)?
         }
         "pdf" => {
             pdf_extract::extract_text(path).with_context(|| "无法解析 PDF")?
+        }
+        "docx" => {
+            extract_docx_text(path).with_context(|| "无法解析 DOCX")?
         }
         _ => return Err(anyhow::anyhow!("跳过不支持的文件格式: {}", extension)),
     };
@@ -149,7 +204,7 @@ impl TextExtractor {
             .and_then(|ext| ext.to_str())
             .unwrap_or("");
         
-        matches!(extension, "txt" | "md" | "rs" | "pdf" | "toml" | "json" | "yaml" | "yml")
+        matches!(extension, "txt" | "md" | "markdown" | "rs" | "pdf" | "docx" | "toml" | "json" | "yaml" | "yml")
     }
 }
 

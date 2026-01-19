@@ -18,6 +18,7 @@ pub mod models;
 pub mod registry;
 pub mod schema;
 pub mod search;
+pub mod query_executor;
 
 // RPC 适配层（可选功能）
 #[cfg(feature = "rpc-compat")]
@@ -38,6 +39,7 @@ pub use models::FileDoc;
 pub use registry::{FileRegistry, FileState, EventType, PendingEvent};
 pub use schema::{build_schema, IndexDocument, SchemaFields, FIELD_TITLE, FIELD_BODY, FIELD_PATH, FIELD_TAGS, FIELD_FILE_SIZE, FIELD_MODIFIED_TIME};
 pub use search::search_index;
+pub use query_executor::{execute_query, parse_and_execute, QueryContext, QueryExecuteError};
 
 /// 搜索引擎统一入口
 pub struct SearchEngine {
@@ -164,4 +166,8 @@ pub struct SearchHit {
     pub path: String,
     pub score: f32,
     pub tags: Option<String>,
+    /// 文件大小（字节），可选
+    pub file_size: Option<u64>,
+    /// 修改时间（Unix 时间戳秒），可选
+    pub modified_time: Option<u64>,
 }

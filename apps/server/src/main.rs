@@ -31,6 +31,13 @@ async fn main() -> error::Result<()> {
             cli::Commands::ClearCache => {
                 Box::new(command::ClearCacheCommand::new(cfg))
             }
+            cli::Commands::DebugCache { filter, limit, show_meta } => {
+                if show_meta {
+                    Box::new(command::DebugCacheMetaCommand::new(cfg, filter, limit))
+                } else {
+                    Box::new(command::DebugCacheCommand::new(cfg, filter, limit))
+                }
+            }
         };
         cmd.execute().await?;
     } else {

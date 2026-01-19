@@ -23,4 +23,16 @@ pub enum Commands {
     },
     /// Clear all caches (index + embedding cache)
     ClearCache,
+    /// Debug: 查看缓存的关键词和元数据
+    DebugCache {
+        /// 过滤文件路径（支持部分匹配）
+        #[arg(short, long)]
+        filter: Option<String>,
+        /// 限制显示的条目数量
+        #[arg(short, long, default_value = "20")]
+        limit: usize,
+        /// 显示文件元数据而非关键词
+        #[arg(long)]
+        show_meta: bool,
+    },
 }

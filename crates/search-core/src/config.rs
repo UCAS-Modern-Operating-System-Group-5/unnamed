@@ -101,7 +101,9 @@ impl Default for WalkerConfig {
             supported_extensions: vec![
                 "txt".to_string(),
                 "md".to_string(),
+                "markdown".to_string(),
                 "pdf".to_string(),
+                "docx".to_string(),
             ],
         }
     }

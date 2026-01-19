@@ -90,6 +90,8 @@ pub fn search_with_results(reader: &IndexReader, index: &Index, query_str: &str)
             path,
             score,
             tags,
+            file_size: None,
+            modified_time: None,
         });
     }
 
@@ -227,6 +229,8 @@ pub fn hybrid_search(
                         path,
                         score,
                         tags,
+                        file_size: None,
+                        modified_time: None,
                     });
                 }
             }
