@@ -5,9 +5,38 @@ use std::fs;
 use std::path::Path;
 use std::time::Duration;
 use anyhow::{Result, Context};
+use encoding_rs::{Encoding, UTF_8, GBK, GB18030};
+use chardetng::EncodingDetector;
 
 use crate::models::FileDoc;
 use crate::config::CONFIG;
+
+/// 智能读取文本文件（自动检测编码）
+fn read_text_with_encoding_detection(path: &Path) -> Result<String> {
+    let bytes = fs::read(path)?;
+    
+    // 先尝试UTF-8
+    if let Ok(text) = std::str::from_utf8(&bytes) {
+        tracing::debug!("文件使用 UTF-8 编码: {:?}", path);
+        return Ok(text.to_string());
+    }
+    
+    // 使用 chardetng 检测编码
+    let mut detector = EncodingDetector::new();
+    detector.feed(&bytes, true);
+    let detected_encoding = detector.guess(None, true);
+    
+    tracing::debug!("检测到文件编码 {:?}: {:?}", detected_encoding.name(), path);
+    
+    // 尝试使用检测到的编码
+    let (decoded, encoding_used, had_errors) = detected_encoding.decode(&bytes);
+    
+    if had_errors {
+        tracing::warn!("文件 {:?} 使用 {} 解码时有部分错误，可能影响搜索准确性", path, encoding_used.name());
+    }
+    
+    Ok(decoded.into_owned())
+}
 
 /// 从文件提取文本内容
 pub fn extract_text(path: &Path) -> Result<FileDoc> {
@@ -22,7 +51,7 @@ pub fn extract_text(path: &Path) -> Result<FileDoc> {
 
     let content = match extension {
         "txt" | "md" | "rs" | "toml" | "json" | "yaml" | "yml" => {
-            fs::read_to_string(path)?
+            read_text_with_encoding_detection(path)?
         }
         "pdf" => {
             pdf_extract::extract_text(path).with_context(|| "无法解析 PDF")?

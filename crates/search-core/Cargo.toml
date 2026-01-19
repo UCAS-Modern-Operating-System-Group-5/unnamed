@@ -33,6 +33,10 @@ walkdir.workspace = true
 # 文本提取
 pdf-extract.workspace = true
 
+# 编码检测和转换
+encoding_rs = "0.8"
+chardetng = "0.1"
+
 # 缓存
 sled.workspace = true
 bincode.workspace = true
