@@ -14,7 +14,7 @@ impl Default for AppConfig {
         Self {
             width: 800.0,
             height: 600.0,
-            background_alpha: 0.95,
+            background_alpha: 1.0,
         }
     }
 }

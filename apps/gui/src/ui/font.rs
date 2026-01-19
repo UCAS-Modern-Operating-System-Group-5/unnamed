@@ -3,66 +3,64 @@
 // Issue to track: https://github.com/emilk/egui/issues/5233
 
 use egui::{Context, FontData, FontDefinitions, FontFamily};
-use font_kit::{
-    family_name::FamilyName, handle::Handle, properties::Properties, source::SystemSource,
-};
-use tracing::{debug, info};
+// use tracing::{debug, info};
 use std::sync::Arc;
 
+// use font_kit::{
+//     family_name::FamilyName, handle::Handle, properties::Properties, source::SystemSource,
+// };
+// #[allow(dead_code)]
+// // Reference: https://github.com/woelper/oculante/blob/66e00785f13ef008e516d790b88ec34436188d24/src/ui/theme.rs#L110-L133
+// /// Attempt to load a system font by any of the given `family_names`, returning the first match.
+// fn load_font_family(family_names: &[&str]) -> Option<Vec<u8>> {
+//     let system_source = SystemSource::new();
+//     for &name in family_names {
+//         let font_handle = system_source.select_best_match(
+//             &[FamilyName::Title(name.to_string())],
+//             &Properties::new(),
+//         );
+//         match font_handle {
+//             Ok(h) => match &h {
+//                 Handle::Memory { bytes, .. } => {
+//                     info!("Loaded {name} from memory.");
+//                     return Some(bytes.to_vec());
+//                 }
+//                 Handle::Path { path, .. } => {
+//                     info!("Loaded {name} from path: {:?}", path);
+//                     if let Ok(data) = std::fs::read(path) {
+//                         return Some(data);
+//                     }
+//                 }
+//             },
+//             Err(e) => debug!("Could not load {}: {:?}", name, e),
+//         }
+//     }
+//     None
+// }
 
+// #[allow(dead_code)]
+// pub fn load_system_chinese_font() -> Result<FontData, String> {
+//     debug!("Attempting to load sys fonts");
 
-#[allow(dead_code)]
-// Reference: https://github.com/woelper/oculante/blob/66e00785f13ef008e516d790b88ec34436188d24/src/ui/theme.rs#L110-L133
-/// Attempt to load a system font by any of the given `family_names`, returning the first match.
-fn load_font_family(family_names: &[&str]) -> Option<Vec<u8>> {
-    let system_source = SystemSource::new();
-    for &name in family_names {
-        let font_handle = system_source.select_best_match(
-            &[FamilyName::Title(name.to_string())],
-            &Properties::new(),
-        );
-        match font_handle {
-            Ok(h) => match &h {
-                Handle::Memory { bytes, .. } => {
-                    info!("Loaded {name} from memory.");
-                    return Some(bytes.to_vec());
-                }
-                Handle::Path { path, .. } => {
-                    info!("Loaded {name} from path: {:?}", path);
-                    if let Ok(data) = std::fs::read(path) {
-                        return Some(data);
-                    }
-                }
-            },
-            Err(e) => debug!("Could not load {}: {:?}", name, e),
-        }
-    }
-    None
-}
+//     let font_families = vec![
+//         "Noto Sans CJK SC",
+//         "Microsoft YaHei",
+//         "Noto Sans SC",
+//         "WenQuanYi Zen Hei",
+//         "PingFang SC",
+//         "Heiti SC",
+//         "Songti SC",
+//         "SimSun",
+//         "Noto Sans SC",
+//         "Source Han Sans CN",
+//     ];
 
-#[allow(dead_code)]
-pub fn load_system_chinese_font() -> Result<FontData, String> {
-    debug!("Attempting to load sys fonts");
+//     if let Some(font_data) = load_font_family(&font_families) {
+//         return Ok(FontData::from_owned(font_data));
+//     }
 
-    let font_families = vec![
-        "Noto Sans CJK SC",
-        "Microsoft YaHei",
-        "Noto Sans SC",
-        "WenQuanYi Zen Hei",
-        "PingFang SC",
-        "Heiti SC",
-        "Songti SC",
-        "SimSun",
-        "Noto Sans SC",
-        "Source Han Sans CN",
-    ];
-
-    if let Some(font_data) = load_font_family(&font_families) {
-        return Ok(FontData::from_owned(font_data));
-    }
-
-    Err("No Chinese font founded".to_string())
-}
+//     Err("No Chinese font founded".to_string())
+// }
 
 
 // This methods find NotoSansCJK-VF.otf.ttc (~33MB) font on my system and takes

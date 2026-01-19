@@ -1,6 +1,8 @@
 # NOTE, you may want to set CROSS_CONTAINER_UID and CROSS_CONTAINER_GID environment
 # variables for `cross`. See https://aveygo.github.io/posts/cross_set_uid_gid/
 
+mod? p 'private.just'
+
 set dotenv-load
 set dotenv-override
 

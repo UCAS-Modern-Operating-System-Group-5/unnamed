@@ -14,7 +14,7 @@ use crate::constants;
 use egui::{FontId, TextStyle};
 use std::collections::BTreeMap;
 
-pub fn setup_ui(ctx: &egui::Context, cfg: &config::UiConfig) {
+pub fn setup_ui(ctx: &egui::Context, cfg: &config::UiConfig, alpha: f32) {
     let mut style = (*ctx.style()).clone();
 
     setup_fonts(ctx);
@@ -32,29 +32,20 @@ pub fn setup_ui(ctx: &egui::Context, cfg: &config::UiConfig) {
         (TextStyle::Heading, FontId::proportional(font_size * 1.2)),
         (TextStyle::Monospace, FontId::monospace(font_size)),
         (TextStyle::Button, FontId::monospace(font_size)),
+        (TextStyle::Name("SearchBar".into()), FontId::proportional(font_size * 1.5)),
+        (TextStyle::Name("StatusBar".into()), FontId::proportional(font_size * 1.2))
     ]
     .into();
     style.text_styles = text_styles;
 
     // Theme
-    let cur_theme = modus_operandi_tinted();
-    style.visuals = cur_theme.visuals;
-    ctx.data_mut(|data| {
-        data.insert_temp(
-            egui::Id::new(constants::ID_THEME_EXTRA_PALETTE_KEY),
-            cur_theme.extra_palette,
-        );
-    });
+    let theme = hexa34c_light(alpha);
+    if theme.is_dark {
+        ctx.set_theme(egui::Theme::Dark);
+    } else {
+        ctx.set_theme(egui::Theme::Light);
+    }
+    style.visuals = theme.visuals;
 
     ctx.set_style(style);
-}
-
-pub fn get_cur_theme_extra_palette(ctx: &egui::Context) -> ThemeExtraPalette {
-    ctx.data(|data| {
-        data.get_temp(egui::Id::new(constants::ID_THEME_EXTRA_PALETTE_KEY))
-            .expect(&format!(
-                "Cannot get {} in egui data",
-                constants::ID_THEME_EXTRA_PALETTE_KEY
-            ))
-    })
 }

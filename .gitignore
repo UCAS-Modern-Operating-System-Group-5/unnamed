@@ -1,4 +1,5 @@
 /target
+/private.just
 .direnv
 .env*
 repomix-output.*

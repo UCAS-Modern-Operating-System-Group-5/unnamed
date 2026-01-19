@@ -1,7 +1,15 @@
-// In the future, this may be moved to `ipc` crate
+use serde::{Deserialize, Serialize};
+use strum::{EnumCount, EnumIter};
 use std::path::PathBuf;
 use std::time::SystemTime;
-use serde::{Serialize, Deserialize};
+
+// #[derive(Debug, Serialize, Deserialize)]
+// pub struct SearchRequest {
+//     query: String,
+//     search_mode: SearchMode,
+//     sort_mode: SortMode,
+// }
+
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SearchRequest {
@@ -35,8 +43,20 @@ pub struct SearchRequest {
     pub max_results: Option<usize>
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+
+#[derive(
+    Debug,
+    Default,
+    PartialEq,
+    Serialize,
+    Deserialize,
+    strum::Display,
+    EnumIter,
+    EnumCount,
+    Clone,
+)]
 pub enum SortMode {
+    #[default]
     Alphabetical,
     ReverseAlphabetical,
     AccessedTime,
@@ -45,6 +65,15 @@ pub enum SortMode {
     Extension,
     /// Sort by AI relevance score
     Relevance,
+}
+
+#[derive(Debug, Default, PartialEq, Serialize, Deserialize, EnumIter)]
+pub enum SearchMode {
+    /// Natural language
+    #[default]
+    Natural,
+    /// Rule based search (i.e. exact match, regexp, specifying root directory)
+    Rule,
 }
 
 /// 搜索启动结果
@@ -101,7 +130,6 @@ pub struct FetchResults {
 
 // ============ 兼容旧 API（可选保留）============
 
-/// 旧版搜索结果（兼容）
 #[derive(Debug, Serialize, Deserialize)]
 pub enum SearchResult {
     /// Search started successfully

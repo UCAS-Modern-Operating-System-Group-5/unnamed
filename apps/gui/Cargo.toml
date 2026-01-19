@@ -4,9 +4,11 @@ version = "0.1.0"
 edition.workspace = true
 
 [dependencies]
-egui.version = "0.33.3"
-egui_extras = { version = "0.33.3", features = ["default", "image"] }
-font-kit = "0.14.3"
+# Note, we are using an patched version, which is specified at the Cargo.toml
+# at project root 
+egui = { version = "0.33.3", features = [ "callstack", "accesskit"] }
+egui_extras = { version = "0.33.3", features = ["svg"] }
+egui-i18n = { version = "0.1",  features = ["fluent"] }
 
 tracing.workspace = true
 tracing-subscriber.workspace = true
@@ -22,7 +24,11 @@ toml.workspace = true
 tokio.workspace = true
 rpc = { path = "../../crates/rpc" }
 config = { path = "../../crates/config" }
+query = { path = "../../crates/query" }
 tarpc.workspace = true
+strum.workspace = true
+derive_builder.workspace = true
+tokio-stream.workspace = true
 
 
 [dependencies.eframe]
@@ -32,7 +38,7 @@ features = [
 "accesskit",
 "glow",
 "wayland",
-"x11"
+"x11",
 ]
 
 [dev-dependencies]
@@ -41,3 +47,4 @@ rstest.workspace = true
 
 [features]
 profile-with-puffin = ["profiling/profile-with-puffin", "dep:puffin", "dep:puffin_http"]
+
