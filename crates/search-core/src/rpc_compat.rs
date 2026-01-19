@@ -69,7 +69,7 @@ pub struct SearchResultItem {
     pub title: String,
     pub score: f32,
     pub preview: String,
-    pub tags: Vec<String>,
+    pub ags: Vec<String>,
     pub file_size: u64,
     pub modified_time: std::time::SystemTime,
 }

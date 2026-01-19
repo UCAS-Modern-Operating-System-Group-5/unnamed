@@ -207,7 +207,7 @@ async fn search_async(client: &WorldClient) -> anyhow::Result<()> {
             loop {
                 tokio::time::sleep(Duration::from_millis(300)).await;
                 
-                let fetch = client.fetch_results(context::current(), session_id, offset, limit).await?;
+                let fetch = client.fetch_search_results(context::current(), session_id, offset, limit).await?;
                 
                 if let Some(result) = fetch {
                     // 显示新结果
@@ -215,7 +215,7 @@ async fn search_async(client: &WorldClient) -> anyhow::Result<()> {
                         println!("📄 结果 [{}-{}]:", offset + 1, offset + result.hits.len());
                         for (i, hit) in result.hits.iter().enumerate() {
                             let num = offset + i + 1;
-                            println!("  {}. {} (评分: {:.2})", num, hit.file_path.display(), hit.score);
+                            println!("  {}. {} (评分: {:.2})", num, hit.abs_file_path.display(), hit.score);
                             println!("     📝 {}", hit.snippet);
                             println!("     📊 大小: {} bytes, 修改: {:?}", hit.file_size, hit.modified_time);
                             println!();

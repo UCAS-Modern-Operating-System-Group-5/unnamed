@@ -35,7 +35,7 @@ impl Server {
     fn convert_to_hits(results: Vec<rpc_compat::SearchResultItem>) -> Vec<SearchHit> {
         results.into_iter().map(|hit| {
             SearchHit {
-                file_path: hit.path,
+                abs_file_path: hit.path,
                 score: hit.score,
                 snippet: hit.preview,
                 file_size: hit.file_size,
@@ -87,7 +87,7 @@ impl World for Server {
         StartSearchResult::Started { session_id }
     }
 
-    async fn fetch_results(
+    async fn fetch_search_results(
         self, 
         _c: Context, 
         session_id: usize, 
@@ -101,43 +101,6 @@ impl World for Server {
     async fn cancel_search(self, _c: Context, session_id: usize) -> bool {
         info!("取消搜索会话: {}", session_id);
         self.sessions.cancel_session(session_id)
-    }
-
-    // ============ 旧 API: 同步搜索（兼容）============
-
-    async fn start_search(self, _c: Context, req: SearchRequest) -> SearchResult {
-        info!("收到同步搜索请求: {:?}", req.keywords);
-        
-        // 使用 rpc_compat 处理请求
-        match rpc_compat::search_sync(&self.engine, &req) {
-            Ok(results) => {
-                let total_count = results.len();
-                info!("搜索完成，找到 {} 个结果", total_count);
-                
-                // 转换为 SearchHit
-                let hits = Self::convert_to_hits(results);
-                
-                // 创建会话存储结果
-                let session_id = self.sessions.create_session(hits);
-                info!("创建搜索会话: {}, 结果数: {}", session_id, total_count);
-                
-                SearchResult::Started { session_id, total_count }
-            }
-            Err(e) => {
-                SearchResult::Failed(e)
-            }
-        }
-    }
-
-    async fn get_results_page(
-        self, 
-        _c: Context, 
-        session_id: usize, 
-        page: usize, 
-        page_size: usize
-    ) -> Option<PagedResults> {
-        info!("获取分页结果: session={}, page={}, size={}", session_id, page, page_size);
-        self.sessions.get_page(session_id, page, page_size)
     }
 }
 
