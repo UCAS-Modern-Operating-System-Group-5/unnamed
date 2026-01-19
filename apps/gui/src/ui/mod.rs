@@ -32,8 +32,8 @@ pub fn setup_ui(ctx: &egui::Context, cfg: &config::UiConfig, alpha: f32) {
         (TextStyle::Heading, FontId::proportional(font_size * 1.2)),
         (TextStyle::Monospace, FontId::monospace(font_size)),
         (TextStyle::Button, FontId::monospace(font_size)),
-        (TextStyle::Name("SearchBar".into()), FontId::proportional(font_size * 1.5)),
-        (TextStyle::Name("StatusBar".into()), FontId::proportional(font_size * 1.2))
+        (TextStyle::Name("SearchBar".into()), FontId::proportional(font_size * 1.618)),
+        (TextStyle::Name("StatusBar".into()), FontId::proportional(font_size))
     ]
     .into();
     style.text_styles = text_styles;
@@ -46,6 +46,8 @@ pub fn setup_ui(ctx: &egui::Context, cfg: &config::UiConfig, alpha: f32) {
         ctx.set_theme(egui::Theme::Light);
     }
     style.visuals = theme.visuals;
+
+    style.spacing = theme.spacing;
 
     ctx.set_style(style);
 }

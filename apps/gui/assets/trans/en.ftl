@@ -22,3 +22,22 @@ query-field-mtime = Modified time range
 query-field-ctime = Creation time range
 query-field-s = File size range
 
+
+# TODO Chinese Translation
+# Query Result Field
+qrf-file-name = name
+qrf-file-path = Path
+qrf-score = Score
+qrf-mtime = MTime
+qrf-atime = ATime
+qrf-ctime = CTime
+
+# Query Result Field Description
+qrfd-file-name = File name
+qrfd-file-path = Absolute file path
+qrfd-score = Natural language search score(The larger the better)
+qrfd-mtime = Modified time
+qrfd-atime = Access time
+qrfd-ctime = Creation time
+
+

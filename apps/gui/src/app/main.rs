@@ -1,9 +1,10 @@
 use crate::constants;
-use super::Scope;
+use super::{Scope, SortMode};
 use super::{KeyHandler, UserCommand};
 use crate::backend::{BackendEvent, ServerStatus, ServerWorkingStatus};
 use crate::component::{
     SearchBar, SearchBarEvent, SearchBarProps, StatusBar, StatusBarEvent, StatusBarProps,
+    SearchResultViewer, SearchResultViewerProps, SearchResultViewerEvent,
     prelude::*,
 };
 use crate::config::Config;
@@ -14,11 +15,11 @@ use crate::util::{
 };
 use rpc::{
     Request as RpcRequest,
-    search::{SearchMode, SortMode},
+    search::{SearchMode},
 };
 use std::sync::mpsc;
 use tracing::{error, info};
-use strum::{EnumCount, IntoEnumIterator};
+use strum::IntoEnumIterator;
 
 
 pub struct App {
@@ -30,6 +31,7 @@ pub struct App {
     ability: Ability,
     search_bar: SearchBar,
     status_bar: StatusBar,
+    search_result_viewer: SearchResultViewer,
 
     tx_request: mpsc::Sender<Request>,
     rx_response: mpsc::Receiver<Response>,
@@ -43,7 +45,6 @@ pub struct State {
 
     /// Whether in Expand Mode
     expand: bool,
-    // window_size: egui::Vec2,
     // dropped_files: Vec<egui::DroppedFile>,
     search_mode: SearchMode,
     sort_mode: SortMode,
@@ -108,6 +109,7 @@ impl App {
             },
             search_bar: SearchBar::new(egui::Id::new(constants::ID_SEARCH_BAR_INPUT)),
             status_bar: Default::default(),
+            search_result_viewer: Default::default(),
             tx_request,
             rx_response,
 
@@ -147,7 +149,13 @@ impl App {
         for (scope, cmd) in self.key_handler.handle(ctx, &cur_scope) {
             let handled = match scope {
                 Scope::Global => false,
-                Scope::Main => false,
+                Scope::Main => {
+                    if self.s.expand {
+                        self.search_result_viewer.handle_user_command(&cmd)
+                    } else {
+                        false
+                    }
+                },
                 Scope::SearchBar | Scope::SearchBarCompletion => {
                     self.search_bar.handle_user_command(&scope, &cmd)
                 }
@@ -157,10 +165,6 @@ impl App {
                 self.handle_user_command(ctx, cmd);
             }
         }
-
-        // for scope in cur_scope.hierarchy() {
-        //     if let Some(self.config.)
-        // }
     }
 
     /// Handle user command at Global scope.
@@ -251,6 +255,16 @@ impl App {
                     ));
                 }
             }
+        }
+    }
+
+    pub fn render_search_result_viewer(&mut self, ui: &mut egui::Ui) {
+        let props = SearchResultViewerProps {
+            search_mode: &self.s.search_mode,
+            sort_mode: &self.s.sort_mode,
+        };
+        let output = self.search_result_viewer.render(ui, props);
+        for event in output.events {
         }
     }
 
@@ -383,9 +397,7 @@ impl eframe::App for App {
                     .fill(ctx.style().visuals.panel_fill),
             )
             .show(ctx, |ui| {
-                ui.horizontal(|ui| {
-                    ui.label("HI");
-                });
+                self.render_search_result_viewer(ui);
             });
     }
 }

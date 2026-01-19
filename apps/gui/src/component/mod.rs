@@ -1,10 +1,12 @@
 // Reference: https://github.com/anitnilay20/thoth/blob/main/src/components/traits.rs
 mod status_bar;
 mod search_bar;
+mod search_result_viewer;
 
 // pub use search_bar::{}
 pub use status_bar::{StatusBar, StatusBarEvent, StatusBarProps};
 pub use search_bar::{SearchBar, SearchBarEvent, SearchBarProps};
+pub use search_result_viewer::{SearchResultViewer, SearchResultViewerProps, SearchResultViewerEvent};
 
 pub mod prelude {
     pub use super::{StatelessComponent, StatefulComponent, ContextComponent};

@@ -7,7 +7,7 @@ pub use monochrome::{monochrome_dark, monochrome_light};
 use egui::{
     Color32, Context, CornerRadius, Visuals,
     epaint::{Shadow, Stroke},
-    style::{Selection, TextCursorStyle, WidgetVisuals, Widgets},
+    style::{Selection, TextCursorStyle, WidgetVisuals, Widgets, Spacing, ScrollStyle},
 };
 
 pub trait ColorPalette {
@@ -38,6 +38,7 @@ pub struct Theme {
     pub name: String,
     pub is_dark: bool,
     pub visuals: Visuals,
+    pub spacing: Spacing
 }
 
 impl Theme {
@@ -146,16 +147,18 @@ impl Theme {
                 Visuals::light()
             }
         };
+
+        let spacing = Spacing {
+            scroll: ScrollStyle::floating(),
+            ..Default::default()
+        };
+        
         Self {
             name: name.to_string(),
             is_dark: palette.is_dark() ,
             visuals,
+            spacing,
         }
-    }
-
-    #[allow(dead_code)]
-    pub fn apply(self, ctx: &Context) {
-        ctx.set_visuals(self.visuals);
     }
 }
 

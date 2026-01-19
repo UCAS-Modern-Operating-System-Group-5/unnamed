@@ -60,8 +60,12 @@ fn main() -> eframe::Result {
         // .with_decorations(false)
         // Wayland user can use app-id to customize window's behavior
         .with_app_id(constants::APP_ID)
-        .with_transparent(true)
+        // Our test machine doesn't support transparent viewport
+        // (failed to find a matching configuration for creating glutin config)
         .with_drag_and_drop(true);
+
+    #[cfg(feature = "transparent-viewport")]
+    let viewport = viewport.with_transparent(true);
 
     let options = eframe::NativeOptions {
         viewport,

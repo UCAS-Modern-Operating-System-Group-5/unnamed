@@ -3,9 +3,10 @@ use crate::backend::ServerStatus;
 use crate::ui::icon::icon_image;
 use egui::{Response, Sense, TextStyle, Ui, Widget, pos2, vec2};
 use egui_i18n::tr;
-use rpc::search::{SearchMode, SortMode};
+use rpc::search::SearchMode;
 use strum::{EnumCount, IntoEnumIterator};
 use crate::constants;
+use crate::app::SortMode;
 
 pub struct StatusBar {
     panel_height: f32,
@@ -214,7 +215,7 @@ impl ContextComponent for StatusBar {
     fn render(&mut self, ctx: &egui::Context, props: Self::Props<'_>) -> Self::Output {
         let mut events = Vec::new();
 
-        let resp = egui::TopBottomPanel::bottom("status_bar")
+        let resp = egui::TopBottomPanel::bottom(constants::ID_PANEL_STATUS_BAR)
             .show_separator_line(false)
             .frame(
                 egui::Frame::NONE

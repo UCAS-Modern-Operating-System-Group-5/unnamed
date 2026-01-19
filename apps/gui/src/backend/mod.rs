@@ -44,10 +44,13 @@ pub async fn handle_backend_request(
 ) -> std::result::Result<RpcResponse, String> {
     match request {
         RpcRequest::Ping => rpc_client
-            .ping(context::current())
-            .await
-            .map_err(|e| e.to_string())
-            .map(RpcResponse::Ping),
+                .ping(context::current())
+                .await
+                .map_err(|e| e.to_string())
+                .map(RpcResponse::Ping),
         RpcRequest::StartSearch(_) => todo!(),
+        RpcRequest::SearchStatus(uuid) => todo!(),
+        RpcRequest::FetchSearchResults(fetch_search_results_request) => todo!(),
+        RpcRequest::CancelSearch(uuid) => todo!(),
     }
 }

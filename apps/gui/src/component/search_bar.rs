@@ -362,7 +362,7 @@ impl ContextComponent for SearchBar {
 
         }
 
-        let resp = egui::TopBottomPanel::top("search_bar")
+        let resp = egui::TopBottomPanel::top(constants::ID_PANEL_SEARCH_BAR)
             .show_separator_line(props.draw_separate_line)
             .frame(
                 egui::Frame::NONE

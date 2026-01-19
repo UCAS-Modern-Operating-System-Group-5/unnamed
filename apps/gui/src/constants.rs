@@ -1,5 +1,8 @@
 pub const APP_ID: &str = "unnamed";
 
+pub const ID_PANEL_SEARCH_BAR: &str = "search_bar_panel";
+pub const ID_PANEL_STATUS_BAR: &str = "status_bar_panel";
+pub const ID_PANEL_SEARCH_RESULT_VIEWER: &str = "search_result_viewer_panel";
 pub const ID_SEARCH_BAR_INPUT: &str = "search_bar_input";
 pub const ID_SEARCH_BAR_COMPLETION_POPUP: &str = "search_bar_completion_popup";
 
