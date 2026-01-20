@@ -56,7 +56,6 @@ fn main() -> eframe::Result {
         // See https://docs.rs/winit/latest/winit/window/struct.Window.html#method.set_resizable
         .with_resizable(false)
         // .with_window_type(egui::X11WindowType::Dialog)
-        
         // .with_decorations(false)
         // Wayland user can use app-id to customize window's behavior
         .with_app_id(constants::APP_ID)

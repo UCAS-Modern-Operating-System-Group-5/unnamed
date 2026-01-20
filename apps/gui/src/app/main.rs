@@ -101,13 +101,15 @@ impl App {
             ..Default::default()
         };
 
+        let search_bar = Self::create_search_bar(&config);
+
         Self {
             s: state,
             key_handler: KeyHandler::new(config.keys),
             ability: Ability {
                 recenter: can_recenter,
             },
-            search_bar: SearchBar::new(egui::Id::new(constants::ID_SEARCH_BAR_INPUT)),
+            search_bar,
             status_bar: Default::default(),
             search_result_viewer: Default::default(),
             tx_request,
@@ -117,10 +119,41 @@ impl App {
         }
     }
 
+    fn create_search_bar(config: &Config) -> SearchBar {
+        // Find start_search key shortcut
+        let mut start_search_key_shortcut = None;
+        let mut completion_start_search_key_shortcut = None;
+        for (scope, bindings) in &config.keys {
+            match scope {
+                Scope::SearchBar => {
+                    for (key_shortcut, user_command) in bindings {
+                        if user_command == &UserCommand::StartSearch {
+                            start_search_key_shortcut = Some(key_shortcut.clone());
+                        }
+                    }
+                },
+                Scope::SearchBarCompletion => {
+                    for (key_shortcut, user_command) in bindings {
+                        if user_command == &UserCommand::StartSearch {
+                            completion_start_search_key_shortcut = Some(key_shortcut.clone());
+                        }
+                    }
+                },
+                _ => {}
+            }
+        };
+
+        SearchBar::new(
+            egui::Id::new(constants::ID_SEARCH_BAR_INPUT),
+            start_search_key_shortcut,
+            completion_start_search_key_shortcut,
+        )
+    }
+
     /// Tweaking Egui's beheavior to make it suitable for this application.
     /// For example, Egui will always move focus when user pressing TAB even if
     /// We have consumed the TAB key. We need to tweak this beheavior.
-    fn tweakingEguiBebeavior(&self, ctx: &egui::Context) {
+    fn tweak_egui_beheavior(&self, ctx: &egui::Context) {
         // Make TAB key don't move focus
         // Reference: https://github.com/emilk/egui/issues/5878#issuecomment-3316326257
         if let Some(focused_widget) = ctx.memory(|i| i.focused()) {
@@ -371,6 +404,7 @@ impl eframe::App for App {
         // color.to_normalized_gamma_f32()
         egui::Color32::TRANSPARENT.to_normalized_gamma_f32()
     }
+    
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if self.s.request_search_focus {
             self.search_bar.request_focus();
@@ -378,7 +412,7 @@ impl eframe::App for App {
             self.s.request_search_focus = false;
         }
         
-        self.tweakingEguiBebeavior(ctx);
+        self.tweak_egui_beheavior(ctx);
         self.handle_key(ctx);
 
         // TODO first test it on my Arch Linux XFCE desktop

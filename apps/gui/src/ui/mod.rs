@@ -33,6 +33,7 @@ pub fn setup_ui(ctx: &egui::Context, cfg: &config::UiConfig, alpha: f32) {
         (TextStyle::Monospace, FontId::monospace(font_size)),
         (TextStyle::Button, FontId::monospace(font_size)),
         (TextStyle::Name("SearchBar".into()), FontId::proportional(font_size * 1.618)),
+        (TextStyle::Name("SearchBarKeyHint".into()), FontId::proportional(font_size)),
         (TextStyle::Name("StatusBar".into()), FontId::proportional(font_size))
     ]
     .into();

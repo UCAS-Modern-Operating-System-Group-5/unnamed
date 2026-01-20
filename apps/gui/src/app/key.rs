@@ -166,9 +166,10 @@ pub fn default_key_config() -> KeyConfig {
             "Ctrl-K" => UserCommand::PrevItem,
             "Enter" => UserCommand::ApplyCompletion,
             "Esc" => UserCommand::CancelCompletion,
+            "Ctrl-Enter" => UserCommand::StartSearch,
         },
         Scope::SearchBar => {
-            "Enter" => UserCommand::StartSearch
+            "Enter" => UserCommand::StartSearch,
         }
     }
 }

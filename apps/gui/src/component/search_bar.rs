@@ -1,10 +1,10 @@
 use super::ContextComponent;
+use crate::app::{KeyShortcut, Scope, UserCommand};
 use crate::constants;
 use crate::util::MemoizedQueryHighligher;
 use crate::util::completion::{CompletionItem, CompletionSessionId, CompletionState};
-use egui::{Sense, text_edit::TextEditOutput, Id};
+use egui::{Id, Sense, text_edit::TextEditOutput};
 use rpc::search::SearchMode;
-use crate::app::{UserCommand, Scope};
 
 use egui_i18n::tr;
 use std::time::{Duration, Instant};
@@ -13,7 +13,10 @@ const COMPLETION_VISIBLE_ITEMS_NUM: usize = 10;
 
 pub struct SearchBar {
     id: Id,
-    
+
+    start_search_key_shortcut: Option<KeyShortcut>,
+    completion_start_search_key_shortcut: Option<KeyShortcut>,
+
     raw_search_query: String,
     panel_height: f32,
     query_highligher: MemoizedQueryHighligher,
@@ -35,10 +38,6 @@ pub struct SearchBar {
     should_cancel_completion: bool,
     should_apply_completion: bool,
 }
-
-// pub struct SearchBarState {
-    
-// }
 
 pub struct SearchBarProps<'a> {
     pub search_mode: &'a SearchMode,
@@ -68,9 +67,15 @@ pub enum SearchBarEvent {
 }
 
 impl SearchBar {
-    pub fn new(id: Id) -> Self {
+    pub fn new(
+        id: Id,
+        start_search_key_shortcut: Option<KeyShortcut>,
+        completion_start_search_key_shortcut: Option<KeyShortcut>,
+    ) -> Self {
         Self {
             id,
+            start_search_key_shortcut,
+            completion_start_search_key_shortcut,
             raw_search_query: String::new(),
             panel_height: 0.0,
             query_highligher: Default::default(),
@@ -125,35 +130,35 @@ impl SearchBar {
     /// Scope can only be Scope::SearchBar or Scope::SearchBarCompletion
     pub fn handle_user_command(&mut self, scope: &Scope, cmd: &UserCommand) -> bool {
         match scope {
-            Scope::SearchBar => {
-                match cmd {
-                    UserCommand::StartSearch => {
-                        self.should_start_search = true;
-                        true
-                    },
-                    _ => false
+            Scope::SearchBar => match cmd {
+                UserCommand::StartSearch => {
+                    self.should_start_search = true;
+                    true
                 }
+                _ => false,
             },
-            Scope::SearchBarCompletion => {
-                match cmd {
-                    UserCommand::NextItem => {
-                        self.completion.select_next();
-                        true
-                    },
-                    UserCommand::PrevItem => {
-                        self.completion.select_prev();
-                        true
-                    },
-                    UserCommand::ApplyCompletion => {
-                        self.should_apply_completion = true;
-                        true
-                    },
-                    UserCommand::CancelCompletion => {
-                        self.should_cancel_completion = true;
-                        true
-                    }
-                    _ => false
+            Scope::SearchBarCompletion => match cmd {
+                UserCommand::NextItem => {
+                    self.completion.select_next();
+                    true
                 }
+                UserCommand::PrevItem => {
+                    self.completion.select_prev();
+                    true
+                }
+                UserCommand::ApplyCompletion => {
+                    self.should_apply_completion = true;
+                    true
+                }
+                UserCommand::CancelCompletion => {
+                    self.should_cancel_completion = true;
+                    true
+                }
+                UserCommand::StartSearch => {
+                    self.should_start_search = true;
+                    true
+                }
+                _ => false,
             },
             _ => unreachable!(),
         }
@@ -237,7 +242,7 @@ impl SearchBar {
         false
     }
 
-    // TODO In non-expanded mode, height is limited
+    // TODO In non-expanded mode, height should be limited
     /// Render completion popup using egui::Popup (like egui_code_editor)
     fn render_completion_popup(
         &mut self,
@@ -337,6 +342,88 @@ impl SearchBar {
 
         event
     }
+
+    fn render_key_shortcut_hint(
+        &self,
+        ui: &egui::Ui,
+        text_edit_output: &TextEditOutput,
+        shortcut: Option<&KeyShortcut>,
+    ) {
+        let Some(shortcut) = shortcut else {
+            return;
+        };
+
+        // Collect all parts of the shortcut (modifiers + key)
+        let mut parts: Vec<&str> = Vec::new();
+        let modifiers = shortcut.0.modifiers;
+        if modifiers.ctrl {
+            parts.push("Ctrl");
+        }
+        if modifiers.alt {
+            parts.push("Alt");
+        }
+        if modifiers.shift {
+            parts.push("Shift");
+        }
+        if modifiers.command {
+            #[cfg(target_os = "macos")]
+            parts.push("⌘");
+            #[cfg(target_os = "windows")]
+            parts.push("Win");
+            #[cfg(not(any(target_os="macos", target_os = "windows")))]
+            parts.push("Super");
+
+        }
+        parts.push(shortcut.0.logical_key.name());
+
+        
+        let painter = ui.painter_at(text_edit_output.text_clip_rect);
+        let style = ui.style();
+        let text_color = style.visuals.weak_text_color();
+        let font_id = egui::TextStyle::Name("SearchBarKeyHint".into()).resolve(style);
+        let bg_color = ui.visuals().widgets.inactive.bg_fill.gamma_multiply(0.5);
+        let bg_stroke = egui::Stroke::new(1.0, text_color.gamma_multiply(0.5));
+        
+        let rounding = 3;
+        let padding = style.spacing.button_padding;
+        let initial_spacing = style.spacing.item_spacing.x;
+        let spacing = initial_spacing / 2.0;
+
+        let typed_text_width = text_edit_output.galley.rect.width();
+        let base_y = text_edit_output.galley_pos.y;
+        let mut current_x = text_edit_output.galley_pos.x + typed_text_width + initial_spacing;
+        let line_height = text_edit_output.galley.rect.height();
+
+        for part in parts {
+            let galley = painter.layout_no_wrap(part.to_string(), font_id.clone(), text_color);
+            let text_size = galley.rect.size();
+
+            // Calculate the background rect (vertically centered)
+            let bg_height = text_size.y + padding.y * 2.0;
+            let bg_y = base_y + line_height - bg_height - bg_stroke.width;
+
+            let bg_rect = egui::Rect::from_min_size(
+                egui::pos2(current_x, bg_y),
+                egui::vec2(text_size.x + padding.x * 2.0, bg_height),
+            );
+
+            
+            // Draw rounded background with border
+            painter.rect(
+                bg_rect,
+                egui::CornerRadius::same(rounding),
+                bg_color,
+                bg_stroke,
+                egui::StrokeKind::Outside,
+            );
+
+            // Draw text (centered in the rect)
+            let text_pos = egui::pos2(current_x + padding.x, bg_y + padding.y);
+            painter.galley(text_pos, galley, text_color);
+
+            current_x = bg_rect.max.x + spacing;
+        }
+    }
 }
 
 fn setup_text_edit_style(style: &mut egui::Style) {
@@ -359,7 +446,6 @@ impl ContextComponent for SearchBar {
                 events.push(SearchBarEvent::CancelCompletion { session_id });
             }
             self.completion.clear();
-
         }
 
         let resp = egui::TopBottomPanel::top(constants::ID_PANEL_SEARCH_BAR)
@@ -449,6 +535,23 @@ impl ContextComponent for SearchBar {
                             events.push(event);
                         }
                     }
+
+                    if !self.raw_search_query.is_empty() {
+                        if self.should_handle_completion() {
+                            self.render_key_shortcut_hint(
+                                ui,
+                                &output,
+                                self.completion_start_search_key_shortcut.as_ref(),
+                            );
+                        } else {
+                            self.render_key_shortcut_hint(
+                                ui,
+                                &output,
+                                self.start_search_key_shortcut.as_ref(),
+                            );
+                        }                        
+                    }
+
 
                     if self.should_start_search {
                         events.push(SearchBarEvent::StartSearch(
