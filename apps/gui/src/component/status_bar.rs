@@ -1,12 +1,11 @@
 use super::ContextComponent;
-use crate::backend::ServerStatus;
 use crate::ui::icon::icon_image;
 use egui::{Response, Sense, TextStyle, Ui, Widget, pos2, vec2};
 use egui_i18n::tr;
-use rpc::search::SearchMode;
+use rpc::search::{SearchMode, SearchStatus as RpcSearchStatus};
 use strum::{EnumCount, IntoEnumIterator};
 use crate::constants;
-use crate::util::{SortConfig, SortMode};
+use crate::util::{SortConfig, SortMode, SearchStatus};
 
 pub struct StatusBar {
     panel_height: f32,
@@ -19,73 +18,110 @@ impl Default for StatusBar {
 }
 
 pub struct StatusBarProps<'a> {
-    pub server_status: ServerStatus,
+    pub server_online: bool,
+    pub search_status: &'a SearchStatus,
     pub search_mode: &'a SearchMode,
     pub sort_config: &'a SortConfig,
 }
 
 /// Events emitted by the status bar
 pub enum StatusBarEvent {
-    /// User clicked on the restart button by the side of server status label
-    RestartServer,
+    // /// User clicked on the restart button by the side of server status label
+    // RestartServer,
 
     ChangeSortConfig(SortConfig),
     ChangeSearchMode(SearchMode),
 }
 
-// TODO show restart server button when server status is `offline`
-/// We make status bar status a widget since we want it to be able keep the
-/// order of the status circle and the text in a right-to-left context (in `Sides`)
-struct StatusBarStatusWidget {
-    status: ServerStatus,
+
+const SPINNER_FRAMES: &[char] = &['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+const SPINNER_FPS: f64 = 10.0;
+pub struct StatusBarStatusWidget<'a> {
+    pub server_online: bool,
+    pub search_status: &'a SearchStatus,
 }
 
-impl StatusBarStatusWidget {
-    fn new(status: ServerStatus) -> Self {
-        Self { status }
-    }
-}
-
-impl Widget for StatusBarStatusWidget {
+impl Widget for StatusBarStatusWidget<'_> {
     fn ui(self, ui: &mut Ui) -> Response {
         let circle_radius = 6.0;
         let circle_diam = circle_radius * 2.0;
         let gap = ui.spacing().item_spacing.x;
-
-        let text = format!("{}", self.status);
         let font_id = TextStyle::Name(constants::TEXT_STYLE_STATUS_BAR.into()).resolve(ui.style());
-        // let font_id = TextStyle::Body.resolve(ui.style());
         let text_color = ui.visuals().text_color();
-
-        // Layout the text without drawing it yet
-        let galley = ui.painter().layout_no_wrap(text, font_id, text_color);
-
+        // Build status text based on current state
+        let (status_text, is_animating) = self.build_status_text(ui);
+        let galley = ui.painter().layout_no_wrap(status_text, font_id, text_color);
         let width = circle_diam + gap + galley.size().x;
         let height = f32::max(circle_diam, galley.size().y);
-
         let desired_size = vec2(width, height);
-
         let (rect, response) = ui.allocate_exact_size(desired_size, Sense::hover());
-
         if ui.is_rect_visible(rect) {
+            // Draw server status indicator circle
             let circle_center = pos2(rect.min.x + circle_radius, rect.center().y);
-            // TODO change to process indicator usually used in TUI app
-            ui.painter().circle_filled(
-                circle_center,
-                circle_radius,
-                ui.style().visuals.error_fg_color,
-            );
-
+            let circle_color = if self.server_online {
+                ui.visuals().extreme_bg_color
+            } else {
+                ui.visuals().error_fg_color // Red when offline
+            };
+            ui.painter().circle_filled(circle_center, circle_radius, circle_color);
+            // Draw status text
             let text_pos = pos2(
                 rect.min.x + circle_diam + gap,
                 rect.center().y - (galley.size().y / 2.0),
             );
-
-            ui.painter()
-                .galley(text_pos, galley, egui::Color32::PLACEHOLDER);
+            ui.painter().galley(text_pos, galley, text_color);
         }
-
+        // Request continuous repaint while animating
+        if is_animating {
+            ui.ctx().request_repaint();
+        }
         response
+    }
+}
+impl StatusBarStatusWidget<'_> {
+    fn build_status_text(&self, ui: &Ui) -> (String, bool) {
+        match self.search_status {
+            SearchStatus::Idle => {
+                let status = if self.server_online { "Ready" } else { "Offline" };
+                (status.to_string(), false)
+            }
+            SearchStatus::Working(working) => {
+                let spinner = self.get_spinner_frame(ui);
+                let text = match &working.status {
+                    Some(RpcSearchStatus::InProgress { found_so_far }) => {
+                        format!("{} Searching... ({} found)", spinner, found_so_far)
+                    }
+                    Some(RpcSearchStatus::Completed { total_count }) => {
+                        // Briefly show completed before transitioning
+                        format!("✓ Completed ({} results)", total_count)
+                    }
+                    Some(RpcSearchStatus::Cancelled) => {
+                        "⊘ Cancelled".to_string()
+                    }
+                    Some(RpcSearchStatus::Failed(_)) => {
+                        "✗ Search failed".to_string()
+                    }
+                    None => {
+                        format!("{} Initializing...", spinner)
+                    }
+                };
+                // Only animate when actually in progress
+                let animating = matches!(
+                    working.status,
+                    None | Some(RpcSearchStatus::InProgress { .. })
+                );
+                (text, animating)
+            }
+            SearchStatus::Failed(err) => {
+                let text = format!("✗ Error: {:?}", err);
+                (text, false)
+            }
+        }
+    }
+    fn get_spinner_frame(&self, ui: &Ui) -> char {
+        let time = ui.input(|i| i.time);
+        let frame_index = (time * SPINNER_FPS) as usize % SPINNER_FRAMES.len();
+        SPINNER_FRAMES[frame_index]
     }
 }
 
@@ -236,7 +272,10 @@ impl ContextComponent for StatusBar {
                 style.override_text_style = Some(TextStyle::Name(constants::TEXT_STYLE_STATUS_BAR.into()));
 
                 ui.horizontal(|ui| {
-                    ui.add(StatusBarStatusWidget::new(props.server_status));
+                    ui.add(StatusBarStatusWidget {
+                        server_online: props.server_online,
+                        search_status: props.search_status,
+                    });
                     ui.with_layout(
                         egui::Layout::right_to_left(egui::Align::Center),
                         |ui| {

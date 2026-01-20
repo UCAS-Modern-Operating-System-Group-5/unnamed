@@ -8,7 +8,7 @@ pub const ID_SEARCH_BAR_COMPLETION_POPUP: &str = "search_bar_completion_popup";
 
 pub const ID_SALT_SEARCH_RESULT_VIEWER_EGUI_TABLE: &str = "search_result_viewer";
 
-pub const SEARCH_RESULT_FETCH_INTERVAL_MS: u64 = 100;
+pub const SEARCH_POLL_INTERVAL_MS: u64 = 100;
 pub const SEARCH_RESULT_FETCH_BATCH_SIZE: usize = 50;
 
 pub const COMPLETION_BATCH_SIZE: usize = 20;

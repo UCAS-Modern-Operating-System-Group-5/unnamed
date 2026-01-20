@@ -54,7 +54,6 @@ pub enum SearchStatus {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FetchResults {
-    pub session_id: Uuid,
     pub offset: u64,
     pub hits: Vec<SearchHit>,
     pub has_more: bool,

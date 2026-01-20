@@ -151,7 +151,6 @@ impl SessionManager {
             };
             
             Some(FetchResults {
-                session_id,
                 offset: offset as u64,
                 hits,
                 has_more,

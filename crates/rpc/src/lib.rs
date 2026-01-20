@@ -14,13 +14,13 @@ pub trait World {
     /// Start async search
     async fn start_search(req: SearchRequest) -> SResult<Uuid>;
 
-    async fn search_status(session_id: Uuid) -> SResult<SearchStatus>;
+    async fn search_status(session_id: Uuid) -> (Uuid, SResult<SearchStatus>);
 
     async fn fetch_search_results(
         req: FetchSearchResultsRequest,
-    ) -> SResult<FetchResults>;
+    ) -> (Uuid, SResult<FetchResults>);
 
-    async fn cancel_search(session_id: Uuid) -> SResult<()>;
+    async fn cancel_search(session_id: Uuid) -> (Uuid, SResult<()>);
 }
 
 #[derive(Debug)]
@@ -36,7 +36,7 @@ pub enum Request {
 pub enum Response {
     Ping(String),
     StartSearch(SResult<Uuid>),
-    SearchStatus(SResult<SearchStatus>),
-    FetchSearchResults(SResult<FetchResults>),
-    CancelSearch(SResult<()>)
+    SearchStatus((Uuid, SResult<SearchStatus>)),
+    FetchSearchResults((Uuid, SResult<FetchResults>)),
+    CancelSearch((Uuid, SResult<()>))
 }

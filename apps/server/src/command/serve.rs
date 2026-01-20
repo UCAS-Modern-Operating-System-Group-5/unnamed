@@ -132,33 +132,37 @@ impl World for Server {
         Ok(session_id)
     }
 
-    async fn search_status(self, _c: Context, session_id: Uuid) -> SResult<SearchStatus> {
+    async fn search_status(self, _c: Context, session_id: Uuid) -> (Uuid, SResult<SearchStatus>) {
         info!("查询搜索状态: session={}", session_id);
         
-        self.sessions.get_status(session_id)
-            .ok_or(SearchErrorKind::SessionNotExists)
+        let res = self.sessions.get_status(session_id).ok_or(SearchErrorKind::SessionNotExists);
+        (session_id, res)
     }
 
     async fn fetch_search_results(
         self, 
         _c: Context, 
         req: FetchSearchResultsRequest,
-    ) -> SResult<FetchResults> {
+    ) -> (Uuid, SResult<FetchResults>) {
         info!("获取搜索结果: session={}, offset={}, limit={}", 
               req.session_id, req.offset, req.limit);
         
-        self.sessions.fetch_results(req.session_id, req.offset, req.limit)
-            .ok_or(SearchErrorKind::SessionNotExists)
+        let res = self.sessions.fetch_results(req.session_id, req.offset, req.limit)
+            .ok_or(SearchErrorKind::SessionNotExists);
+
+        (req.session_id, res)
     }
 
-    async fn cancel_search(self, _c: Context, session_id: Uuid) -> SResult<()> {
+    async fn cancel_search(self, _c: Context, session_id: Uuid) -> (Uuid, SResult<()>) {
         info!("取消搜索会话: {}", session_id);
         
-        if self.sessions.cancel_session(session_id) {
+        let res = if self.sessions.cancel_session(session_id) {
             Ok(())
         } else {
             Err(SearchErrorKind::SessionNotExists)
-        }
+        };
+
+        (session_id, res)
     }
 }
 

@@ -1,7 +1,3 @@
-mod server_status;
-
-pub use server_status::{ServerStatus, ServerWorkingStatus};
-
 use crate::app::Response;
 use crate::constants;
 use rpc::search::{FetchSearchResultsRequest, SearchStatus};
@@ -22,6 +18,7 @@ pub enum BackendEvent {
     RpcResponse(RpcResponse),
     RpcFailure(client::RpcError),
 }
+
 
 pub async fn init_trpc_client(
     unix_socket_path: &Path,
@@ -56,7 +53,7 @@ pub async fn handle_backend_request(
             let result = rpc_client.start_search(context::current(), req).await;
 
             if let Ok(Ok(session_id)) = &result {
-                spawn_auto_fetcher(
+                spawn_search_poller(
                     rpc_client.clone(),
                     *session_id,
                     tx_response,
@@ -82,74 +79,166 @@ pub async fn handle_backend_request(
     }
 }
 
-fn spawn_auto_fetcher(
+fn spawn_search_poller(
     rpc_client: WorldClient,
     session_id: Uuid,
     tx_response: mpsc::Sender<Response>,
     egui_ctx: egui::Context,
 ) {
     tokio::spawn(async move {
-        auto_fetch_search_results(rpc_client, session_id, tx_response, egui_ctx).await;
+        poll_search_status_and_results(rpc_client, session_id, tx_response, egui_ctx)
+            .await;
     });
 }
 
-/// Automatically fetches search results periodically until the search completes, fails,
-/// or is cancelled.
-async fn auto_fetch_search_results(
+/// Periodically polls search status and fetches results until the search
+/// completes, fails, or is cancelled.
+async fn poll_search_status_and_results(
     rpc_client: WorldClient,
     session_id: Uuid,
     tx_response: mpsc::Sender<Response>,
     egui_ctx: egui::Context,
 ) {
-    const FETCH_INTERVAL: Duration =
-        Duration::from_millis(constants::SEARCH_RESULT_FETCH_INTERVAL_MS);
+    const POLL_INTERVAL: Duration =
+        Duration::from_millis(constants::SEARCH_POLL_INTERVAL_MS);
     const BATCH_LIMIT: usize = constants::SEARCH_RESULT_FETCH_BATCH_SIZE;
 
     let mut offset = 0usize;
+    let mut all_results_fetched = false;
 
     loop {
-        tokio::time::sleep(FETCH_INTERVAL).await;
+        tokio::time::sleep(POLL_INTERVAL).await;
 
-        let req = FetchSearchResultsRequest {
+        let status = match fetch_and_send_status(
+            &rpc_client,
             session_id,
-            offset,
-            limit: BATCH_LIMIT,
-        };
-
-        match rpc_client
-            .fetch_search_results(context::current(), req)
-            .await
+            &tx_response,
+            &egui_ctx,
+        )
+        .await
         {
-            Ok(result) => {
-                let response = Response::Backend(BackendEvent::RpcResponse(
-                    RpcResponse::FetchSearchResults(result.clone()),
-                ));
-
-                if tx_response.send(response).is_err() {
-                    // Receiver dropped, stop fetching
-                    break;
-                }
-                egui_ctx.request_repaint();
-
-                match result {
-                    Ok(fetch) => {
-                        offset += fetch.hits.len();
-
-                        if !fetch.has_more {
-                            break;
-                        }
-                    }
-                    Err(_search_error) => {
-                        break;
-                    }
-                }
-            }
-            Err(rpc_error) => {
-                let _ = tx_response
-                    .send(Response::Backend(BackendEvent::RpcFailure(rpc_error)));
+            Ok(status) => status,
+            Err(PollError::ChannelClosed) => break,
+            Err(PollError::RpcError(e)) => {
+                let _ = tx_response.send(Response::Backend(BackendEvent::RpcFailure(e)));
                 egui_ctx.request_repaint();
                 break;
             }
+        };
+
+        let search_in_progress = matches!(status, (_, Ok(SearchStatus::InProgress { .. })));
+        let search_completed = matches!(status, (_, Ok(SearchStatus::Completed { .. })));
+
+        // Stop immediately for failed/cancelled/error
+        if !search_in_progress && !search_completed {
+            break;
         }
+
+        if !all_results_fetched {
+            match fetch_and_send_results(
+                &rpc_client,
+                session_id,
+                offset,
+                BATCH_LIMIT,
+                &tx_response,
+                &egui_ctx,
+            )
+            .await
+            {
+                Ok(FetchOutcome::Fetched { count, has_more }) => {
+                    offset += count;
+                    if !has_more {
+                        all_results_fetched = true;
+                    }
+                }
+                Ok(FetchOutcome::SearchError) => {
+                    // Search-level error (session not found, etc.)
+                    break;
+                }
+                Err(PollError::ChannelClosed) => break,
+                Err(PollError::RpcError(e)) => {
+                    let _ =
+                        tx_response.send(Response::Backend(BackendEvent::RpcFailure(e)));
+                    egui_ctx.request_repaint();
+                    break;
+                }
+            }
+        }
+
+        if search_completed && all_results_fetched {
+            break;
+        }
+    }
+}
+
+enum PollError {
+    ChannelClosed,
+    RpcError(client::RpcError),
+}
+
+enum FetchOutcome {
+    Fetched { count: usize, has_more: bool },
+    SearchError,
+}
+
+/// Fetches the search status and sends it to the UI.
+async fn fetch_and_send_status(
+    rpc_client: &WorldClient,
+    session_id: Uuid,
+    tx_response: &mpsc::Sender<Response>,
+    egui_ctx: &egui::Context,
+) -> Result<(Uuid, rpc::search::SResult<SearchStatus>), PollError> {
+    let result = rpc_client
+        .search_status(context::current(), session_id)
+        .await
+        .map_err(PollError::RpcError)?;
+
+    let response = Response::Backend(BackendEvent::RpcResponse(
+        RpcResponse::SearchStatus(result.clone()),
+    ));
+
+    if tx_response.send(response).is_err() {
+        return Err(PollError::ChannelClosed);
+    }
+    egui_ctx.request_repaint();
+
+    Ok(result)
+}
+
+/// Fetches search results and sends them to the UI.
+async fn fetch_and_send_results(
+    rpc_client: &WorldClient,
+    session_id: Uuid,
+    offset: usize,
+    limit: usize,
+    tx_response: &mpsc::Sender<Response>,
+    egui_ctx: &egui::Context,
+) -> Result<FetchOutcome, PollError> {
+    let req = FetchSearchResultsRequest {
+        session_id,
+        offset,
+        limit,
+    };
+
+    let result = rpc_client
+        .fetch_search_results(context::current(), req)
+        .await
+        .map_err(PollError::RpcError)?;
+
+    let response = Response::Backend(BackendEvent::RpcResponse(
+        RpcResponse::FetchSearchResults(result.clone()),
+    ));
+
+    if tx_response.send(response).is_err() {
+        return Err(PollError::ChannelClosed);
+    }
+    egui_ctx.request_repaint();
+
+    match result {
+        (_, Ok(fetch)) => Ok(FetchOutcome::Fetched {
+            count: fetch.hits.len(),
+            has_more: fetch.has_more,
+        }),
+        (_, Err(_)) => Ok(FetchOutcome::SearchError),
     }
 }

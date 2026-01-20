@@ -214,6 +214,8 @@ impl egui_table::TableDelegate for SearchResultTable<'_> {
     }
 }
 
+// TODO Don't display result when the store is empty, show an Text or indicator
+// TODO preview panel
 impl StatefulComponent for SearchResultViewer {
     type Props<'a> = SearchResultViewerProps;
     type Output = SearchResultViewerOutput;
