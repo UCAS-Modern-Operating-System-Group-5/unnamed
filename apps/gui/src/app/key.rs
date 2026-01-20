@@ -147,7 +147,6 @@ pub fn default_key_config() -> KeyConfig {
         Scope::Global => {
             "Ctrl-Q" => UserCommand::QuitApplication,
             "F11" => UserCommand::ToggleFullScreen,
-            "Tab" => UserCommand::ToggleSearchMode,
         },
         Scope::Main => {
             "Down" => UserCommand::NextItem,
@@ -170,6 +169,7 @@ pub fn default_key_config() -> KeyConfig {
         },
         Scope::SearchBar => {
             "Enter" => UserCommand::StartSearch,
+            "Tab" => UserCommand::ToggleSearchMode,
         }
     }
 }

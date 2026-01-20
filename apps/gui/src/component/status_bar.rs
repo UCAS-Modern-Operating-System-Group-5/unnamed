@@ -6,7 +6,7 @@ use egui_i18n::tr;
 use rpc::search::SearchMode;
 use strum::{EnumCount, IntoEnumIterator};
 use crate::constants;
-use crate::app::SortMode;
+use crate::util::{SortConfig, SortMode};
 
 pub struct StatusBar {
     panel_height: f32,
@@ -21,7 +21,7 @@ impl Default for StatusBar {
 pub struct StatusBarProps<'a> {
     pub server_status: ServerStatus,
     pub search_mode: &'a SearchMode,
-    pub sort_mode: &'a SortMode,
+    pub sort_config: &'a SortConfig,
 }
 
 /// Events emitted by the status bar
@@ -29,7 +29,7 @@ pub enum StatusBarEvent {
     /// User clicked on the restart button by the side of server status label
     RestartServer,
 
-    ChangeSortMode(SortMode),
+    ChangeSortConfig(SortConfig),
     ChangeSearchMode(SearchMode),
 }
 
@@ -106,16 +106,18 @@ fn set_borderless_button_style(style: &mut egui::Style) {
 }
 
 impl StatusBar {
+    // TODO also render sort direction
     fn render_sort_mode_selector(
         &mut self,
         ui: &mut egui::Ui,
-        sort_mode: &SortMode,
+        sort_config: &SortConfig,
     ) -> Option<StatusBarEvent> {
         // Note, we don't use combobox since it cannot vertically centered in the context
         // where we use a different(larger) text style than TextStyle::Body
         // https://github.com/emilk/egui/issues/7412
         // (May not correct) Though the center position of menu_button changes(so the wight id
         // changes). The change is not frequent, so the performance cost is bearable.
+        let sort_mode = sort_config.mode.clone();
         let mut selected = sort_mode.clone();
         let label_text = format!("S:{}", tr!(&sort_mode.to_string()));
 
@@ -166,8 +168,10 @@ impl StatusBar {
                 });
         });
 
-        if &selected != sort_mode {
-            return Some(StatusBarEvent::ChangeSortMode(selected));
+        if selected != sort_mode {
+            return Some(StatusBarEvent::ChangeSortConfig(SortConfig {
+                mode: selected, direction: sort_config.direction
+            }));
         }
 
         None
@@ -245,7 +249,7 @@ impl ContextComponent for StatusBar {
                             ui.add(egui::Separator::default().vertical().shrink(2.0));
 
                             if let Some(event) =
-                                self.render_sort_mode_selector(ui, props.sort_mode)
+                                self.render_sort_mode_selector(ui, props.sort_config)
                             {
                                 events.push(event);
                             }

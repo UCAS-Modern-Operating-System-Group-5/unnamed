@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 use strum::EnumIter;
 use std::path::PathBuf;
-use std::time::SystemTime;
 use uuid::Uuid;
 use query::ValidationError;
 
@@ -14,7 +13,7 @@ pub struct SearchRequest {
 }
 
 
-#[derive(Debug, Default, PartialEq, Serialize, Deserialize, EnumIter)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize, EnumIter)]
 pub enum SearchMode {
     /// Natural language
     #[default]
@@ -48,7 +47,7 @@ pub enum SearchStatus {
     Completed {
         total_count: u64,
     },
-    /// Could be like `invalid query`
+    /// Maybe some internal issues
     Failed(SearchErrorKind),
     Cancelled,
 }

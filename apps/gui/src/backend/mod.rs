@@ -6,6 +6,7 @@ use rpc::{Request as RpcRequest, Response as RpcResponse, WorldClient};
 use std::path::Path;
 use tarpc::{client, context, tokio_serde::formats::Bincode};
 
+
 #[derive(Debug)]
 pub enum BackendEvent {
     /// The backend successfully connected to the socket
@@ -14,7 +15,7 @@ pub enum BackendEvent {
     ConnectionFailed(String),
     /// A response to a specific RPC request
     RpcResponse(RpcResponse),
-    RpcFailure(String),
+    RpcFailure(client::RpcError),
 }
 
 pub async fn init_trpc_client(
@@ -41,16 +42,28 @@ pub async fn init_trpc_client(
 pub async fn handle_backend_request(
     rpc_client: WorldClient,
     request: RpcRequest
-) -> std::result::Result<RpcResponse, String> {
+) -> std::result::Result<RpcResponse, client::RpcError> {
     match request {
         RpcRequest::Ping => rpc_client
                 .ping(context::current())
                 .await
-                .map_err(|e| e.to_string())
                 .map(RpcResponse::Ping),
-        RpcRequest::StartSearch(_) => todo!(),
-        RpcRequest::SearchStatus(uuid) => todo!(),
-        RpcRequest::FetchSearchResults(fetch_search_results_request) => todo!(),
-        RpcRequest::CancelSearch(uuid) => todo!(),
+        RpcRequest::StartSearch(req) => {
+            rpc_client.start_search(context::current(), req)
+                .await
+                .map(RpcResponse::StartSearch)
+        },
+        RpcRequest::SearchStatus(session_id) => {
+            rpc_client.search_status(context::current(), session_id)
+                .await
+                .map(RpcResponse::SearchStatus)
+        },
+        RpcRequest::CancelSearch(session_id) => {
+            rpc_client.cancel_search(context::current(), session_id)
+                .await
+                .map(RpcResponse::CancelSearch)
+        },
+        /// Ui should never send this event
+        RpcRequest::FetchSearchResults(_) => unreachable!(),
     }
 }

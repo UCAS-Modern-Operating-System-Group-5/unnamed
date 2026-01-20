@@ -1,26 +1,27 @@
-use crate::constants;
-use super::{Scope, SortMode};
+use super::Scope;
 use super::{KeyHandler, UserCommand};
 use crate::backend::{BackendEvent, ServerStatus, ServerWorkingStatus};
 use crate::component::{
-    SearchBar, SearchBarEvent, SearchBarProps, StatusBar, StatusBarEvent, StatusBarProps,
-    SearchResultViewer, SearchResultViewerProps, SearchResultViewerEvent,
-    prelude::*,
+    SearchBar, SearchBarEvent, SearchBarProps, SearchResultViewer,
+    SearchResultViewerEvent, SearchResultViewerProps, StatusBar, StatusBarEvent,
+    StatusBarProps, prelude::*,
 };
 use crate::config::Config;
+use crate::constants;
 use crate::ui;
 use crate::util::{
-    UniversalEventHandlerThread,
+    SearchStatus, SortConfig, UniversalEventHandlerThread, WorkingSearchStatus,
     completion::{CompletionRequest, CompletionResponse},
 };
 use rpc::{
     Request as RpcRequest,
-    search::{SearchMode},
+    search::{SResult, SearchMode, SearchRequest},
 };
 use std::sync::mpsc;
-use tracing::{error, info};
 use strum::IntoEnumIterator;
-
+use tarpc::client::RpcError;
+use tracing::{error, info};
+use uuid::Uuid;
 
 pub struct App {
     // config: Config,
@@ -43,11 +44,16 @@ pub struct App {
 pub struct State {
     request_search_focus: bool,
 
+    search_status: SearchStatus,
+
+    server_online: bool,
+
     /// Whether in Expand Mode
     expand: bool,
     // dropped_files: Vec<egui::DroppedFile>,
     search_mode: SearchMode,
-    sort_mode: SortMode,
+    // sort_mode: SortMode,
+    sort_config: SortConfig,
 }
 
 #[derive(Default)]
@@ -131,17 +137,18 @@ impl App {
                             start_search_key_shortcut = Some(key_shortcut.clone());
                         }
                     }
-                },
+                }
                 Scope::SearchBarCompletion => {
                     for (key_shortcut, user_command) in bindings {
                         if user_command == &UserCommand::StartSearch {
-                            completion_start_search_key_shortcut = Some(key_shortcut.clone());
+                            completion_start_search_key_shortcut =
+                                Some(key_shortcut.clone());
                         }
                     }
-                },
+                }
                 _ => {}
             }
-        };
+        }
 
         SearchBar::new(
             egui::Id::new(constants::ID_SEARCH_BAR_INPUT),
@@ -188,7 +195,7 @@ impl App {
                     } else {
                         false
                     }
-                },
+                }
                 Scope::SearchBar | Scope::SearchBarCompletion => {
                     self.search_bar.handle_user_command(&scope, &cmd)
                 }
@@ -211,12 +218,13 @@ impl App {
                 ctx.send_viewport_cmd(egui::ViewportCommand::Fullscreen(!fullscreen));
             }
             UserCommand::ToggleSearchMode => {
-                self.s.search_mode = SearchMode::iter()
+                let mode = SearchMode::iter()
                     .cycle()
                     .skip_while(|m| m != &self.s.search_mode)
                     .skip(1)
                     .next()
                     .unwrap();
+                self.change_search_mode(mode);
             }
             _ => {}
         }
@@ -243,16 +251,16 @@ impl App {
 
     /// Should set search path to the parent directory of the file; Or if the dropped
     /// stuff is a directory, then set the search path to that directory
-    pub fn handle_file_drop(&mut self, _ctx: &egui::Context) {
+    fn handle_file_drop(&mut self, _ctx: &egui::Context) {
         // pass
     }
 
-    pub fn update_window_title(&self, ctx: &egui::Context) {
+    fn update_window_title(&self, ctx: &egui::Context) {
         let title = config::constants::APP_NAME.to_string();
         ctx.send_viewport_cmd(egui::ViewportCommand::Title(title));
     }
 
-    pub fn render_search_bar(&mut self, ctx: &egui::Context) {
+    fn render_search_bar(&mut self, ctx: &egui::Context) {
         let props = SearchBarProps {
             search_mode: &self.s.search_mode,
             draw_separate_line: self.s.expand,
@@ -261,8 +269,16 @@ impl App {
         for event in output.events {
             match event {
                 SearchBarEvent::StartSearch(query) => {
-                    info!("Starting search: {}", query);
-                    // TODO: Send search request to backend
+                    if !self.s.server_online {
+                        continue;
+                    }
+                    let search_request = SearchRequest {
+                        query,
+                        search_mode: self.s.search_mode.clone(),
+                    };
+                    let _ = self
+                        .tx_request
+                        .send(Request::Backend(RpcRequest::StartSearch(search_request)));
                 }
                 SearchBarEvent::RequestCompletion {
                     session_id,
@@ -291,40 +307,46 @@ impl App {
         }
     }
 
-    pub fn render_search_result_viewer(&mut self, ui: &mut egui::Ui) {
-        let props = SearchResultViewerProps {
-            search_mode: &self.s.search_mode,
-            sort_mode: &self.s.sort_mode,
-        };
+    fn render_search_result_viewer(&mut self, ui: &mut egui::Ui) {
+        let props = SearchResultViewerProps {};
         let output = self.search_result_viewer.render(ui, props);
-        for event in output.events {
-        }
+        for event in output.events {}
     }
 
-    pub fn render_status_bar(&mut self, ctx: &egui::Context) {
+    fn change_sort_config(&mut self, config: SortConfig) {
+        self.search_result_viewer.set_sort_config(config.clone());
+        self.s.sort_config = config;
+    }
+
+    fn change_search_mode(&mut self, mode: SearchMode) {
+        self.search_result_viewer.set_search_mode(mode.clone());
+        self.s.search_mode = mode;
+        self.s.request_search_focus = true;
+    }
+
+    fn render_status_bar(&mut self, ctx: &egui::Context) {
         let server_status = ServerStatus::Online(ServerWorkingStatus::Searching);
         let props = StatusBarProps {
             server_status,
             search_mode: &self.s.search_mode,
-            sort_mode: &self.s.sort_mode,
+            sort_config: &self.s.sort_config,
         };
         let output = self.status_bar.render(ctx, props);
 
         for event in output.events {
             match event {
                 StatusBarEvent::RestartServer => {}
-                StatusBarEvent::ChangeSortMode(sort_mode) => {
-                    self.s.sort_mode = sort_mode;
+                StatusBarEvent::ChangeSortConfig(config) => {
+                    self.change_sort_config(config);
                 }
-                StatusBarEvent::ChangeSearchMode(search_mode) => {
-                    self.s.search_mode = search_mode;
-                    self.s.request_search_focus = true;
+                StatusBarEvent::ChangeSearchMode(mode) => {
+                    self.change_search_mode(mode);
                 }
             }
         }
     }
 
-    pub fn handle_event(&mut self) {
+    fn handle_event(&mut self) {
         while let Ok(event) = self.rx_response.try_recv() {
             match event {
                 Response::SpawnUniversalEventHandlerThreadFailed => {
@@ -360,26 +382,90 @@ impl App {
         }
     }
 
-    pub fn handle_backend_event(&self, event: BackendEvent) {
+    fn handle_backend_event(&mut self, event: BackendEvent) {
         match event {
             BackendEvent::Connected => {
                 info!("Connected to server");
                 let _ = self.tx_request.send(Request::Backend(RpcRequest::Ping));
             }
-            BackendEvent::RpcFailure(e) => {
+            BackendEvent::RpcFailure(rpc_error) => {
+                match rpc_error {
+                    RpcError::Shutdown => {
+                        self.s.server_online = false;
+                        // TODO try reconnection
+                    }
+                    _ => {
+                        // TODO handle other type of errors
+                    }
+                }
                 // TODO Display failture reason
-                error!(e)
             }
             BackendEvent::ConnectionFailed(e) => {
                 // error!("Connection to server failed: {e}");
             }
-            BackendEvent::RpcResponse(response) => {
-                info!("{response:?}");
-            }
+            BackendEvent::RpcResponse(response) => match response {
+                rpc::Response::Ping(_) => {
+                    self.s.server_online = true;
+                }
+                rpc::Response::StartSearch(session_id) => {
+                    if let Some(session_id) = self.unwrap_sresult_safe(session_id) {
+                        self.s.search_status =
+                            SearchStatus::Working(WorkingSearchStatus::new(session_id));
+                    }
+                }
+                rpc::Response::SearchStatus(search_status) => {
+                    if let Some(status) = self.unwrap_sresult_safe(search_status) {
+                        match status {
+                            rpc::search::SearchStatus::Failed(err) => {
+                                self.s.search_status = SearchStatus::Failed(err);
+                            },
+                            rpc::search::SearchStatus::Cancelled => {
+                                self.s.search_status = SearchStatus::Idle;
+                            },
+                            _ => {
+                                match &self.s.search_status {
+                                    SearchStatus::Working(ss) => {
+                                        self.s.search_status =
+                                    SearchStatus::Working(WorkingSearchStatus {
+                                        session_id: ss.session_id,
+                                        status: Some(status),
+                                    })
+                                    }
+                                    _ => {}
+                                }
+                            }
+                        }
+                    }
+                }
+                rpc::Response::FetchSearchResults(fetch_result) => {
+                    if let Some(res) = self.unwrap_sresult_safe(fetch_result) {
+                        self.search_result_viewer.recieve_items(res.hits);
+                    }
+                },
+                rpc::Response::CancelSearch(_) => {
+                    self.s.search_status = SearchStatus::Idle;
+                },
+            },
         }
     }
 
-    pub fn resize_window(&self, ctx: &egui::Context) {
+    /// Unwrap the search result and handles error cases
+    fn unwrap_sresult_safe<T: std::fmt::Debug>(
+        &mut self,
+        result: SResult<T>,
+    ) -> Option<T> {
+        if result.is_ok() {
+            return result.ok();
+        }
+
+        let err = result.unwrap_err();
+
+        self.s.search_status = SearchStatus::Failed(err);
+
+        None
+    }
+
+    fn resize_window(&self, ctx: &egui::Context) {
         if !self.ability.recenter {
             return;
         }
@@ -404,14 +490,14 @@ impl eframe::App for App {
         // color.to_normalized_gamma_f32()
         egui::Color32::TRANSPARENT.to_normalized_gamma_f32()
     }
-    
+
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if self.s.request_search_focus {
             self.search_bar.request_focus();
 
             self.s.request_search_focus = false;
         }
-        
+
         self.tweak_egui_beheavior(ctx);
         self.handle_key(ctx);
 

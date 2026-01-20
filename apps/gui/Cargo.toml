@@ -30,6 +30,7 @@ tarpc.workspace = true
 strum.workspace = true
 derive_builder.workspace = true
 tokio-stream.workspace = true
+uuid.workspace = true
 
 
 [dependencies.eframe]

@@ -1,19 +1,18 @@
 use super::StatefulComponent;
+use crate::app::UserCommand;
 use crate::constants;
+use crate::util::{SearchResultStore, SortConfig, SortMode};
 use egui_i18n::tr;
-use rpc::search::{SearchMode, SearchHit};
-use crate::app::{SortMode, UserCommand};
-
+use rpc::search::{SearchHit, SearchMode};
 
 #[derive(Default)]
 pub struct SearchResultViewer {
-    search_result: Vec<SearchHit>,
+    store: SearchResultStore,
+    search_mode: SearchMode,
     // currently_selected
-
     display_mode: DisplayMode,
     preview_mode: PreviewMode,
     show_preview: bool,
-    default_column: egui_table::Column,
 }
 
 #[derive(Default)]
@@ -31,10 +30,7 @@ enum PreviewMode {
     NoPreview,
 }
 
-pub struct SearchResultViewerProps<'a> {
-    pub search_mode: &'a SearchMode,
-    pub sort_mode: &'a SortMode,
-}
+pub struct SearchResultViewerProps {}
 
 pub struct SearchResultViewerOutput {
     pub events: Vec<SearchResultViewerEvent>,
@@ -43,17 +39,32 @@ pub struct SearchResultViewerOutput {
 pub enum SearchResultViewerEvent {}
 
 impl SearchResultViewer {
+    pub fn recieve_items(&mut self, items: impl IntoIterator<Item = SearchHit>) {
+        self.store.extend(items);
+    }
+
+    pub fn clear_items(&mut self) {
+        self.store.clear();
+    }
+
+    pub fn set_sort_config(&mut self, config: SortConfig) {
+        self.store.set_sort_config(config);
+    }
+
+    pub fn set_search_mode(&mut self, mode: SearchMode) {
+        self.search_mode = mode;
+        if matches!(self.search_mode, SearchMode::Natural)
+            && matches!(self.store.sort_config().mode, SortMode::Score)
+        {
+            self.store.toggle_or_set_mode(SortMode::FilePath);
+        }
+    }
+
     pub fn handle_user_command(&self, cmd: &UserCommand) -> bool {
         match cmd {
-            UserCommand::NextItem => {
-                true
-            },
-            UserCommand::PrevItem => {
-                true
-            },
-            _ => {
-                false
-            }
+            UserCommand::NextItem => true,
+            UserCommand::PrevItem => true,
+            _ => false,
         }
     }
 }
@@ -62,7 +73,7 @@ pub struct SearchResultTable<'a> {
     sort_mode: &'a SortMode,
     search_mode: &'a SearchMode,
 
-    events: Vec<SearchResultViewerEvent>
+    events: Vec<SearchResultViewerEvent>,
 }
 
 impl egui_table::TableDelegate for SearchResultTable<'_> {
@@ -145,22 +156,22 @@ impl egui_table::TableDelegate for SearchResultTable<'_> {
 }
 
 impl StatefulComponent for SearchResultViewer {
-    type Props<'a> = SearchResultViewerProps<'a>;
+    type Props<'a> = SearchResultViewerProps;
     type Output = SearchResultViewerOutput;
 
     fn render(&mut self, ui: &mut egui::Ui, props: Self::Props<'_>) -> Self::Output {
         let events = Vec::new();
 
         // TODO set `style.animation` to disable the scroll animation
-        
+
         let text_style = egui::TextStyle::Body;
         let row_height = ui.text_style_height(&text_style);
         // let total_rows = self.search_result.len();
         let total_rows = 100;
 
         let mut search_result_table = SearchResultTable {
-            search_mode: props.search_mode,
-            sort_mode: props.sort_mode,
+            search_mode: &self.search_mode,
+            sort_mode: &self.store.sort_config().mode,
             events: Default::default(),
         };
 
@@ -202,11 +213,6 @@ impl StatefulComponent for SearchResultViewer {
 
         egui_table.show(ui, &mut search_result_table);
 
-
-
-
-
-        
         let side_panel = match self.preview_mode {
             PreviewMode::RightPreview => Some(egui::SidePanel::right(
                 constants::ID_PANEL_SEARCH_RESULT_VIEWER,
@@ -235,8 +241,6 @@ impl StatefulComponent for SearchResultViewer {
                     ui.label("Preview");
                 });
         }
-
-
 
         SearchResultViewerOutput { events }
     }
