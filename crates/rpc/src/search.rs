@@ -52,7 +52,7 @@ pub enum SearchStatus {
     Cancelled,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FetchResults {
     pub session_id: Uuid,
     pub offset: u64,
@@ -67,7 +67,9 @@ pub struct SearchHit {
     pub score: Option<f32>,
     pub preview: String,
     pub file_size: u64,
-    /// Access time since unix epoch
+    /// FIXME: BUG here. Should be i64. User's computer can set local time to a
+    /// a time before Unix Epoch
+    /// Access time since Unix Epoch
     pub access_time: u64,
     pub modified_time: u64,
     pub create_time: u64

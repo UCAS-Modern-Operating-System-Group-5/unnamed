@@ -102,7 +102,13 @@ pub async fn handle_request(
     let res: Result<Response, String> = match request {
         Request::Backend(request) => {
             if let Some(rpc_client) = rpc_client {
-                let rpc_response = handle_backend_request(rpc_client, request).await;
+                let rpc_response = handle_backend_request(
+                    rpc_client,
+                    request,
+                    tx_response.clone(),
+                    egui_ctx.clone(),
+                ).await;
+
                 match rpc_response {
                     Ok(resp) => Ok(Response::Backend(BackendEvent::RpcResponse(resp))),
                     Err(e) => Ok(Response::Backend(BackendEvent::RpcFailure(e))),

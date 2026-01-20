@@ -1,7 +1,9 @@
 use super::StatefulComponent;
 use crate::app::UserCommand;
 use crate::constants;
-use crate::util::{SearchResultStore, SortConfig, SortMode};
+use crate::util::{
+    SearchResultStore, SortConfig, SortMode, time::timestamp_to_local_string,
+};
 use egui_i18n::tr;
 use rpc::search::{SearchHit, SearchMode};
 
@@ -70,8 +72,9 @@ impl SearchResultViewer {
 }
 
 pub struct SearchResultTable<'a> {
-    sort_mode: &'a SortMode,
+    store: &'a mut SearchResultStore,
     search_mode: &'a SearchMode,
+    row_height: f32,
 
     events: Vec<SearchResultViewerEvent>,
 }
@@ -84,6 +87,7 @@ impl egui_table::TableDelegate for SearchResultTable<'_> {
     ) {
         let egui_table::HeaderCellInfo { col_range, .. } = cell_info;
 
+        let sort_mode = &self.store.sort_config().mode;
         let time_col_index = match self.search_mode {
             SearchMode::Natural => 3,
             SearchMode::Rule => 2,
@@ -115,7 +119,7 @@ impl egui_table::TableDelegate for SearchResultTable<'_> {
                             ui.label(tr!("qrfd-score"));
                         });
                     }
-                    val if val == time_col_index => match self.sort_mode {
+                    val if val == time_col_index => match sort_mode {
                         SortMode::AccessedTime => {
                             ui.heading(tr!("qrf-atime")).on_hover_ui(|ui| {
                                 ui.label(tr!("qrfd-atime"));
@@ -140,10 +144,56 @@ impl egui_table::TableDelegate for SearchResultTable<'_> {
     fn cell_ui(&mut self, ui: &mut egui::Ui, cell_info: &egui_table::CellInfo) {
         let egui_table::CellInfo { row_nr, col_nr, .. } = cell_info;
 
+        if row_nr % 2 == 1 {
+            ui.painter()
+                .rect_filled(ui.max_rect(), 0.0, ui.visuals().faint_bg_color);
+        }
+
+        let sort_mode = self.store.sort_config().mode.clone();
+        let item = self.store.get_sorted(*row_nr as usize);
+        let time_col_index = match self.search_mode {
+            SearchMode::Natural => 3,
+            SearchMode::Rule => 2,
+        };
+
         egui::Frame::NONE
             .inner_margin(egui::Margin::symmetric(4, 0))
             .show(ui, |ui| {
-                ui.label(format!("{} {}", row_nr, col_nr));
+                if let Some(hit) = item {
+                    let file_name = hit
+                        .file_path
+                        .file_name()
+                        .map(|v| v.to_string_lossy())
+                        .unwrap_or("".into());
+                    let file_path = hit.file_path.to_string_lossy();
+                    match col_nr {
+                        0 => {
+                            ui.label(file_name);
+                        }
+                        1 => {
+                            ui.label(file_path);
+                        }
+                        val if val == &2
+                            && matches!(self.search_mode, SearchMode::Natural) =>
+                        {
+                            if let Some(score) = hit.score {
+                                ui.label(format!("{}", score));
+                            }
+                        }
+                        val if val == &time_col_index => match sort_mode {
+                            SortMode::AccessedTime => {
+                                ui.label(timestamp_to_local_string(hit.access_time as i64));
+                            }
+                            SortMode::CreatedTime => {
+                                ui.label(timestamp_to_local_string(hit.access_time as i64));
+                            }
+                            _ => {
+                                ui.label(timestamp_to_local_string(hit.access_time as i64));
+                            }
+                        },
+                        _ => {}
+                    }
+                }
             });
     }
 
@@ -152,6 +202,15 @@ impl egui_table::TableDelegate for SearchResultTable<'_> {
             ui.painter()
                 .rect_filled(ui.max_rect(), 0.0, ui.visuals().code_bg_color);
         }
+    }
+
+    fn row_top_offset(
+        &self,
+        ctx: &egui::Context,
+        _table_id: egui::Id,
+        row_nr: u64,
+    ) -> f32 {
+        row_nr as f32 * self.row_height
     }
 }
 
@@ -166,12 +225,12 @@ impl StatefulComponent for SearchResultViewer {
 
         let text_style = egui::TextStyle::Body;
         let row_height = ui.text_style_height(&text_style);
-        // let total_rows = self.search_result.len();
-        let total_rows = 100;
+        let total_rows = self.store.len();
 
         let mut search_result_table = SearchResultTable {
             search_mode: &self.search_mode,
-            sort_mode: &self.store.sort_config().mode,
+            store: &mut self.store,
+            row_height,
             events: Default::default(),
         };
 
@@ -205,9 +264,9 @@ impl StatefulComponent for SearchResultViewer {
         };
 
         let egui_table = egui_table::Table::new()
-            .id_salt("1111")
+            .id_salt(constants::ID_SALT_SEARCH_RESULT_VIEWER_EGUI_TABLE)
             .columns(columns)
-            .num_rows(total_rows)
+            .num_rows(total_rows as u64)
             .headers([egui_table::HeaderRow::new(row_height)])
             .auto_size_mode(egui_table::AutoSizeMode::Always);
 
@@ -236,7 +295,7 @@ impl StatefulComponent for SearchResultViewer {
                 .default_width(max_width * 0.38) // Golden ratio
                 .min_width(max_width * 0.3)
                 .max_width(max_width * 0.5)
-                .show_animated(ui.ctx(), true, |ui| {
+                .show_animated(ui.ctx(), self.show_preview, |ui| {
                     ui.take_available_space();
                     ui.label("Preview");
                 });

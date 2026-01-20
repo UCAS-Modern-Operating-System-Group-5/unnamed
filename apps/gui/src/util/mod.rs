@@ -4,6 +4,7 @@ mod thread;
 mod search_result_store;
 mod sort;
 mod search_status;
+pub mod time;
 
 pub use query_highlighter::MemoizedQueryHighligher;
 pub use thread::UniversalEventHandlerThread;

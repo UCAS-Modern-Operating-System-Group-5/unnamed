@@ -11,6 +11,7 @@ regex.workspace = true
 ignore.workspace = true
 chrono.version = "0.4"
 serde = { workspace = true, optional = true }
+chrono.workspace = true
 
 
 [features]

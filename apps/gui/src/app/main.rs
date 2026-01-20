@@ -15,13 +15,12 @@ use crate::util::{
 };
 use rpc::{
     Request as RpcRequest,
-    search::{SResult, SearchMode, SearchRequest},
+    search::{SResult, SearchErrorKind, SearchMode, SearchRequest},
 };
 use std::sync::mpsc;
 use strum::IntoEnumIterator;
 use tarpc::client::RpcError;
 use tracing::{error, info};
-use uuid::Uuid;
 
 pub struct App {
     // config: Config,
@@ -272,6 +271,15 @@ impl App {
                     if !self.s.server_online {
                         continue;
                     }
+
+
+                    // Cancel existing search first
+                    if let SearchStatus::Working(ref working) = self.s.search_status {
+                        let _ = self.tx_request.send(Request::Backend(
+                            RpcRequest::CancelSearch(working.session_id)
+                        ));
+                    }
+    
                     let search_request = SearchRequest {
                         query,
                         search_mode: self.s.search_mode.clone(),
@@ -391,78 +399,84 @@ impl App {
             BackendEvent::RpcFailure(rpc_error) => {
                 match rpc_error {
                     RpcError::Shutdown => {
-                        self.s.server_online = false;
-                        // TODO try reconnection
+                        self.reset_server_related_states();
                     }
                     _ => {
-                        // TODO handle other type of errors
+                        error!("RPC error: {:?}", rpc_error);
                     }
                 }
-                // TODO Display failture reason
             }
-            BackendEvent::ConnectionFailed(e) => {
-                // error!("Connection to server failed: {e}");
+            BackendEvent::ConnectionFailed(_) => {
+                self.reset_server_related_states();
             }
             BackendEvent::RpcResponse(response) => match response {
                 rpc::Response::Ping(_) => {
                     self.s.server_online = true;
                 }
                 rpc::Response::StartSearch(session_id) => {
-                    if let Some(session_id) = self.unwrap_sresult_safe(session_id) {
+                    if let Some(session_id) = self.unwrap_sresult_or_fail(session_id) {
+                        self.search_result_viewer.clear_items();
                         self.s.search_status =
                             SearchStatus::Working(WorkingSearchStatus::new(session_id));
                     }
                 }
                 rpc::Response::SearchStatus(search_status) => {
-                    if let Some(status) = self.unwrap_sresult_safe(search_status) {
+                    if let Some(status) = self.unwrap_sresult_or_fail(search_status) {
                         match status {
                             rpc::search::SearchStatus::Failed(err) => {
                                 self.s.search_status = SearchStatus::Failed(err);
-                            },
+                            }
                             rpc::search::SearchStatus::Cancelled => {
                                 self.s.search_status = SearchStatus::Idle;
-                            },
-                            _ => {
-                                match &self.s.search_status {
-                                    SearchStatus::Working(ss) => {
-                                        self.s.search_status =
-                                    SearchStatus::Working(WorkingSearchStatus {
-                                        session_id: ss.session_id,
-                                        status: Some(status),
-                                    })
-                                    }
-                                    _ => {}
-                                }
                             }
+                            _ => match &self.s.search_status {
+                                SearchStatus::Working(ss) => {
+                                    self.s.search_status =
+                                        SearchStatus::Working(WorkingSearchStatus {
+                                            session_id: ss.session_id,
+                                            status: Some(status),
+                                        })
+                                }
+                                _ => {}
+                            },
                         }
                     }
                 }
                 rpc::Response::FetchSearchResults(fetch_result) => {
-                    if let Some(res) = self.unwrap_sresult_safe(fetch_result) {
-                        self.search_result_viewer.recieve_items(res.hits);
+                    if let Some(res) = self.unwrap_sresult_or_fail(fetch_result) {
+                        if let SearchStatus::Working(ref working) = self.s.search_status {
+                            if working.session_id == res.session_id {
+                                self.search_result_viewer.recieve_items(res.hits);
+                            }
+                        }
                     }
-                },
-                rpc::Response::CancelSearch(_) => {
-                    self.s.search_status = SearchStatus::Idle;
-                },
+                }
+                rpc::Response::CancelSearch(res) => {
+                    if let Some(_) = self.unwrap_sresult_or_fail(res) {
+                        self.s.search_status = SearchStatus::Idle;
+                    }
+                }
             },
         }
     }
 
-    /// Unwrap the search result and handles error cases
-    fn unwrap_sresult_safe<T: std::fmt::Debug>(
-        &mut self,
-        result: SResult<T>,
-    ) -> Option<T> {
-        if result.is_ok() {
-            return result.ok();
+    /// Unwrap search result, setting failed status on error
+    fn unwrap_sresult_or_fail<T>(&mut self, result: SResult<T>) -> Option<T> {
+        match result {
+            Ok(v) => Some(v),
+            Err(err) => {
+                match err {
+                    SearchErrorKind::SessionNotExists
+                    | SearchErrorKind::SessionAlreadyCancelled => {
+                        // These are expected, don't mark as failed
+                    }
+                    _ => {
+                        self.s.search_status = SearchStatus::Failed(err);
+                    }
+                }
+                None
+            }
         }
-
-        let err = result.unwrap_err();
-
-        self.s.search_status = SearchStatus::Failed(err);
-
-        None
     }
 
     fn resize_window(&self, ctx: &egui::Context) {
@@ -480,6 +494,11 @@ impl App {
         if let Some(cmd) = egui::ViewportCommand::center_on_screen(ctx) {
             ctx.send_viewport_cmd(cmd);
         }
+    }
+
+    fn reset_server_related_states(&mut self) {
+        self.s.server_online = false;
+        self.s.search_status = SearchStatus::Idle;
     }
 }
 

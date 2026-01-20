@@ -31,6 +31,7 @@ derive_builder.version = "0.20"
 regex.version = "1"
 ignore = "0.4"
 uuid = { version = "1", features = ["v4", "serde"] }
+chrono = "0.4"
 
 [workspace.dependencies.tarpc]
 version = "0.37"
