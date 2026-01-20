@@ -135,6 +135,14 @@ impl SearchBar {
                     self.should_start_search = true;
                     true
                 }
+                UserCommand::ToggleSearchMode => {
+                    // Don't toggle search mode when there is input string
+                    if !self.raw_search_query.is_empty() {
+                        true
+                    } else {
+                        false
+                    }
+                }
                 _ => false,
             },
             Scope::SearchBarCompletion => match cmd {
