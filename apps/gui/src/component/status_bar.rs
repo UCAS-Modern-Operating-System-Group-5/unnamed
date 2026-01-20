@@ -34,6 +34,7 @@ pub enum StatusBarEvent {
 }
 
 
+// TODO don't use text, draw it directly
 const SPINNER_FRAMES: &[char] = &['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
 const SPINNER_FPS: f64 = 10.0;
 pub struct StatusBarStatusWidget<'a> {

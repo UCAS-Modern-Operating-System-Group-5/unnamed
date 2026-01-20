@@ -41,7 +41,7 @@ pub struct SearchBar {
 
 pub struct SearchBarProps<'a> {
     pub search_mode: &'a SearchMode,
-    pub draw_separate_line: bool,
+    pub in_expand_view: bool,
 }
 
 pub struct SearchBarOutput {
@@ -256,6 +256,7 @@ impl SearchBar {
         &mut self,
         ctx: &egui::Context,
         text_edit_output: &TextEditOutput,
+        in_expand_view: bool,
     ) -> Option<SearchBarEvent> {
         if !self.should_handle_completion() {
             return None;
@@ -269,17 +270,28 @@ impl SearchBar {
         let cursor_pos_in_galley = galley.pos_from_cursor(cursor);
         let cursor_rect = cursor_pos_in_galley
             .translate(text_edit_output.response.rect.left_top().to_vec2());
+        
+        // let typed_text_width = text_edit_output.galley.rect.width();
+        // let base_y = text_edit_output.galley_pos.y;
+        // let mut current_x =
+        //     text_edit_output.galley_pos.x + typed_text_width + initial_spacing;
+
 
         let mut event = None;
 
         let popup_id = Id::new(constants::ID_SEARCH_BAR_COMPLETION_POPUP);
         let text_edit_rect = text_edit_output.response.rect;
         let layer_id = text_edit_output.response.layer_id;
-        let rect = if cursor.index == 0 {
+        let mut rect = if cursor.index == 0 {
             text_edit_rect
         } else {
             cursor_rect
         };
+
+        if !in_expand_view {
+            rect = rect.with_max_x(rect.min.x + ctx.style().spacing.item_spacing.x * 2.0);
+            rect = rect.with_min_x(rect.min.x + ctx.style().spacing.item_spacing.x * 2.0);
+        }
 
         egui::Popup::new(popup_id, ctx.clone(), rect, layer_id)
             .frame(egui::Frame::popup(&ctx.style()))
@@ -297,8 +309,14 @@ impl SearchBar {
                     .len()
                     .min(COMPLETION_VISIBLE_ITEMS_NUM);
                 let single_item_height = text_height + button_padding;
-                let height = single_item_height * num_items as f32
+                let items_height = single_item_height * num_items as f32
                     + item_spacing * num_items.saturating_sub(1) as f32;
+                // May not be correct, but though, it works.
+                let available_max_height = ctx.content_rect().height()
+                    - ui.style().spacing.window_margin.top as f32
+                    - ui.style().spacing.window_margin.bottom as f32
+                    - ui.visuals().clip_rect_margin;
+                let height = items_height.min(available_max_height);
                 ui.set_height(height);
 
                 egui::ScrollArea::vertical()
@@ -378,20 +396,18 @@ impl SearchBar {
             parts.push("⌘");
             #[cfg(target_os = "windows")]
             parts.push("Win");
-            #[cfg(not(any(target_os="macos", target_os = "windows")))]
+            #[cfg(not(any(target_os = "macos", target_os = "windows")))]
             parts.push("Super");
-
         }
         parts.push(shortcut.0.logical_key.name());
 
-        
         let painter = ui.painter_at(text_edit_output.text_clip_rect);
         let style = ui.style();
         let text_color = style.visuals.weak_text_color();
         let font_id = egui::TextStyle::Name("SearchBarKeyHint".into()).resolve(style);
         let bg_color = ui.visuals().widgets.inactive.bg_fill.gamma_multiply(0.5);
         let bg_stroke = egui::Stroke::new(1.0, text_color.gamma_multiply(0.5));
-        
+
         let rounding = 3;
         let padding = style.spacing.button_padding;
         let initial_spacing = style.spacing.item_spacing.x;
@@ -399,11 +415,13 @@ impl SearchBar {
 
         let typed_text_width = text_edit_output.galley.rect.width();
         let base_y = text_edit_output.galley_pos.y;
-        let mut current_x = text_edit_output.galley_pos.x + typed_text_width + initial_spacing;
+        let mut current_x =
+            text_edit_output.galley_pos.x + typed_text_width + initial_spacing;
         let line_height = text_edit_output.galley.rect.height();
 
         for part in parts {
-            let galley = painter.layout_no_wrap(part.to_string(), font_id.clone(), text_color);
+            let galley =
+                painter.layout_no_wrap(part.to_string(), font_id.clone(), text_color);
             let text_size = galley.rect.size();
 
             // Calculate the background rect (vertically centered)
@@ -415,7 +433,6 @@ impl SearchBar {
                 egui::vec2(text_size.x + padding.x * 2.0, bg_height),
             );
 
-            
             // Draw rounded background with border
             painter.rect(
                 bg_rect,
@@ -457,7 +474,7 @@ impl ContextComponent for SearchBar {
         }
 
         let resp = egui::TopBottomPanel::top(constants::ID_PANEL_SEARCH_BAR)
-            .show_separator_line(props.draw_separate_line)
+            .show_separator_line(props.in_expand_view)
             .frame(
                 egui::Frame::NONE
                     .inner_margin(egui::vec2(10.0, 6.0))
@@ -539,7 +556,11 @@ impl ContextComponent for SearchBar {
                             }
                         }
 
-                        if let Some(event) = self.render_completion_popup(ctx, &output) {
+                        if let Some(event) = self.render_completion_popup(
+                            ctx,
+                            &output,
+                            props.in_expand_view,
+                        ) {
                             events.push(event);
                         }
                     }
@@ -557,9 +578,8 @@ impl ContextComponent for SearchBar {
                                 &output,
                                 self.start_search_key_shortcut.as_ref(),
                             );
-                        }                        
+                        }
                     }
-
 
                     if self.should_start_search {
                         events.push(SearchBarEvent::StartSearch(

@@ -31,6 +31,7 @@ pub struct App {
     s: State,
 
     key_handler: KeyHandler,
+    max_viewport_height: f32,
 
     ability: Ability,
     search_bar: SearchBar,
@@ -110,10 +111,12 @@ impl App {
             ..Default::default()
         };
 
+        let max_viewport_height = config.app.height;
         let search_bar = Self::create_search_bar(&config);
 
         Self {
             s: state,
+            max_viewport_height,
             key_handler: KeyHandler::new(config.keys),
             ability: Ability {
                 recenter: can_recenter,
@@ -158,6 +161,11 @@ impl App {
             start_search_key_shortcut,
             completion_start_search_key_shortcut,
         )
+    }
+
+    /// Show search result list
+    fn expand_view(&mut self) {
+        self.s.expand = true;
     }
 
     /// Tweaking Egui's beheavior to make it suitable for this application.
@@ -266,7 +274,7 @@ impl App {
     fn render_search_bar(&mut self, ctx: &egui::Context) {
         let props = SearchBarProps {
             search_mode: &self.s.search_mode,
-            draw_separate_line: self.s.expand,
+            in_expand_view: self.s.expand,
         };
         let output = self.search_bar.render(ctx, props);
         for event in output.events {
@@ -450,7 +458,8 @@ impl App {
                                     SearchStatus::Working(WorkingSearchStatus {
                                         session_id: session_id,
                                         status: Some(status),
-                                    })
+                                    });
+                                self.expand_view();
                             }
                         }
                     }
@@ -496,16 +505,23 @@ impl App {
         }
     }
 
-    fn resize_window(&self, ctx: &egui::Context) {
+    fn resize_window(&mut self, ctx: &egui::Context) {
         if !self.ability.recenter {
             return;
         }
 
-        let height = self.status_bar.height() + self.search_bar.height()
-            - ctx.style().visuals.widgets.noninteractive.bg_stroke.width;
+        let viewport = ctx.viewport_rect();
+        
+        let mut height = viewport.height();
+        if self.s.expand {
+            height = self.max_viewport_height.max(height);
+        } else {
+            height = self.status_bar.height() + self.search_bar.height()
+                - ctx.style().visuals.widgets.noninteractive.bg_stroke.width;
+        }
 
         ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::vec2(
-            800.0, height,
+            viewport.width(), height,
         )));
 
         if let Some(cmd) = egui::ViewportCommand::center_on_screen(ctx) {
@@ -541,6 +557,7 @@ impl eframe::App for App {
 
         self.handle_event();
         self.resize_window(ctx);
+        
         self.update_window_title(ctx);
         self.handle_file_drop(ctx);
         self.render_search_bar(ctx);
