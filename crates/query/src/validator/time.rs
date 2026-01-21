@@ -97,12 +97,16 @@ pub fn validate_time(value: String, span: Span) -> ValidationResult<TimeRange> {
 
     if let Some(rest) = value.strip_prefix('>') {
         let ts = parse_time_value(rest.trim(), span)?;
-        return Ok(TimeRange::at_least(ts.saturating_add(1)));
+        // 对于相对时间（如 7d），ts 已经是 "now - 7天"
+        // >7d 表示访问时间晚于7天前，即 atime > (now - 7天)
+        return Ok(TimeRange::at_least(ts));
     }
 
     if let Some(rest) = value.strip_prefix('<') {
         let ts = parse_time_value(rest.trim(), span)?;
-        return Ok(TimeRange::at_most(ts.saturating_sub(1)));
+        // 对于相对时间（如 7d），ts 已经是 "now - 7天"
+        // <7d 表示访问时间早于7天前，即 atime < (now - 7天)
+        return Ok(TimeRange::at_most(ts));
     }
 
     if let Some(rest) = value.strip_prefix('=') {

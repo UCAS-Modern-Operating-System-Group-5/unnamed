@@ -20,7 +20,7 @@ use crate::cache::{EmbeddingCache, FileStatus};
 use crate::config::CONFIG;
 use crate::extract::extract_text;
 use crate::registry::{FileRegistry, EventType};
-use crate::schema::{build_schema, FIELD_TITLE, FIELD_BODY, FIELD_PATH, FIELD_TAGS, FIELD_FILE_SIZE, FIELD_MODIFIED_TIME};
+use crate::schema::{build_schema, FIELD_TITLE, FIELD_BODY, FIELD_PATH, FIELD_TAGS, FIELD_FILE_SIZE, FIELD_MODIFIED_TIME, FIELD_CREATED_TIME, FIELD_ACCESSED_TIME};
 
 /// 初始化持久化索引
 pub fn init_persistent_index(index_path: &Path) -> Result<(Index, Schema, IndexReader)> {
@@ -101,6 +101,20 @@ pub fn process_and_index(
         .unwrap_or_default()
         .as_secs();
 
+    let file_created = fs::metadata(file_path)
+        .and_then(|m| m.created())
+        .unwrap_or(SystemTime::UNIX_EPOCH)
+        .duration_since(SystemTime::UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs();
+
+    let file_accessed = fs::metadata(file_path)
+        .and_then(|m| m.accessed())
+        .unwrap_or(SystemTime::UNIX_EPOCH)
+        .duration_since(SystemTime::UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs();
+
     let file_size = fs::metadata(file_path).map(|m| m.len()).unwrap_or(0);
 
     // AI 关键词提取（优先使用缓存）
@@ -121,6 +135,8 @@ pub fn process_and_index(
     let path_field = schema.get_field(FIELD_PATH).unwrap();
     let tags_field = schema.get_field(FIELD_TAGS).unwrap();
     let modified_time_field = schema.get_field(FIELD_MODIFIED_TIME).unwrap();
+    let created_time_field = schema.get_field(FIELD_CREATED_TIME).unwrap();
+    let accessed_time_field = schema.get_field(FIELD_ACCESSED_TIME).unwrap();
     let size_field = schema.get_field(FIELD_FILE_SIZE).unwrap();
     
     let mut index_writer: IndexWriter = index.writer(50_000_000)?;
@@ -136,6 +152,8 @@ pub fn process_and_index(
         path_field => doc_data.path.as_str(),
         tags_field => tags_str,
         modified_time_field => file_timestamp,
+        created_time_field => file_created,
+        accessed_time_field => file_accessed,
         size_field => file_size
     ))?;
 

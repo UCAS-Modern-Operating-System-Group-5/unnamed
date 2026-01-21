@@ -50,6 +50,12 @@ pub fn search_with_results(reader: &IndexReader, index: &Index, query_str: &str)
     let body_field = schema.get_field(FIELD_BODY).unwrap();
     let path_field = schema.get_field(FIELD_PATH).unwrap();
     let tags_field = schema.get_field(FIELD_TAGS).ok();
+    
+    // 获取时间和大小字段
+    let file_size_field = schema.get_field(crate::schema::FIELD_FILE_SIZE).ok();
+    let modified_time_field = schema.get_field(crate::schema::FIELD_MODIFIED_TIME).ok();
+    let created_time_field = schema.get_field(crate::schema::FIELD_CREATED_TIME).ok();
+    let accessed_time_field = schema.get_field(crate::schema::FIELD_ACCESSED_TIME).ok();
 
     let query_parser = QueryParser::for_index(index, vec![title_field, body_field]);
     
@@ -85,13 +91,32 @@ pub fn search_with_results(reader: &IndexReader, index: &Index, query_str: &str)
             retrieved_doc.get_first(f).and_then(|v| v.as_str()).map(|s| s.to_string())
         });
         
+        // 从索引中读取时间和大小字段
+        let file_size = file_size_field
+            .and_then(|f| retrieved_doc.get_first(f))
+            .and_then(|v| v.as_u64());
+        
+        let modified_time = modified_time_field
+            .and_then(|f| retrieved_doc.get_first(f))
+            .and_then(|v| v.as_u64());
+        
+        let created_time = created_time_field
+            .and_then(|f| retrieved_doc.get_first(f))
+            .and_then(|v| v.as_u64());
+        
+        let accessed_time = accessed_time_field
+            .and_then(|f| retrieved_doc.get_first(f))
+            .and_then(|v| v.as_u64());
+        
         results.push(SearchHit {
             title,
             path,
             score,
             tags,
-            file_size: None,
-            modified_time: None,
+            file_size,
+            modified_time,
+            created_time,
+            accessed_time,
         });
     }
 
@@ -178,6 +203,10 @@ pub fn hybrid_search(
     let body_field = schema.get_field(FIELD_BODY).unwrap();
     let path_field = schema.get_field(FIELD_PATH).unwrap();
     let tags_field = schema.get_field(FIELD_TAGS).ok();
+    let file_size_field = schema.get_field(crate::schema::FIELD_FILE_SIZE).ok();
+    let modified_time_field = schema.get_field(crate::schema::FIELD_MODIFIED_TIME).ok();
+    let created_time_field = schema.get_field(crate::schema::FIELD_CREATED_TIME).ok();
+    let accessed_time_field = schema.get_field(crate::schema::FIELD_ACCESSED_TIME).ok();
     
     let mut semantic_results: Vec<SearchHit> = Vec::new();
     
@@ -205,6 +234,23 @@ pub fn hybrid_search(
                     doc.get_first(f).and_then(|v| v.as_str()).map(String::from)
                 });
                 
+                // 从索引中读取时间和大小字段
+                let file_size = file_size_field
+                    .and_then(|f| doc.get_first(f))
+                    .and_then(|v| v.as_u64());
+                
+                let modified_time = modified_time_field
+                    .and_then(|f| doc.get_first(f))
+                    .and_then(|v| v.as_u64());
+                
+                let created_time = created_time_field
+                    .and_then(|f| doc.get_first(f))
+                    .and_then(|v| v.as_u64());
+                
+                let accessed_time = accessed_time_field
+                    .and_then(|f| doc.get_first(f))
+                    .and_then(|v| v.as_u64());
+                
                 // 简化的语义相似度：基于关键词覆盖率
                 let mut score = 0.0f32;
                 let query_terms: Vec<&str> = query_str.split_whitespace().collect();
@@ -229,8 +275,10 @@ pub fn hybrid_search(
                         path,
                         score,
                         tags,
-                        file_size: None,
-                        modified_time: None,
+                        file_size,
+                        modified_time,
+                        created_time,
+                        accessed_time,
                     });
                 }
             }

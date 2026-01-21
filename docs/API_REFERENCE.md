@@ -152,10 +152,10 @@ PagedResults {
 | `include_globs` | `Vec<String>` | ❌ | ✅ 完整支持 | 文件名 glob 模式白名单，例如 `["*.txt", "*.rs"]` |
 | `exclude_globs` | `Vec<String>` | ❌ | ✅ 完整支持 | 文件名 glob 模式黑名单，例如 `["target/*", ".git/*"]` |
 | `semantic_threshold` | `Option<f32>` | ❌ | ✅ 完整支持 | 语义搜索最低相似度（0.0-1.0），过滤低分结果 |
-| `time_accessed_range` | `Option<(SystemTime, SystemTime)>` | ❌ | ❌ 未实现 | 文件访问时间范围 |
-| `time_created_range` | `Option<(SystemTime, SystemTime)>` | ❌ | ❌ 未实现 | 文件创建时间范围 |
-| `time_modified_range` | `Option<(SystemTime, SystemTime)>` | ❌ | ❌ 未实现 | 文件修改时间范围 |
-| `size_range_bytes` | `Option<(u64, u64)>` | ❌ | ❌ 未实现 | 文件大小范围（字节） |
+| `time_accessed_range` | `Option<(SystemTime, SystemTime)>` | ❌ | ✅ 已实现 | 文件访问时间范围（通过 Query DSL `atime:` 语法） |
+| `time_created_range` | `Option<(SystemTime, SystemTime)>` | ❌ | ✅ 已实现 | 文件创建时间范围（通过 Query DSL `ctime:` 语法） |
+| `time_modified_range` | `Option<(SystemTime, SystemTime)>` | ❌ | ✅ 已实现 | 文件修改时间范围（通过 Query DSL `mtime:` 语法） |
+| `size_range_bytes` | `Option<(u64, u64)>` | ❌ | ✅ 已实现 | 文件大小范围（通过 Query DSL `size:` 语法） |
 
 **Glob 模式示例**:
 ```rust

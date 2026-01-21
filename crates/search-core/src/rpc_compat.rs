@@ -21,6 +21,8 @@ pub struct SearchResultItem {
     pub tags: Vec<String>,
     pub file_size: u64,
     pub modified_time: std::time::SystemTime,
+    pub created_time: std::time::SystemTime,
+    pub accessed_time: std::time::SystemTime,
 }
 
 impl From<SearchHit> for SearchResultItem {
@@ -30,6 +32,14 @@ impl From<SearchHit> for SearchResultItem {
             .map(|secs| std::time::UNIX_EPOCH + std::time::Duration::from_secs(secs))
             .unwrap_or_else(|| std::time::SystemTime::now());
         
+        let created_time = hit.created_time
+            .map(|secs| std::time::UNIX_EPOCH + std::time::Duration::from_secs(secs))
+            .unwrap_or(std::time::UNIX_EPOCH);
+        
+        let accessed_time = hit.accessed_time
+            .map(|secs| std::time::UNIX_EPOCH + std::time::Duration::from_secs(secs))
+            .unwrap_or(std::time::UNIX_EPOCH);
+        
         Self {
             path: PathBuf::from(&hit.path),
             title: hit.title.clone(),
@@ -38,6 +48,8 @@ impl From<SearchHit> for SearchResultItem {
             tags: hit.tags.map(|t| t.split_whitespace().map(String::from).collect()).unwrap_or_default(),
             file_size: hit.file_size.unwrap_or(0),
             modified_time,
+            created_time,
+            accessed_time,
         }
     }
 }

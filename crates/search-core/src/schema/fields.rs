@@ -52,18 +52,16 @@ pub const FIELD_FILE_TYPE: &str = "file_type";
 
 /// 文件创建时间（Unix 时间戳秒）
 /// 
-/// **状态**: 🔴 未启用
+/// **状态**: � 已启用
 /// **用途**: 支持按创建时间范围过滤
-/// **RPC 对应**: SearchRequest.time_created_range（未实现）
-#[allow(dead_code)]
+/// **RPC 对应**: SearchRequest.time_created_range
 pub const FIELD_CREATED_TIME: &str = "created_time";
 
 /// 文件访问时间（Unix 时间戳秒）
 /// 
-/// **状态**: 🔴 未启用
+/// **状态**: � 已启用
 /// **用途**: 支持按访问时间范围过滤
-/// **RPC 对应**: SearchRequest.time_accessed_range（未实现）
-#[allow(dead_code)]
+/// **RPC 对应**: SearchRequest.time_accessed_range
 pub const FIELD_ACCESSED_TIME: &str = "accessed_time";
 
 /// 索引时间（文档被索引的时间）

@@ -13,7 +13,7 @@ use tantivy::query::{AllQuery, QueryParser};
 use tantivy::schema::Value;
 use tantivy::{Index, IndexReader, TantivyDocument};
 
-use crate::schema::{FIELD_BODY, FIELD_FILE_SIZE, FIELD_MODIFIED_TIME, FIELD_PATH, FIELD_TITLE};
+use crate::schema::{FIELD_BODY, FIELD_FILE_SIZE, FIELD_MODIFIED_TIME, FIELD_CREATED_TIME, FIELD_ACCESSED_TIME, FIELD_PATH, FIELD_TITLE};
 use crate::SearchHit;
 
 /// 查询执行上下文
@@ -34,18 +34,25 @@ pub fn execute_query(ctx: &QueryContext, query: &Query) -> Result<Vec<SearchHit>
     
     // 收集所有关键词用于 Tantivy 搜索
     let keywords = collect_keywords(query);
+    tracing::info!("[Query执行器] 收集到关键词: {:?}", keywords);
     
     // 如果没有关键词，获取全部文档作为候选
     let candidates = if keywords.is_empty() {
+        tracing::info!("[Query执行器] 无关键词，获取全部文档作为候选");
         get_all_docs(ctx, &schema)?
     } else {
         // 构建关键词查询
         let query_str = keywords.join(" ");
+        tracing::info!("[Query执行器] 使用关键词搜索: '{}'", query_str);
         search_by_keywords(ctx, &query_str)?
     };
     
+    tracing::info!("[Query执行器] 候选文档数: {}", candidates.len());
+    
     // 在候选集上应用过滤器
     let filtered = filter_by_query(candidates, query)?;
+    
+    tracing::info!("[Query执行器] 过滤后结果数: {}", filtered.len());
     
     Ok(filtered)
 }
@@ -60,8 +67,19 @@ fn collect_keywords(query: &Query) -> Vec<String> {
 fn collect_keywords_recursive(query: &Query, keywords: &mut Vec<String>) {
     match query {
         Query::Term(term) => {
-            if let Term::KeyWord(kw) = term {
-                keywords.push(kw.clone());
+            match term {
+                Term::KeyWord(kw) => {
+                    keywords.push(kw.clone());
+                }
+                Term::Regex(re) => {
+                    // 将正则表达式的模式作为关键词用于 Tantivy 搜索
+                    // Tantivy 会对其进行分词并在 body 中搜索
+                    let pattern = re.as_str();
+                    if !pattern.is_empty() {
+                        keywords.push(pattern.to_string());
+                    }
+                }
+                _ => {}
             }
         }
         Query::And(items) | Query::Or(items) => {
@@ -119,6 +137,14 @@ fn search_by_keywords(ctx: &QueryContext, query_str: &str) -> Result<Vec<SearchH
             .and_then(|f| doc.get_first(f))
             .and_then(|v| v.as_u64());
         
+        let created_time = schema.get_field(FIELD_CREATED_TIME).ok()
+            .and_then(|f| doc.get_first(f))
+            .and_then(|v| v.as_u64());
+        
+        let accessed_time = schema.get_field(FIELD_ACCESSED_TIME).ok()
+            .and_then(|f| doc.get_first(f))
+            .and_then(|v| v.as_u64());
+        
         results.push(SearchHit {
             title,
             path,
@@ -126,6 +152,8 @@ fn search_by_keywords(ctx: &QueryContext, query_str: &str) -> Result<Vec<SearchH
             tags: None,
             file_size,
             modified_time,
+            created_time,
+            accessed_time,
         });
     }
     
@@ -140,7 +168,10 @@ fn get_all_docs(ctx: &QueryContext, schema: &tantivy::schema::Schema) -> Result<
     let path_field = schema.get_field(FIELD_PATH)?;
     
     let all_query = AllQuery;
-    let top_docs = searcher.search(&all_query, &TopDocs::with_limit(ctx.limit * 10))?;
+    let fetch_limit = ctx.limit * 10;
+    tracing::info!("[Query执行器] get_all_docs: 获取所有文档，limit={}", fetch_limit);
+    let top_docs = searcher.search(&all_query, &TopDocs::with_limit(fetch_limit))?;
+    tracing::info!("[Query执行器] get_all_docs: 获取到 {} 个候选文档", top_docs.len());
     
     let mut results = Vec::new();
     for (_score, doc_address) in top_docs {
@@ -164,6 +195,14 @@ fn get_all_docs(ctx: &QueryContext, schema: &tantivy::schema::Schema) -> Result<
             .and_then(|f| doc.get_first(f))
             .and_then(|v| v.as_u64());
         
+        let created_time = schema.get_field(FIELD_CREATED_TIME).ok()
+            .and_then(|f| doc.get_first(f))
+            .and_then(|v| v.as_u64());
+        
+        let accessed_time = schema.get_field(FIELD_ACCESSED_TIME).ok()
+            .and_then(|f| doc.get_first(f))
+            .and_then(|v| v.as_u64());
+        
         results.push(SearchHit {
             title,
             path,
@@ -171,6 +210,8 @@ fn get_all_docs(ctx: &QueryContext, schema: &tantivy::schema::Schema) -> Result<
             tags: None,
             file_size,
             modified_time,
+            created_time,
+            accessed_time,
         });
     }
     
@@ -179,10 +220,15 @@ fn get_all_docs(ctx: &QueryContext, schema: &tantivy::schema::Schema) -> Result<
 
 /// 根据 Query AST 过滤候选结果
 fn filter_by_query(candidates: Vec<SearchHit>, query: &Query) -> Result<Vec<SearchHit>> {
+    let candidate_count = candidates.len();
     let filtered: Vec<SearchHit> = candidates
         .into_iter()
         .filter(|hit| matches_query(hit, query))
         .collect();
+    tracing::info!(
+        "[Query执行器] filter_by_query: 候选 {} 个, 过滤后 {} 个",
+        candidate_count, filtered.len()
+    );
     Ok(filtered)
 }
 
@@ -209,9 +255,11 @@ fn matches_term(hit: &SearchHit, term: &Term) -> bool {
             let root = Path::new(root_path);
             path.starts_with(root)
         }
-        Term::Regex(re) => {
-            // 对路径或标题进行正则匹配
-            re.is_match(&hit.path) || re.is_match(&hit.title)
+        Term::Regex(_re) => {
+            // Regex 模式已作为关键词传给 Tantivy 进行全文搜索
+            // Tantivy 会在 title 和 body 中搜索匹配的内容
+            // 这里直接返回 true，因为候选结果已经是 Tantivy 匹配的
+            true
         }
         Term::Glob(pattern) => {
             // Glob 模式匹配文件名
@@ -221,26 +269,47 @@ fn matches_term(hit: &SearchHit, term: &Term) -> bool {
                         .file_name()
                         .and_then(|n| n.to_str())
                         .unwrap_or("");
-                    p.matches(file_name) || p.matches(&hit.path)
+                    let matches_name = p.matches(file_name);
+                    let matches_path = p.matches(&hit.path);
+                    let result = matches_name || matches_path;
+                    tracing::debug!(
+                        "[Glob过滤] pattern='{}', file_name='{}', path='{}', matches_name={}, matches_path={}, result={}",
+                        pattern, file_name, hit.path, matches_name, matches_path, result
+                    );
+                    result
                 }
-                Err(_) => false,
+                Err(e) => {
+                    tracing::warn!("[Glob过滤] 无效的 glob 模式 '{}': {}", pattern, e);
+                    false
+                }
             }
         }
         Term::AccessTime(range) => {
-            // 访问时间过滤 - 从文件系统获取
-            if let Ok(metadata) = std::fs::metadata(&hit.path) {
-                if let Ok(accessed) = metadata.accessed() {
-                    let secs = accessed
-                        .duration_since(std::time::UNIX_EPOCH)
-                        .map(|d| d.as_secs())
-                        .unwrap_or(0);
-                    range.contains(secs)
-                } else {
-                    true // 无法获取时间，不过滤
-                }
+            // 访问时间过滤 - 优先使用索引中的数据
+            let atime_secs = if let Some(atime) = hit.accessed_time {
+                atime
             } else {
-                true
-            }
+                // 如果没有元数据，尝试从文件系统获取
+                if let Ok(metadata) = std::fs::metadata(&hit.path) {
+                    if let Ok(accessed) = metadata.accessed() {
+                        accessed
+                            .duration_since(std::time::UNIX_EPOCH)
+                            .map(|d| d.as_secs())
+                            .unwrap_or(0)
+                    } else {
+                        return true; // 无法获取时间，不过滤
+                    }
+                } else {
+                    return true;
+                }
+            };
+            
+            let result = range.contains(atime_secs);
+            tracing::debug!(
+                "[AccessTime过滤] 文件: {}, atime: {}, range: {:?}, 匹配: {}",
+                hit.path, atime_secs, range, result
+            );
+            result
         }
         Term::ModifiedTime(range) => {
             // 修改时间过滤
@@ -270,21 +339,31 @@ fn matches_term(hit: &SearchHit, term: &Term) -> bool {
             result
         }
         Term::CreatedTime(range) => {
-            // 创建时间过滤
-            // TODO: 需要在 schema 中添加 created_time 字段
-            if let Ok(metadata) = std::fs::metadata(&hit.path) {
-                if let Ok(created) = metadata.created() {
-                    let secs = created
-                        .duration_since(std::time::UNIX_EPOCH)
-                        .map(|d| d.as_secs())
-                        .unwrap_or(0);
-                    range.contains(secs)
-                } else {
-                    true
-                }
+            // 创建时间过滤 - 优先使用索引中的数据
+            let ctime_secs = if let Some(ctime) = hit.created_time {
+                ctime
             } else {
-                true
-            }
+                // 如果没有元数据，尝试从文件系统获取
+                if let Ok(metadata) = std::fs::metadata(&hit.path) {
+                    if let Ok(created) = metadata.created() {
+                        created
+                            .duration_since(std::time::UNIX_EPOCH)
+                            .map(|d| d.as_secs())
+                            .unwrap_or(0)
+                    } else {
+                        return true; // 无法获取时间，不过滤
+                    }
+                } else {
+                    return true;
+                }
+            };
+            
+            let result = range.contains(ctime_secs);
+            tracing::debug!(
+                "[CreatedTime过滤] 文件: {}, ctime: {}, range: {:?}, 匹配: {}",
+                hit.path, ctime_secs, range, result
+            );
+            result
         }
         Term::Size(range) => {
             // 文件大小过滤

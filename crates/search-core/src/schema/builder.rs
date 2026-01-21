@@ -57,8 +57,8 @@ pub fn build_schema() -> Schema {
     // schema_builder.add_text_field(FIELD_FILE_TYPE, STRING | STORED);
     // 
     // // 时间字段（支持范围查询）
-    // schema_builder.add_u64_field(FIELD_CREATED_TIME, FAST | STORED);
-    // schema_builder.add_u64_field(FIELD_ACCESSED_TIME, FAST | STORED);
+    schema_builder.add_u64_field(FIELD_CREATED_TIME, FAST | STORED);
+    schema_builder.add_u64_field(FIELD_ACCESSED_TIME, FAST | STORED);
     // schema_builder.add_u64_field(FIELD_INDEXED_TIME, FAST | STORED);
 
     schema_builder.build()
@@ -74,13 +74,13 @@ pub struct SchemaFields {
     pub tags: Field,
     pub file_size: Field,
     pub modified_time: Field,
+    pub created_time: Field,
+    pub accessed_time: Field,
     
     // 待启用
     // pub parent_path: Field,
     // pub filename: Field,
     // pub file_type: Field,
-    // pub created_time: Field,
-    // pub accessed_time: Field,
     // pub indexed_time: Field,
 }
 
@@ -94,11 +94,11 @@ impl SchemaFields {
             tags: schema.get_field(FIELD_TAGS).expect("missing tags field"),
             file_size: schema.get_field(FIELD_FILE_SIZE).expect("missing file_size field"),
             modified_time: schema.get_field(FIELD_MODIFIED_TIME).expect("missing modified_time field"),
+            created_time: schema.get_field(FIELD_CREATED_TIME).expect("missing created_time field"),
+            accessed_time: schema.get_field(FIELD_ACCESSED_TIME).expect("missing accessed_time field"),
             // parent_path: schema.get_field(FIELD_PARENT_PATH).expect("missing parent_path field"),
             // filename: schema.get_field(FIELD_FILENAME).expect("missing filename field"),
             // file_type: schema.get_field(FIELD_FILE_TYPE).expect("missing file_type field"),
-            // created_time: schema.get_field(FIELD_CREATED_TIME).expect("missing created_time field"),
-            // accessed_time: schema.get_field(FIELD_ACCESSED_TIME).expect("missing accessed_time field"),
             // indexed_time: schema.get_field(FIELD_INDEXED_TIME).expect("missing indexed_time field"),
         }
     }

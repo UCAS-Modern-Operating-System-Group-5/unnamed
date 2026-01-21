@@ -170,4 +170,8 @@ pub struct SearchHit {
     pub file_size: Option<u64>,
     /// 修改时间（Unix 时间戳秒），可选
     pub modified_time: Option<u64>,
+    /// 创建时间（Unix 时间戳秒），可选
+    pub created_time: Option<u64>,
+    /// 访问时间（Unix 时间戳秒），可选
+    pub accessed_time: Option<u64>,
 }

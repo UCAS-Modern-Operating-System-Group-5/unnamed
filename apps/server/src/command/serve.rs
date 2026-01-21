@@ -43,14 +43,24 @@ impl Server {
                 .map(|d| d.as_secs())
                 .unwrap_or(0);
             
+            let created_secs = hit.created_time
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs())
+                .unwrap_or(0);
+            
+            let accessed_secs = hit.accessed_time
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs())
+                .unwrap_or(0);
+            
             SearchHit {
                 file_path: hit.path,
                 score: Some(hit.score),
                 preview: hit.preview,
                 file_size: hit.file_size,
-                access_time: 0,  // TODO: 从索引获取
+                access_time: accessed_secs,
                 modified_time: modified_secs,
-                create_time: 0,  // TODO: 从索引获取
+                create_time: created_secs,
             }
         }).collect()
     }
