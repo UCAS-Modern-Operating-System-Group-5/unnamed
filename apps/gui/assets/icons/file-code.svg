@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <!-- File background with folded corner - Purple for Code -->
+  <path d="M6 2C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2H6Z" fill="#7E57C2"/>
+  <path d="M14 2L20 8H15C14.4477 8 14 7.55228 14 7V2Z" fill="#E1BEE7"/>
+  <!-- Code brackets as paths -->
+  <!-- < -->
+  <path d="M9 13.25L6.5 11.5v-0.5L9 9.25v1l-1.5 1 1.5 1v1z" fill="white" stroke="white" stroke-width="0.3"/>
+  <!-- / -->
+  <path d="M10.5 16L12.5 9h1L11.5 16h-1z" fill="white"/>
+  <!-- > -->
+  <path d="M15 9.25L17.5 11v0.5L15 13.25v-1l1.5-1-1.5-1v-1z" fill="white" stroke="white" stroke-width="0.3"/>
+</svg>

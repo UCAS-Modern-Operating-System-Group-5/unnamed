@@ -19,7 +19,6 @@ query-field-ctime = Creation time range
 query-field-s = File size range
 
 
-# TODO Chinese Translation
 # Query Result Field
 qrf-file-name = name
 qrf-file-path = Path
@@ -36,4 +35,6 @@ qrfd-mtime = Modified time
 qrfd-atime = Access time
 qrfd-ctime = Creation time
 
-
+# Search Result Viewer
+no-results = No results found
+select-file-preview = Select a file to preview

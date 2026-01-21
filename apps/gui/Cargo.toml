@@ -32,6 +32,7 @@ derive_builder.workspace = true
 tokio-stream.workspace = true
 uuid.workspace = true
 chrono.workspace = true
+open = "5"
 
 
 [dependencies.eframe]
