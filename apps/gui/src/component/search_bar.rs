@@ -105,8 +105,8 @@ impl SearchBar {
         self.should_focus = true;
     }
 
-    pub fn current_scope(&self) -> Scope {
-        if self.should_handle_completion() {
+    pub fn current_scope(&self, ctx: &egui::Context) -> Scope {
+        if self.should_handle_completion(ctx) {
             return Scope::SearchBarCompletion;
         }
         Scope::SearchBar
@@ -213,7 +213,7 @@ impl SearchBar {
         }
     }
 
-    pub fn should_handle_completion(&self) -> bool {
+    pub fn should_handle_completion(&self, ctx: &egui::Context) -> bool {
         if self.ignore_cursor.is_some_and(|c| c == self.current_cursor) {
             return false;
         }
@@ -221,6 +221,11 @@ impl SearchBar {
         if self.completion.items.is_empty() {
             return false;
         }
+
+        if !ctx.memory(|mem| mem.focused().is_some_and(|v| v == self.id)) {
+            return false;
+        }
+        
         return true;
     }
 
@@ -258,7 +263,7 @@ impl SearchBar {
         text_edit_output: &TextEditOutput,
         in_expand_view: bool,
     ) -> Option<SearchBarEvent> {
-        if !self.should_handle_completion() {
+        if !self.should_handle_completion(ctx) {
             return None;
         }
 
@@ -566,7 +571,7 @@ impl ContextComponent for SearchBar {
                     }
 
                     if !self.raw_search_query.is_empty() {
-                        if self.should_handle_completion() {
+                        if self.should_handle_completion(ctx) {
                             self.render_key_shortcut_hint(
                                 ui,
                                 &output,

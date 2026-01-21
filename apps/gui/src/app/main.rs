@@ -189,7 +189,7 @@ impl App {
 
     fn current_scope(&self, ctx: &egui::Context) -> Scope {
         ctx.memory(|mem| match mem.focused() {
-            Some(id) if id == self.search_bar.id() => self.search_bar.current_scope(),
+            Some(id) if id == self.search_bar.id() => self.search_bar.current_scope(ctx),
             Some(_) => Scope::Main,
             None => Scope::Global,
         })

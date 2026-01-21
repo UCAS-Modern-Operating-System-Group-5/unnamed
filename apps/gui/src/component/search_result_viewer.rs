@@ -100,17 +100,11 @@ impl egui_table::TableDelegate for SearchResultTable<'_> {
                         let resp = ui.heading(tr!("qrf-file-name")).on_hover_ui(|ui| {
                             ui.label(tr!("qrfd-file-name"));
                         });
-                        if resp.clicked() {
-                            dbg!("file-name");
-                        }
                     }
                     1 => {
                         let resp = ui.heading(tr!("qrf-file-path")).on_hover_ui(|ui| {
                             ui.label(tr!("qrfd-file-path"));
                         });
-                        if resp.clicked() {
-                            dbg!("file-path");
-                        }
                     }
                     val if val == 2
                         && matches!(self.search_mode, SearchMode::Natural) =>
