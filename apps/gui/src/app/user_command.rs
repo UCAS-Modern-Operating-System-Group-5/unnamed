@@ -13,5 +13,8 @@ pub enum UserCommand {
     CancelCompletion,
     ApplyCompletion,
     
-    StartSearch
+    StartSearch,
+
+    /// Do nothing. Can be used to clear original key-command map.
+    None
 }
