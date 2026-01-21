@@ -135,15 +135,24 @@ impl SearchResultStore {
     
     fn compare_hits(a: &SearchHit, b: &SearchHit, config: &SortConfig) -> Ordering {
         let base_ordering = match config.mode {
-            SortMode::FilePath => a.file_path.cmp(&b.file_path),
+            SortMode::FilePath => {
+                // 按文件名排序，而不是完整路径
+                let a_name = a.file_path.file_name().map(|s| s.to_ascii_lowercase());
+                let b_name = b.file_path.file_name().map(|s| s.to_ascii_lowercase());
+                a_name.cmp(&b_name)
+                    .then_with(|| a.file_path.cmp(&b.file_path)) // 文件名相同时按完整路径排序
+            }
             SortMode::AccessedTime => a.access_time.cmp(&b.access_time),
             SortMode::CreatedTime => a.create_time.cmp(&b.create_time),
             SortMode::ModifiedTime => a.modified_time.cmp(&b.modified_time),
             SortMode::Score => {
-                a.score
-                    .partial_cmp(&b.score)
-                    .unwrap_or(Ordering::Equal)
-                    .then_with(|| a.file_path.cmp(&b.file_path))
+                // Score 从高到低排序，None 排在最后
+                match (a.score, b.score) {
+                    (Some(sa), Some(sb)) => sa.partial_cmp(&sb).unwrap_or(Ordering::Equal),
+                    (Some(_), None) => Ordering::Greater, // 有分数的排前面
+                    (None, Some(_)) => Ordering::Less,
+                    (None, None) => Ordering::Equal,
+                }.then_with(|| a.file_path.cmp(&b.file_path))
             }
         };
         config.direction.apply(base_ordering)

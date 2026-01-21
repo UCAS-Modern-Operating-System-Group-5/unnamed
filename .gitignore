@@ -3,3 +3,4 @@
 .direnv
 .env*
 repomix-output.*
+/model

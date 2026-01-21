@@ -117,9 +117,10 @@ impl StatusBar {
         });
 
         if selected != sort_mode {
-            return Some(StatusBarEvent::ChangeSortConfig(SortConfig {
-                mode: selected, direction: sort_config.direction
-            }));
+            // 切换模式时，使用新模式的默认方向
+            let mut new_config = sort_config.clone();
+            new_config.toggle_or_set(selected);
+            return Some(StatusBarEvent::ChangeSortConfig(new_config));
         }
 
         None

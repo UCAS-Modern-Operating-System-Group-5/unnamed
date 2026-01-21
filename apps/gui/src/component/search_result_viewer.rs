@@ -192,12 +192,13 @@ impl egui_table::TableDelegate for SearchResultTable<'_> {
                             }
                             SortMode::CreatedTime => {
                                 ui.label(timestamp_to_local_string(
-                                    hit.access_time as i64,
+                                    hit.create_time as i64,
                                 ));
                             }
                             _ => {
+                                // ModifiedTime or others default to modified_time
                                 ui.label(timestamp_to_local_string(
-                                    hit.access_time as i64,
+                                    hit.modified_time as i64,
                                 ));
                             }
                         },
