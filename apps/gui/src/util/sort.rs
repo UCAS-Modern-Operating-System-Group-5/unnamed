@@ -14,9 +14,9 @@ use strum::{EnumCount, EnumIter};
     Clone,
 )]
 pub enum SortMode {
-    #[default]
     FilePath,
     /// Sort by AI relevance score
+    #[default]
     Score,
     ModifiedTime,
     AccessedTime,
@@ -47,10 +47,18 @@ impl SortDirection {
     }
 }
 
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SortConfig {
     pub mode: SortMode,
     pub direction: SortDirection,
+}
+
+impl Default for SortConfig {
+    fn default() -> Self {
+        let mode = SortMode::default();
+        let direction = Self::default_direction_for(&mode);
+        Self { mode, direction }
+    }
 }
 
 impl SortConfig {

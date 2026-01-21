@@ -136,7 +136,7 @@ fn render_result_card(
                         // Score (if available, for natural search)
                         if let Some(score) = hit.score {
                             if matches!(search_mode, SearchMode::Natural) {
-                                let score_text = format!("{:.1}%", score * 100.0);
+                                let score_text = format!("{:.2}", score);
                                 ui.label(
                                     egui::RichText::new(score_text)
                                         .small()

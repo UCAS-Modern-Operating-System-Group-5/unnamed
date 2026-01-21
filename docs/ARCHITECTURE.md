@@ -156,7 +156,7 @@ sequenceDiagram
     Index-->>User: 索引完成
 ```
 
-### 搜索流程（新 API - 异步）
+### 搜索流程（异步）
 
 ```mermaid
 sequenceDiagram
@@ -168,11 +168,11 @@ sequenceDiagram
     participant Engine as SearchEngine
     participant Search as search.rs
 
-    Client->>RPC: start_search_async(req)
-    RPC->>Serve: World::start_search_async()
+    Client->>RPC: start_search(req)
+    RPC->>Serve: World::start_search()
     Serve->>Session: create_async_session()
-    Session-->>Serve: session_id
-    Serve-->>Client: Started { session_id }
+    Session-->>Serve: session_id (UUID)
+    Serve-->>Client: Ok(session_id)
     Note over Client: 立即返回，不阻塞
 
     Serve->>Serve: tokio::spawn()
@@ -181,17 +181,16 @@ sequenceDiagram
     Compat->>Engine: 构建查询
     Engine->>Search: search_index()
     Search-->>Compat: results
-    Compat->>Compat: 应用 root_directories 过滤
     Compat-->>Serve: Vec<SearchResultItem>
     Serve->>Session: append_results()
     Serve->>Session: mark_completed()
     deactivate Serve
 
     loop 轮询获取结果
-        Client->>RPC: fetch_results(session_id, offset, limit)
-        RPC->>Serve: World::fetch_results()
+        Client->>RPC: fetch_search_results(req)
+        RPC->>Serve: World::fetch_search_results()
         Serve->>Session: fetch_results()
-        Session-->>Client: FetchResults { hits, status, has_more }
+        Session-->>Client: FetchResults { hits, has_more }
         alt has_more == false
             Client->>Client: 停止轮询
         end
@@ -199,33 +198,6 @@ sequenceDiagram
 
     Client->>RPC: cancel_search(session_id)
     RPC->>Session: cancel_session()
-```
-
-### 搜索流程（旧 API - 同步）
-
-```mermaid
-sequenceDiagram
-    participant Client as 客户端
-    participant RPC as tarpc Server
-    participant Serve as serve.rs
-    participant Session as SessionManager
-    participant Compat as rpc_compat.rs
-
-    Client->>RPC: start_search(req)
-    RPC->>Serve: World::start_search()
-    Serve->>Compat: search_sync(engine, req)
-    Note over Serve: 阻塞等待搜索完成
-    Compat-->>Serve: Vec<SearchResultItem>
-    Serve->>Session: create_session(hits)
-    Session-->>Serve: session_id
-    Serve-->>Client: Started { session_id, total_count }
-    Note over Client: 知道总数后可计算页数
-
-    loop 分页获取
-        Client->>RPC: get_results_page(session_id, page, page_size)
-        RPC->>Session: get_page()
-        Session-->>Client: PagedResults { hits, total_pages, ... }
-    end
 ```
 
 ---

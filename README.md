@@ -92,11 +92,11 @@ unnamed/
 | 模块 | 说明 |
 |------|------|
 | `lib.rs` | tarpc 服务 trait 定义 |
-| `search.rs` | 搜索相关类型（`SearchRequest`, `SearchResult` 等） |
+| `search.rs` | 搜索相关类型（`SearchRequest`, `SearchHit` 等） |
 
-**支持两套 API**:
-- **新 API（推荐）**: 异步搜索 + Offset-based 分页，支持流式/无限滚动
-- **旧 API**: 同步搜索 + Page-based 分页，兼容传统分页
+**API 特点**:
+- 异步搜索 + Offset-based 分页
+- 支持流式返回和无限滚动
 
 #### `crates/query/` - 查询解析器
 解析和验证用户查询语法。
@@ -163,7 +163,7 @@ cargo run -- index /path/to/documents
 cargo run -p gui
 ```
 
-### 运行测试客户端
+### 运行测试无gui客户端（for testing）
 
 ```bash
 cargo run -p server --example interactive_client
@@ -194,10 +194,16 @@ just run -- serve # 运行服务器
 
 ## 🔧 跨平台编译
 
-使用 [cross](https://github.com/cross-rs/cross) 进行交叉编译。
+使用 [cargo-zigbuild](https://github.com/rust-cross/cargo-zigbuild) 进行交叉编译（推荐）：
 
 ```bash
 # 编译到 RISC-V 64 位
+cargo zigbuild --release --target riscv64gc-unknown-linux-gnu
+```
+
+或使用 [cross](https://github.com/cross-rs/cross)：
+
+```bash
 CROSS_CONTAINER_UID=0 CROSS_CONTAINER_GID=0 cross build --release --target riscv64gc-unknown-linux-gnu
 
 # 或使用 just
