@@ -1,5 +1,7 @@
 # Unnamed - 智能文件搜索引擎
 
+[DeepWiki](https://deepwiki.com/UCAS-Modern-Operating-System-Group-5/unnamed/3.1-application-entry-point)
+
 一个基于 Rust 构建的智能文件搜索系统，结合了传统全文搜索（Tantivy）和 AI 语义搜索（BERT）能力，提供高效的本地文件索引和检索功能。
 
 ## ✨ 主要特性
