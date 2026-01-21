@@ -232,19 +232,186 @@ pub fn scan_existing_files(
     cache: &EmbeddingCache,
     registry: &FileRegistry,
 ) -> Result<()> {
+    scan_existing_files_with_progress(watch_path, index, schema, bert, cache, registry, |_, _| {})
+}
+
+/// 扫描现有文件（带进度回调）
+pub fn scan_existing_files_with_progress<F>(
+    watch_path: &Path, 
+    index: &Index, 
+    schema: &Schema, 
+    bert: &BertModel, 
+    cache: &EmbeddingCache,
+    registry: &FileRegistry,
+    progress_callback: F,
+) -> Result<()> 
+where
+    F: Fn(usize, usize) + Send + Sync,
+{
     let _ = cleanup_orphan_indexes(index, schema, cache);
     
-    tracing::info!("正在扫描现有文件...");
+    // 先统计文件总数
+    let total_files = count_supported_files(watch_path);
+    tracing::info!("正在扫描现有文件... (共 {} 个支持的文件)", total_files);
+    
     let mut file_count = 0;
 
     if CONFIG.walker.use_ripgrep_walker {
-        scan_with_ripgrep_walker(watch_path, index, schema, bert, cache, registry, &mut file_count)?;
+        scan_with_ripgrep_walker_progress(watch_path, index, schema, bert, cache, registry, &mut file_count, total_files, &progress_callback)?;
     } else {
-        scan_with_std_walker(watch_path, index, schema, bert, cache, registry, &mut file_count)?;
+        scan_with_std_walker_progress(watch_path, index, schema, bert, cache, registry, &mut file_count, total_files, &progress_callback)?;
     }
     
     tracing::info!("初始索引完成，共处理 {} 个文件", file_count);
     Ok(())
+}
+
+/// 统计目录下支持的文件数量
+fn count_supported_files(dir: &Path) -> usize {
+    if !dir.exists() {
+        return 0;
+    }
+    
+    let mut count = 0;
+    
+    if CONFIG.walker.use_ripgrep_walker {
+        let walker_config = &CONFIG.walker;
+        let mut builder = ignore::WalkBuilder::new(dir);
+        builder
+            .hidden(!walker_config.skip_hidden)
+            .git_ignore(false)
+            .git_global(false)
+            .git_exclude(false)
+            .ignore(walker_config.respect_ignore)
+            .follow_links(walker_config.follow_symlinks);
+        
+        if walker_config.max_depth > 0 {
+            builder.max_depth(Some(walker_config.max_depth));
+        }
+        
+        for result in builder.build() {
+            if let Ok(entry) = result {
+                let path = entry.path();
+                if !path.is_dir() && is_supported_file(path) {
+                    count += 1;
+                }
+            }
+        }
+    } else {
+        fn count_recursive(dir: &Path, count: &mut usize) {
+            if let Ok(entries) = fs::read_dir(dir) {
+                for entry in entries.flatten() {
+                    let path = entry.path();
+                    if path.is_file() && is_supported_file(&path) {
+                        *count += 1;
+                    } else if path.is_dir() {
+                        count_recursive(&path, count);
+                    }
+                }
+            }
+        }
+        count_recursive(dir, &mut count);
+    }
+    
+    count
+}
+
+fn scan_with_ripgrep_walker_progress<F>(
+    watch_path: &Path,
+    index: &Index,
+    schema: &Schema,
+    bert: &BertModel,
+    cache: &EmbeddingCache,
+    registry: &FileRegistry,
+    file_count: &mut usize,
+    total_files: usize,
+    progress_callback: &F,
+) -> Result<()>
+where
+    F: Fn(usize, usize),
+{
+    let walker_config = &CONFIG.walker;
+    
+    let mut builder = ignore::WalkBuilder::new(watch_path);
+    builder
+        .hidden(!walker_config.skip_hidden)
+        .git_ignore(false)
+        .git_global(false)
+        .git_exclude(false)
+        .ignore(walker_config.respect_ignore)
+        .follow_links(walker_config.follow_symlinks);
+    
+    if walker_config.max_depth > 0 {
+        builder.max_depth(Some(walker_config.max_depth));
+    }
+    
+    tracing::debug!("开始遍历目录: {:?}", watch_path);
+    
+    for result in builder.build() {
+        match result {
+            Ok(entry) => {
+                let path = entry.path();
+                tracing::debug!("发现条目: {:?}, is_dir={}, is_supported={}", 
+                    path, path.is_dir(), is_supported_file(path));
+                if path.is_dir() || !is_supported_file(path) {
+                    continue;
+                }
+                process_file_entry(path, index, schema, bert, cache, registry, file_count);
+                progress_callback(*file_count, total_files);
+            }
+            Err(e) => {
+                tracing::warn!("遍历错误: {}", e);
+            }
+        }
+    }
+    
+    Ok(())
+}
+
+fn scan_with_std_walker_progress<F>(
+    watch_path: &Path,
+    index: &Index,
+    schema: &Schema,
+    bert: &BertModel,
+    cache: &EmbeddingCache,
+    registry: &FileRegistry,
+    file_count: &mut usize,
+    total_files: usize,
+    progress_callback: &F,
+) -> Result<()>
+where
+    F: Fn(usize, usize),
+{
+    fn visit_dirs<F2>(
+        dir: &Path, 
+        index: &Index, 
+        schema: &Schema, 
+        file_count: &mut usize, 
+        bert: &BertModel, 
+        cache: &EmbeddingCache,
+        registry: &FileRegistry,
+        total_files: usize,
+        progress_callback: &F2,
+    ) -> Result<()>
+    where
+        F2: Fn(usize, usize),
+    {
+        if dir.is_dir() {
+            for entry in fs::read_dir(dir)? {
+                let entry = entry?;
+                let path = entry.path();
+                if path.is_dir() {
+                    visit_dirs(&path, index, schema, file_count, bert, cache, registry, total_files, progress_callback)?;
+                } else if path.is_file() && is_supported_file(&path) {
+                    process_file_entry(&path, index, schema, bert, cache, registry, file_count);
+                    progress_callback(*file_count, total_files);
+                }
+            }
+        }
+        Ok(())
+    }
+
+    visit_dirs(watch_path, index, schema, file_count, bert, cache, registry, total_files, progress_callback)
 }
 
 fn scan_with_ripgrep_walker(

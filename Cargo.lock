@@ -5506,6 +5506,7 @@ dependencies = [
  "config",
  "dirs 5.0.1",
  "futures",
+ "indicatif",
  "query",
  "rpc",
  "search-core",

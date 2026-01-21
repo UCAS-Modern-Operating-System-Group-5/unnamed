@@ -6,6 +6,26 @@ use tracing::info;
 
 use search_core::{SearchConfig, SearchEngine};
 
+/// 统计目录下的文件数量
+fn count_files(dir: &std::path::Path) -> usize {
+    if !dir.exists() {
+        return 0;
+    }
+    
+    let mut count = 0;
+    if let Ok(entries) = std::fs::read_dir(dir) {
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if path.is_file() && search_core::is_file_supported(&path) {
+                count += 1;
+            } else if path.is_dir() {
+                count += count_files(&path);
+            }
+        }
+    }
+    count
+}
+
 pub struct IndexCommand {
     config: Config,
     root_path: Option<PathBuf>,
@@ -61,11 +81,18 @@ impl Command for IndexCommand {
         
         // 扫描并索引每个目录
         for path in &paths_to_index {
-            info!("开始索引目录: {:?}", path);
-            engine.scan_directory(path)
+            let total_files = count_files(path);
+            // 输出进度信息（机器可读格式）
+            println!("PROGRESS:TOTAL:{}", total_files);
+            
+            info!("开始索引目录: {:?} (共 {} 个支持的文件)", path, total_files);
+            engine.scan_directory_with_progress(path, |current, total| {
+                println!("PROGRESS:CURRENT:{}/{}", current, total);
+            })
                 .map_err(|e| color_eyre::eyre::eyre!("索引目录失败: {}", e))?;
         }
         
+        println!("PROGRESS:DONE");
         info!("所有目录索引完成");
         Ok(())
     }

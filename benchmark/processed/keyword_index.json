@@ -1,0 +1,2708 @@
+{
+  "prostate cancer": [
+    "001_MED-4239.txt",
+    "090_MED-4220.txt",
+    "117_MED-4482.txt"
+  ],
+  "low-fat diet": [
+    "001_MED-4239.txt"
+  ],
+  "strenuous exercise": [
+    "001_MED-4239.txt"
+  ],
+  "igf axis": [
+    "001_MED-4239.txt"
+  ],
+  "tumor cell growth": [
+    "001_MED-4239.txt"
+  ],
+  "low-carbohydrate diet": [
+    "002_MED-1323.txt"
+  ],
+  "type 2 diabetes": [
+    "002_MED-1323.txt",
+    "008_MED-1461.txt",
+    "055_MED-5225.txt",
+    "131_MED-1795.txt",
+    "145_MED-2001.txt"
+  ],
+  "animal protein and fat": [
+    "002_MED-1323.txt"
+  ],
+  "vegetable protein and fat": [
+    "002_MED-1323.txt"
+  ],
+  "prospective cohort study": [
+    "002_MED-1323.txt",
+    "131_MED-1795.txt"
+  ],
+  "penetrating ocular injury": [
+    "003_MED-863.txt"
+  ],
+  "durian fruit": [
+    "003_MED-863.txt"
+  ],
+  "case report": [
+    "003_MED-863.txt"
+  ],
+  "facial injury": [
+    "003_MED-863.txt"
+  ],
+  "protective devices": [
+    "003_MED-863.txt"
+  ],
+  "probiotics": [
+    "004_MED-4762.txt",
+    "063_MED-3692.txt",
+    "187_MED-3695.txt"
+  ],
+  "cold symptoms": [
+    "004_MED-4762.txt"
+  ],
+  "children": [
+    "004_MED-4762.txt",
+    "036_MED-5062.txt",
+    "084_MED-1170.txt"
+  ],
+  "double-blind study": [
+    "004_MED-4762.txt"
+  ],
+  "dietary supplementation": [
+    "004_MED-4762.txt"
+  ],
+  "mtor": [
+    "005_MED-2130.txt"
+  ],
+  "tor protein complex": [
+    "005_MED-2130.txt"
+  ],
+  "cellular growth": [
+    "005_MED-2130.txt"
+  ],
+  "mtorc1 and mtorc2": [
+    "005_MED-2130.txt"
+  ],
+  "signal propagation": [
+    "005_MED-2130.txt"
+  ],
+  "type 2 diabetes mellitus": [
+    "006_MED-1993.txt"
+  ],
+  "children and adolescents": [
+    "006_MED-1993.txt"
+  ],
+  "obesity": [
+    "006_MED-1993.txt",
+    "111_MED-2717.txt"
+  ],
+  "screening": [
+    "006_MED-1993.txt"
+  ],
+  "lifestyle intervention": [
+    "006_MED-1993.txt"
+  ],
+  "periodontal conditions": [
+    "007_MED-1857.txt"
+  ],
+  "vegetarian diet": [
+    "007_MED-1857.txt",
+    "055_MED-5225.txt"
+  ],
+  "clinical study": [
+    "007_MED-1857.txt",
+    "032_MED-1842.txt"
+  ],
+  "oral hygiene": [
+    "007_MED-1857.txt"
+  ],
+  "dental health": [
+    "007_MED-1857.txt"
+  ],
+  "insulin resistance": [
+    "008_MED-1461.txt",
+    "055_MED-5225.txt",
+    "108_MED-1992.txt"
+  ],
+  "intramyocellular triglyceride": [
+    "008_MED-1461.txt"
+  ],
+  "nuclear magnetic resonance spectroscopy": [
+    "008_MED-1461.txt"
+  ],
+  "lipid metabolism": [
+    "008_MED-1461.txt"
+  ],
+  "toxicant exposures": [
+    "009_MED-4739.txt"
+  ],
+  "reproductive health": [
+    "009_MED-4739.txt"
+  ],
+  "pregnancy": [
+    "009_MED-4739.txt",
+    "106_MED-3682.txt",
+    "183_MED-4665.txt"
+  ],
+  "contaminated seafood": [
+    "009_MED-4739.txt"
+  ],
+  "nutritional sufficiency": [
+    "009_MED-4739.txt"
+  ],
+  "cyanobacteria": [
+    "010_MED-1282.txt"
+  ],
+  "bmaa": [
+    "010_MED-1282.txt"
+  ],
+  "neurodegenerative diseases": [
+    "010_MED-1282.txt"
+  ],
+  "als": [
+    "010_MED-1282.txt"
+  ],
+  "environmental causes": [
+    "010_MED-1282.txt"
+  ],
+  "flaxseed": [
+    "011_MED-4443.txt"
+  ],
+  "nutritional composition": [
+    "011_MED-4443.txt"
+  ],
+  "health benefits": [
+    "011_MED-4443.txt"
+  ],
+  "functional food": [
+    "011_MED-4443.txt"
+  ],
+  "omega-3": [
+    "011_MED-4443.txt"
+  ],
+  "sex hormonal profiles": [
+    "012_MED-4757.txt"
+  ],
+  "metabolic profiles": [
+    "012_MED-4757.txt"
+  ],
+  "vegetarians": [
+    "012_MED-4757.txt"
+  ],
+  "omnivores": [
+    "012_MED-4757.txt"
+  ],
+  "pre- and post-menopausal women": [
+    "012_MED-4757.txt"
+  ],
+  "esophageal cancer": [
+    "013_MED-3731.txt"
+  ],
+  "epidemiology": [
+    "013_MED-3731.txt",
+    "161_MED-4825.txt"
+  ],
+  "pathogenesis": [
+    "013_MED-3731.txt",
+    "180_MED-5281.txt"
+  ],
+  "prevention": [
+    "013_MED-3731.txt",
+    "108_MED-1992.txt",
+    "187_MED-3695.txt"
+  ],
+  "risk factors": [
+    "013_MED-3731.txt",
+    "047_MED-1814.txt",
+    "068_MED-2217.txt",
+    "145_MED-2001.txt",
+    "161_MED-4825.txt",
+    "188_MED-4805.txt"
+  ],
+  "cholesterol crystallization": [
+    "014_MED-1204.txt"
+  ],
+  "plaque rupture": [
+    "014_MED-1204.txt"
+  ],
+  "mechanical damage": [
+    "014_MED-1204.txt"
+  ],
+  "biological membranes": [
+    "014_MED-1204.txt"
+  ],
+  "cardiovascular events": [
+    "014_MED-1204.txt"
+  ],
+  "crohn's disease": [
+    "015_MED-3966.txt",
+    "034_MED-3961.txt"
+  ],
+  "dietary microparticles": [
+    "015_MED-3966.txt",
+    "034_MED-3961.txt"
+  ],
+  "mucosal immune response": [
+    "015_MED-3966.txt"
+  ],
+  "food additives": [
+    "015_MED-3966.txt",
+    "040_MED-5046.txt"
+  ],
+  "inflammation": [
+    "015_MED-3966.txt",
+    "058_MED-2080.txt",
+    "120_MED-4878.txt",
+    "137_MED-4335.txt"
+  ],
+  "environmental disease costs": [
+    "016_MED-3013.txt"
+  ],
+  "children's health": [
+    "016_MED-3013.txt"
+  ],
+  "toxic chemical exposure": [
+    "016_MED-3013.txt"
+  ],
+  "lead poisoning prevention": [
+    "016_MED-3013.txt"
+  ],
+  "mercury emissions reduction": [
+    "016_MED-3013.txt"
+  ],
+  "moringa oleifera leaf extract": [
+    "017_MED-903.txt"
+  ],
+  "antiproliferation": [
+    "017_MED-903.txt"
+  ],
+  "apoptosis": [
+    "017_MED-903.txt",
+    "140_MED-938.txt",
+    "155_MED-2601.txt"
+  ],
+  "cancer cells": [
+    "017_MED-903.txt",
+    "103_MED-4089.txt"
+  ],
+  "medicinal plants": [
+    "017_MED-903.txt"
+  ],
+  "ceylon cinnamon": [
+    "018_MED-894.txt"
+  ],
+  "impaired glucose tolerance": [
+    "018_MED-894.txt"
+  ],
+  "postprandial glucose": [
+    "018_MED-894.txt"
+  ],
+  "insulin response": [
+    "018_MED-894.txt",
+    "107_MED-4703.txt"
+  ],
+  "coumarin exposure": [
+    "018_MED-894.txt"
+  ],
+  "type 2 diabetes reversal": [
+    "019_MED-1237.txt"
+  ],
+  "twin cycle hypothesis": [
+    "019_MED-1237.txt"
+  ],
+  "intra-organ fat": [
+    "019_MED-1237.txt"
+  ],
+  "beta cell function": [
+    "019_MED-1237.txt"
+  ],
+  "very low calorie diet": [
+    "019_MED-1237.txt"
+  ],
+  "latitude": [
+    "020_MED-1834.txt"
+  ],
+  "ultraviolet radiation": [
+    "020_MED-1834.txt"
+  ],
+  "vitamin d": [
+    "020_MED-1834.txt"
+  ],
+  "childhood asthma": [
+    "020_MED-1834.txt"
+  ],
+  "hayfever": [
+    "020_MED-1834.txt"
+  ],
+  "stress": [
+    "021_MED-1922.txt",
+    "086_MED-1923.txt"
+  ],
+  "telomere biology": [
+    "021_MED-1922.txt"
+  ],
+  "lifespan": [
+    "021_MED-1922.txt"
+  ],
+  "aging processes": [
+    "021_MED-1922.txt"
+  ],
+  "mental illnesses": [
+    "021_MED-1922.txt"
+  ],
+  "monoamine oxidase inhibitors": [
+    "022_MED-3542.txt"
+  ],
+  "cheese effect": [
+    "022_MED-3542.txt"
+  ],
+  "tyramine": [
+    "022_MED-3542.txt"
+  ],
+  "intestinal metabolism": [
+    "022_MED-3542.txt"
+  ],
+  "antidepressant": [
+    "022_MED-3542.txt"
+  ],
+  "high-fiber foods": [
+    "023_MED-4034.txt"
+  ],
+  "periodontal disease progression": [
+    "023_MED-4034.txt"
+  ],
+  "men aged 65 and older": [
+    "023_MED-4034.txt"
+  ],
+  "alveolar bone loss": [
+    "023_MED-4034.txt"
+  ],
+  "tooth loss": [
+    "023_MED-4034.txt"
+  ],
+  "yerba mate": [
+    "024_MED-869.txt"
+  ],
+  "bone mineral density": [
+    "024_MED-869.txt"
+  ],
+  "postmenopausal women": [
+    "024_MED-869.txt",
+    "027_MED-4642.txt"
+  ],
+  "osteoporosis prevention": [
+    "024_MED-869.txt"
+  ],
+  "bone health": [
+    "024_MED-869.txt"
+  ],
+  "nutmeg abuse": [
+    "025_MED-3806.txt"
+  ],
+  "toxicity": [
+    "025_MED-3806.txt"
+  ],
+  "hallucinations": [
+    "025_MED-3806.txt"
+  ],
+  "central nervous system": [
+    "025_MED-3806.txt"
+  ],
+  "adverse effects": [
+    "025_MED-3806.txt"
+  ],
+  "roundup": [
+    "026_MED-1739.txt"
+  ],
+  "glyphosate": [
+    "026_MED-1739.txt"
+  ],
+  "sertoli cell death": [
+    "026_MED-1739.txt"
+  ],
+  "calcium overload": [
+    "026_MED-1739.txt"
+  ],
+  "oxidative stress": [
+    "026_MED-1739.txt",
+    "055_MED-5225.txt",
+    "094_MED-2664.txt",
+    "192_MED-2219.txt"
+  ],
+  "diet": [
+    "027_MED-4642.txt",
+    "112_MED-2105.txt",
+    "193_MED-3108.txt"
+  ],
+  "breast cancer": [
+    "027_MED-4642.txt",
+    "046_MED-1532.txt",
+    "049_MED-2435.txt",
+    "057_MED-4049.txt"
+  ],
+  "hormones": [
+    "027_MED-4642.txt"
+  ],
+  "fiber": [
+    "027_MED-4642.txt"
+  ],
+  "premenstrual syndrome": [
+    "028_MED-4308.txt"
+  ],
+  "nutrient intake": [
+    "028_MED-4308.txt"
+  ],
+  "carbohydrate craving": [
+    "028_MED-4308.txt"
+  ],
+  "depression": [
+    "028_MED-4308.txt"
+  ],
+  "serotonin synthesis": [
+    "028_MED-4308.txt"
+  ],
+  "acute rhinosinusitis": [
+    "029_MED-4564.txt"
+  ],
+  "viral infections": [
+    "029_MED-4564.txt"
+  ],
+  "symptomatic treatment": [
+    "029_MED-4564.txt"
+  ],
+  "antibiotics": [
+    "029_MED-4564.txt"
+  ],
+  "computed tomography": [
+    "029_MED-4564.txt",
+    "039_MED-4839.txt"
+  ],
+  "freeze-dried strawberries": [
+    "030_MED-3730.txt"
+  ],
+  "esophageal dysplasia": [
+    "030_MED-3730.txt"
+  ],
+  "phase ii trial": [
+    "030_MED-3730.txt"
+  ],
+  "cancer prevention": [
+    "030_MED-3730.txt",
+    "200_MED-2075.txt"
+  ],
+  "biomarker reduction": [
+    "030_MED-3730.txt"
+  ],
+  "bisphosphonate-associated osteonecrosis": [
+    "031_MED-2990.txt"
+  ],
+  "jaw": [
+    "031_MED-2990.txt"
+  ],
+  "task force": [
+    "031_MED-2990.txt"
+  ],
+  "american society for bone and mineral research": [
+    "031_MED-2990.txt"
+  ],
+  "case definition": [
+    "031_MED-2990.txt"
+  ],
+  "sour tea": [
+    "032_MED-1842.txt"
+  ],
+  "hibiscus sabdariffa": [
+    "032_MED-1842.txt",
+    "126_MED-5043.txt"
+  ],
+  "essential hypertension": [
+    "032_MED-1842.txt"
+  ],
+  "blood pressure": [
+    "032_MED-1842.txt",
+    "069_MED-5148.txt",
+    "073_MED-5285.txt"
+  ],
+  "grapefruit juice": [
+    "033_MED-3202.txt"
+  ],
+  "naringenin": [
+    "033_MED-3202.txt"
+  ],
+  "cyp1a2 inhibition": [
+    "033_MED-3202.txt"
+  ],
+  "caffeine metabolism": [
+    "033_MED-3202.txt"
+  ],
+  "drug interaction": [
+    "033_MED-3202.txt"
+  ],
+  "clinical trial": [
+    "034_MED-3961.txt",
+    "154_MED-2822.txt"
+  ],
+  "remission induction": [
+    "034_MED-3961.txt"
+  ],
+  "corticosteroid treatment": [
+    "034_MED-3961.txt"
+  ],
+  "antidiabetic potential": [
+    "035_MED-2146.txt"
+  ],
+  "legumes": [
+    "035_MED-2146.txt"
+  ],
+  "diabetes management": [
+    "035_MED-2146.txt"
+  ],
+  "dietary therapy": [
+    "035_MED-2146.txt"
+  ],
+  "glucose-lowering": [
+    "035_MED-2146.txt"
+  ],
+  "artificial food colour additives": [
+    "036_MED-5062.txt"
+  ],
+  "hyperactivity": [
+    "036_MED-5062.txt"
+  ],
+  "randomised controlled trial": [
+    "036_MED-5062.txt"
+  ],
+  "sodium benzoate": [
+    "036_MED-5062.txt"
+  ],
+  "capsinoids": [
+    "037_MED-5319.txt"
+  ],
+  "brown adipose tissue": [
+    "037_MED-5319.txt"
+  ],
+  "energy expenditure": [
+    "037_MED-5319.txt",
+    "052_MED-2719.txt"
+  ],
+  "fdg-pet": [
+    "037_MED-5319.txt"
+  ],
+  "thermogenesis": [
+    "037_MED-5319.txt"
+  ],
+  "abdominal bloating": [
+    "038_MED-718.txt"
+  ],
+  "gas passage": [
+    "038_MED-718.txt"
+  ],
+  "colonic gas production": [
+    "038_MED-718.txt"
+  ],
+  "fermentable fiber": [
+    "038_MED-718.txt"
+  ],
+  "irritable bowel syndrome": [
+    "038_MED-718.txt"
+  ],
+  "migrating fish bone": [
+    "039_MED-4839.txt"
+  ],
+  "neck lump": [
+    "039_MED-4839.txt"
+  ],
+  "acute onset": [
+    "039_MED-4839.txt"
+  ],
+  "foreign body extraction": [
+    "039_MED-4839.txt"
+  ],
+  "green tea catechins": [
+    "040_MED-5046.txt",
+    "057_MED-4049.txt"
+  ],
+  "in vitro digestion": [
+    "040_MED-5046.txt"
+  ],
+  "catechin recovery": [
+    "040_MED-5046.txt"
+  ],
+  "beverage formulation": [
+    "040_MED-5046.txt"
+  ],
+  "dietary fat": [
+    "041_MED-1554.txt"
+  ],
+  "cardiovascular disease": [
+    "041_MED-1554.txt",
+    "054_MED-2588.txt",
+    "072_MED-892.txt",
+    "079_MED-984.txt",
+    "113_MED-4245.txt",
+    "167_MED-1556.txt"
+  ],
+  "mortality": [
+    "041_MED-1554.txt",
+    "085_MED-5258.txt",
+    "124_MED-5116.txt",
+    "173_MED-2750.txt",
+    "184_MED-1338.txt"
+  ],
+  "systematic review": [
+    "041_MED-1554.txt",
+    "045_MED-2145.txt",
+    "125_MED-904.txt",
+    "128_MED-2843.txt"
+  ],
+  "randomized trials": [
+    "041_MED-1554.txt",
+    "171_MED-3990.txt"
+  ],
+  "biogenic amines": [
+    "042_MED-4546.txt"
+  ],
+  "acute toxicity": [
+    "042_MED-4546.txt"
+  ],
+  "subacute toxicity": [
+    "042_MED-4546.txt"
+  ],
+  "rats": [
+    "042_MED-4546.txt"
+  ],
+  "spermine toxicity": [
+    "042_MED-4546.txt"
+  ],
+  "methylmercury exposure": [
+    "043_MED-3021.txt",
+    "170_MED-3019.txt"
+  ],
+  "hair-to-blood ratio": [
+    "043_MED-3021.txt"
+  ],
+  "biological half-life": [
+    "043_MED-3021.txt"
+  ],
+  "fish consumption": [
+    "043_MED-3021.txt"
+  ],
+  "mercury elimination": [
+    "043_MED-3021.txt"
+  ],
+  "diet and asthma": [
+    "044_MED-2452.txt"
+  ],
+  "vitamin e intake": [
+    "044_MED-2452.txt"
+  ],
+  "antioxidant activity": [
+    "044_MED-2452.txt",
+    "061_MED-4705.txt",
+    "077_MED-4585.txt"
+  ],
+  "airway inflammation": [
+    "044_MED-2452.txt"
+  ],
+  "prospective study": [
+    "044_MED-2452.txt",
+    "085_MED-5258.txt"
+  ],
+  "non-oil-seed pulses": [
+    "045_MED-2145.txt"
+  ],
+  "glycaemic control": [
+    "045_MED-2145.txt"
+  ],
+  "meta-analysis": [
+    "045_MED-2145.txt",
+    "054_MED-2588.txt",
+    "084_MED-1170.txt",
+    "128_MED-2843.txt",
+    "167_MED-1556.txt",
+    "171_MED-3990.txt"
+  ],
+  "randomised controlled trials": [
+    "045_MED-2145.txt"
+  ],
+  "cancer mortality": [
+    "046_MED-1532.txt"
+  ],
+  "nutrition transition": [
+    "046_MED-1532.txt"
+  ],
+  "east asia": [
+    "046_MED-1532.txt"
+  ],
+  "stomach cancer": [
+    "046_MED-1532.txt"
+  ],
+  "pancreatic cancer": [
+    "047_MED-1814.txt",
+    "161_MED-4825.txt"
+  ],
+  "dietary patterns": [
+    "047_MED-1814.txt",
+    "120_MED-4878.txt"
+  ],
+  "prudent diet": [
+    "047_MED-1814.txt"
+  ],
+  "western diet": [
+    "047_MED-1814.txt"
+  ],
+  "plasma beta-carotene": [
+    "048_MED-4858.txt"
+  ],
+  "fruit and vegetable intake": [
+    "048_MED-4858.txt"
+  ],
+  "biomarker": [
+    "048_MED-4858.txt"
+  ],
+  "dietary intake": [
+    "048_MED-4858.txt",
+    "156_MED-1838.txt"
+  ],
+  "raw food diet": [
+    "048_MED-4858.txt"
+  ],
+  "chemoprevention": [
+    "049_MED-2435.txt",
+    "059_MED-5052.txt",
+    "146_MED-4777.txt"
+  ],
+  "dietary compounds": [
+    "049_MED-2435.txt"
+  ],
+  "phytochemicals": [
+    "049_MED-2435.txt",
+    "149_MED-2073.txt"
+  ],
+  "carcinogenesis": [
+    "049_MED-2435.txt",
+    "158_MED-3560.txt"
+  ],
+  "calmodulin-binding proteins": [
+    "050_MED-1281.txt"
+  ],
+  "calcium sensors": [
+    "050_MED-1281.txt"
+  ],
+  "human proteome": [
+    "050_MED-1281.txt"
+  ],
+  "mrna display": [
+    "050_MED-1281.txt"
+  ],
+  "signaling pathways": [
+    "050_MED-1281.txt"
+  ],
+  "dietary fiber intake": [
+    "051_MED-1232.txt"
+  ],
+  "stroke risk": [
+    "051_MED-1232.txt"
+  ],
+  "population study": [
+    "051_MED-1232.txt"
+  ],
+  "soluble fiber": [
+    "051_MED-1232.txt"
+  ],
+  "insoluble fiber": [
+    "051_MED-1232.txt"
+  ],
+  "exercise intervention": [
+    "052_MED-2719.txt"
+  ],
+  "weight loss": [
+    "052_MED-2719.txt",
+    "111_MED-2717.txt",
+    "159_MED-3492.txt",
+    "168_MED-4989.txt",
+    "186_MED-939.txt"
+  ],
+  "energy balance": [
+    "052_MED-2719.txt"
+  ],
+  "caloric intake": [
+    "052_MED-2719.txt"
+  ],
+  "soy protein": [
+    "053_MED-1252.txt"
+  ],
+  "animal protein": [
+    "053_MED-1252.txt"
+  ],
+  "plasma cholesterol": [
+    "053_MED-1252.txt"
+  ],
+  "hypocholesterolemic response": [
+    "053_MED-1252.txt"
+  ],
+  "dietary cholesterol": [
+    "053_MED-1252.txt",
+    "123_MED-1885.txt"
+  ],
+  "low-carbohydrate diets": [
+    "054_MED-2588.txt"
+  ],
+  "all-cause mortality": [
+    "054_MED-2588.txt"
+  ],
+  "observational studies": [
+    "054_MED-2588.txt"
+  ],
+  "calorie restriction": [
+    "055_MED-5225.txt"
+  ],
+  "asthma": [
+    "056_MED-2476.txt",
+    "106_MED-3682.txt"
+  ],
+  "atopic disease": [
+    "056_MED-2476.txt"
+  ],
+  "childhood infections": [
+    "056_MED-2476.txt"
+  ],
+  "dietary factors": [
+    "056_MED-2476.txt",
+    "157_MED-1456.txt"
+  ],
+  "vitamin intake": [
+    "056_MED-2476.txt"
+  ],
+  "phip-induced carcinogenesis": [
+    "057_MED-4049.txt"
+  ],
+  "heterocyclic amines": [
+    "057_MED-4049.txt",
+    "117_MED-4482.txt"
+  ],
+  "ras-erk-nox-ros pathway": [
+    "057_MED-4049.txt"
+  ],
+  "platelets": [
+    "058_MED-2080.txt"
+  ],
+  "atherosclerosis": [
+    "058_MED-2080.txt",
+    "118_MED-2370.txt"
+  ],
+  "immune functions": [
+    "058_MED-2080.txt"
+  ],
+  "antiplatelet therapies": [
+    "058_MED-2080.txt"
+  ],
+  "green tea": [
+    "059_MED-5052.txt",
+    "146_MED-4777.txt",
+    "185_MED-4468.txt"
+  ],
+  "clinical evidence": [
+    "059_MED-5052.txt"
+  ],
+  "cardiovascular protection": [
+    "059_MED-5052.txt"
+  ],
+  "literature review": [
+    "059_MED-5052.txt"
+  ],
+  "complicated diverticulitis": [
+    "060_MED-974.txt"
+  ],
+  "mortality rates": [
+    "060_MED-974.txt"
+  ],
+  "elective resection": [
+    "060_MED-974.txt"
+  ],
+  "perforation": [
+    "060_MED-974.txt"
+  ],
+  "immunocompromised patients": [
+    "060_MED-974.txt"
+  ],
+  "walnut extracts": [
+    "061_MED-4705.txt"
+  ],
+  "antiproliferative effects": [
+    "061_MED-4705.txt",
+    "103_MED-4089.txt",
+    "149_MED-2073.txt"
+  ],
+  "phenolic compounds": [
+    "061_MED-4705.txt",
+    "077_MED-4585.txt",
+    "126_MED-5043.txt",
+    "163_MED-5283.txt"
+  ],
+  "cancer cell lines": [
+    "061_MED-4705.txt",
+    "140_MED-938.txt"
+  ],
+  "colorectal cancer screening": [
+    "062_MED-3272.txt"
+  ],
+  "canine scent detection": [
+    "062_MED-3272.txt"
+  ],
+  "early detection": [
+    "062_MED-3272.txt"
+  ],
+  "volatile organic compounds": [
+    "062_MED-3272.txt"
+  ],
+  "non-invasive method": [
+    "062_MED-3272.txt"
+  ],
+  "gut microbiota": [
+    "063_MED-3692.txt"
+  ],
+  "health": [
+    "063_MED-3692.txt",
+    "195_MED-3231.txt"
+  ],
+  "disease": [
+    "063_MED-3692.txt"
+  ],
+  "clinical intervention": [
+    "063_MED-3692.txt"
+  ],
+  "mediterranean diet": [
+    "064_MED-1394.txt"
+  ],
+  "cardiovascular disease prevention": [
+    "064_MED-1394.txt"
+  ],
+  "randomized trial": [
+    "064_MED-1394.txt"
+  ],
+  "extra-virgin olive oil": [
+    "064_MED-1394.txt"
+  ],
+  "nuts": [
+    "064_MED-1394.txt"
+  ],
+  "sweet orange aroma": [
+    "065_MED-2713.txt"
+  ],
+  "anxiolytic effect": [
+    "065_MED-2713.txt"
+  ],
+  "essential oil": [
+    "065_MED-2713.txt"
+  ],
+  "anxiety": [
+    "065_MED-2713.txt"
+  ],
+  "aromatherapy": [
+    "065_MED-2713.txt"
+  ],
+  "polybrominated diphenyl ethers": [
+    "066_MED-1165.txt"
+  ],
+  "hexachlorobenzene": [
+    "066_MED-1165.txt"
+  ],
+  "polycyclic aromatic hydrocarbons": [
+    "066_MED-1165.txt"
+  ],
+  "cooking processes": [
+    "066_MED-1165.txt"
+  ],
+  "food contamination": [
+    "066_MED-1165.txt"
+  ],
+  "alcohol-mediated carcinogenesis": [
+    "067_MED-3765.txt"
+  ],
+  "acetaldehyde": [
+    "067_MED-3765.txt"
+  ],
+  "dna methylation": [
+    "067_MED-3765.txt"
+  ],
+  "genetic susceptibility": [
+    "067_MED-3765.txt"
+  ],
+  "ethanol metabolism": [
+    "067_MED-3765.txt"
+  ],
+  "alzheimer's disease": [
+    "068_MED-2217.txt",
+    "077_MED-4585.txt",
+    "197_MED-4671.txt"
+  ],
+  "dementia prevalence": [
+    "068_MED-2217.txt"
+  ],
+  "rural india": [
+    "068_MED-2217.txt"
+  ],
+  "cognitive impairment": [
+    "068_MED-2217.txt",
+    "162_MED-990.txt"
+  ],
+  "cocoa intake": [
+    "069_MED-5148.txt"
+  ],
+  "dark chocolate": [
+    "069_MED-5148.txt"
+  ],
+  "polyphenols": [
+    "069_MED-5148.txt",
+    "073_MED-5285.txt",
+    "146_MED-4777.txt"
+  ],
+  "nitric oxide": [
+    "069_MED-5148.txt"
+  ],
+  "perfluorinated compounds": [
+    "070_MED-4176.txt"
+  ],
+  "human blood": [
+    "070_MED-4176.txt"
+  ],
+  "china": [
+    "070_MED-4176.txt"
+  ],
+  "pfos": [
+    "070_MED-4176.txt"
+  ],
+  "pfc concentrations": [
+    "070_MED-4176.txt"
+  ],
+  "yersinia enterocolitica": [
+    "071_MED-4134.txt"
+  ],
+  "pathogenic strains": [
+    "071_MED-4134.txt"
+  ],
+  "swine prevalence": [
+    "071_MED-4134.txt"
+  ],
+  "pcr assay": [
+    "071_MED-4134.txt"
+  ],
+  "food-borne pathogen": [
+    "071_MED-4134.txt"
+  ],
+  "dietary sodium": [
+    "072_MED-892.txt"
+  ],
+  "coronary flow reserve": [
+    "072_MED-892.txt"
+  ],
+  "inverse association": [
+    "072_MED-892.txt",
+    "085_MED-5258.txt"
+  ],
+  "middle-aged twins": [
+    "072_MED-892.txt"
+  ],
+  "cocoa": [
+    "073_MED-5285.txt"
+  ],
+  "cardiovascular health": [
+    "073_MED-5285.txt",
+    "076_MED-1708.txt",
+    "137_MED-4335.txt"
+  ],
+  "flavanols": [
+    "073_MED-5285.txt"
+  ],
+  "curcumin": [
+    "074_MED-2599.txt",
+    "154_MED-2822.txt",
+    "155_MED-2601.txt"
+  ],
+  "trail-induced apoptosis": [
+    "074_MED-2599.txt"
+  ],
+  "reactive oxygen species": [
+    "074_MED-2599.txt"
+  ],
+  "dr5 upregulation": [
+    "074_MED-2599.txt"
+  ],
+  "renal cancer cells": [
+    "074_MED-2599.txt"
+  ],
+  "pre-exercise feeding": [
+    "075_MED-3895.txt"
+  ],
+  "carbohydrate sources": [
+    "075_MED-3895.txt"
+  ],
+  "metabolic effects": [
+    "075_MED-3895.txt"
+  ],
+  "cycling performance": [
+    "075_MED-3895.txt"
+  ],
+  "raisins vs sports gel": [
+    "075_MED-3895.txt"
+  ],
+  "dietary sugars": [
+    "076_MED-1708.txt"
+  ],
+  "added sugars": [
+    "076_MED-1708.txt"
+  ],
+  "sugar-sweetened beverages": [
+    "076_MED-1708.txt"
+  ],
+  "american heart association": [
+    "076_MED-1708.txt",
+    "194_MED-1546.txt"
+  ],
+  "fruit juices": [
+    "077_MED-4585.txt"
+  ],
+  "proanthocyanidins": [
+    "077_MED-4585.txt"
+  ],
+  "molecular mimicry": [
+    "078_MED-1120.txt"
+  ],
+  "rheumatic heart disease": [
+    "078_MED-1120.txt"
+  ],
+  "autoimmune pathogenesis": [
+    "078_MED-1120.txt"
+  ],
+  "streptococcal m protein": [
+    "078_MED-1120.txt"
+  ],
+  "cardiac myosin": [
+    "078_MED-1120.txt"
+  ],
+  "plasma homocysteine": [
+    "079_MED-984.txt"
+  ],
+  "food intake": [
+    "079_MED-984.txt"
+  ],
+  "aminothiol compounds": [
+    "079_MED-984.txt"
+  ],
+  "hyperhomocysteinemia": [
+    "079_MED-984.txt"
+  ],
+  "nausea and vomiting": [
+    "080_MED-4369.txt",
+    "196_MED-691.txt"
+  ],
+  "early pregnancy": [
+    "080_MED-4369.txt"
+  ],
+  "interventions": [
+    "080_MED-4369.txt"
+  ],
+  "acupressure": [
+    "080_MED-4369.txt"
+  ],
+  "ginger": [
+    "080_MED-4369.txt",
+    "196_MED-691.txt"
+  ],
+  "flaxseed consumption": [
+    "081_MED-1879.txt"
+  ],
+  "glycemic control": [
+    "081_MED-1879.txt"
+  ],
+  "pre-diabetes": [
+    "081_MED-1879.txt"
+  ],
+  "randomized study": [
+    "081_MED-1879.txt"
+  ],
+  "insulin sensitivity": [
+    "081_MED-1879.txt",
+    "105_MED-1609.txt",
+    "157_MED-1456.txt",
+    "172_MED-1069.txt"
+  ],
+  "estrogen metabolites": [
+    "082_MED-4899.txt"
+  ],
+  "breast cancer risk": [
+    "082_MED-4899.txt",
+    "132_MED-3844.txt"
+  ],
+  "commercial milk": [
+    "082_MED-4899.txt"
+  ],
+  "lc-ms/ms": [
+    "082_MED-4899.txt"
+  ],
+  "catechol estrogens": [
+    "082_MED-4899.txt"
+  ],
+  "sweet potato": [
+    "083_MED-2202.txt"
+  ],
+  "human nutrition": [
+    "083_MED-2202.txt",
+    "136_MED-1801.txt"
+  ],
+  "beta-carotene": [
+    "083_MED-2202.txt"
+  ],
+  "anthocyanins": [
+    "083_MED-2202.txt"
+  ],
+  "value-added products": [
+    "083_MED-2202.txt"
+  ],
+  "parental occupational exposure": [
+    "084_MED-1170.txt"
+  ],
+  "pesticides": [
+    "084_MED-1170.txt"
+  ],
+  "brain tumors": [
+    "084_MED-1170.txt"
+  ],
+  "coffee consumption": [
+    "085_MED-5258.txt"
+  ],
+  "cause-specific mortality": [
+    "085_MED-5258.txt"
+  ],
+  "loving-kindness meditation": [
+    "086_MED-1923.txt"
+  ],
+  "telomere length": [
+    "086_MED-1923.txt",
+    "120_MED-4878.txt"
+  ],
+  "aging": [
+    "086_MED-1923.txt",
+    "142_MED-3270.txt"
+  ],
+  "women": [
+    "086_MED-1923.txt"
+  ],
+  "thermic effect": [
+    "087_MED-5305.txt"
+  ],
+  "metabolic rate": [
+    "087_MED-5305.txt"
+  ],
+  "spices": [
+    "087_MED-5305.txt"
+  ],
+  "diet-induced thermogenesis": [
+    "087_MED-5305.txt"
+  ],
+  "chilli": [
+    "087_MED-5305.txt"
+  ],
+  "amyotrophic lateral sclerosis": [
+    "088_MED-1276.txt"
+  ],
+  "spatial clustering": [
+    "088_MED-1276.txt"
+  ],
+  "finland": [
+    "088_MED-1276.txt"
+  ],
+  "birth place": [
+    "088_MED-1276.txt"
+  ],
+  "death place": [
+    "088_MED-1276.txt"
+  ],
+  "urine ph": [
+    "089_MED-3230.txt"
+  ],
+  "net acid excretion": [
+    "089_MED-3230.txt"
+  ],
+  "dietary groups": [
+    "089_MED-3230.txt"
+  ],
+  "acid-base balance": [
+    "089_MED-3230.txt"
+  ],
+  "vegans": [
+    "089_MED-3230.txt"
+  ],
+  "diet and exercise": [
+    "090_MED-4220.txt"
+  ],
+  "serum igf-i": [
+    "090_MED-4220.txt"
+  ],
+  "igfbp-1": [
+    "090_MED-4220.txt"
+  ],
+  "lncap cell growth": [
+    "090_MED-4220.txt"
+  ],
+  "endocrine disruptors": [
+    "091_MED-5167.txt"
+  ],
+  "hypospadias": [
+    "091_MED-5167.txt"
+  ],
+  "genistein": [
+    "091_MED-5167.txt"
+  ],
+  "vinclozolin": [
+    "091_MED-5167.txt"
+  ],
+  "gestational exposure": [
+    "091_MED-5167.txt"
+  ],
+  "endocrine disrupters": [
+    "092_MED-2627.txt"
+  ],
+  "cancer risk assessment": [
+    "092_MED-2627.txt"
+  ],
+  "low dose extrapolation": [
+    "092_MED-2627.txt"
+  ],
+  "exposure data": [
+    "092_MED-2627.txt"
+  ],
+  "biologically based dose response model": [
+    "092_MED-2627.txt"
+  ],
+  "ciguatera": [
+    "093_MED-1570.txt"
+  ],
+  "ciguatoxins": [
+    "093_MED-1570.txt"
+  ],
+  "seafood poisoning": [
+    "093_MED-1570.txt"
+  ],
+  "gambierdiscus toxicus": [
+    "093_MED-1570.txt"
+  ],
+  "coral bleaching": [
+    "093_MED-1570.txt"
+  ],
+  "brain aging": [
+    "094_MED-2664.txt"
+  ],
+  "plant foods": [
+    "094_MED-2664.txt"
+  ],
+  "antioxidants": [
+    "094_MED-2664.txt",
+    "103_MED-4089.txt"
+  ],
+  "neuroprotectants": [
+    "094_MED-2664.txt"
+  ],
+  "traditional diets": [
+    "095_MED-2572.txt"
+  ],
+  "indigenous health": [
+    "095_MED-2572.txt"
+  ],
+  "food as medicine": [
+    "095_MED-2572.txt"
+  ],
+  "disease patterns": [
+    "095_MED-2572.txt"
+  ],
+  "nutrient bioavailability": [
+    "095_MED-2572.txt"
+  ],
+  "nonextractable polyphenols": [
+    "096_MED-1789.txt"
+  ],
+  "dietary polyphenols": [
+    "096_MED-1789.txt"
+  ],
+  "spanish diet": [
+    "096_MED-1789.txt"
+  ],
+  "polyphenol intake": [
+    "096_MED-1789.txt"
+  ],
+  "food analysis": [
+    "096_MED-1789.txt",
+    "100_MED-4476.txt"
+  ],
+  "nutritional risk factors": [
+    "097_MED-4412.txt"
+  ],
+  "copd": [
+    "097_MED-4412.txt"
+  ],
+  "male smokers": [
+    "097_MED-4412.txt"
+  ],
+  "black tea": [
+    "097_MED-4412.txt"
+  ],
+  "vegetables-fruits": [
+    "097_MED-4412.txt"
+  ],
+  "cytotoxicity": [
+    "098_MED-2092.txt"
+  ],
+  "mouthrinses": [
+    "098_MED-2092.txt"
+  ],
+  "epithelial cells": [
+    "098_MED-2092.txt"
+  ],
+  "micronucleus test": [
+    "098_MED-2092.txt"
+  ],
+  "gingival indices": [
+    "098_MED-2092.txt"
+  ],
+  "vitamin d absorption": [
+    "099_MED-4566.txt"
+  ],
+  "serum 25-hydroxyvitamin d": [
+    "099_MED-4566.txt"
+  ],
+  "largest meal": [
+    "099_MED-4566.txt"
+  ],
+  "supplementation": [
+    "099_MED-4566.txt"
+  ],
+  "deficiency treatment": [
+    "099_MED-4566.txt"
+  ],
+  "n-nitroso compounds": [
+    "100_MED-4476.txt"
+  ],
+  "n-nitroso precursors": [
+    "100_MED-4476.txt"
+  ],
+  "chemiluminescence detection": [
+    "100_MED-4476.txt"
+  ],
+  "tobacco products": [
+    "100_MED-4476.txt"
+  ],
+  "human diet evolution": [
+    "101_MED-4299.txt"
+  ],
+  "paleolithic diet": [
+    "101_MED-4299.txt"
+  ],
+  "chronic disease prevention": [
+    "101_MED-4299.txt"
+  ],
+  "functional foods": [
+    "101_MED-4299.txt"
+  ],
+  "bioactive compounds": [
+    "101_MED-4299.txt"
+  ],
+  "rheumatoid arthritis": [
+    "102_MED-1128.txt",
+    "154_MED-2822.txt"
+  ],
+  "proteus mirabilis": [
+    "102_MED-1128.txt"
+  ],
+  "etiopathogenesis": [
+    "102_MED-1128.txt"
+  ],
+  "diagnostic markers": [
+    "102_MED-1128.txt"
+  ],
+  "therapeutic protocol": [
+    "102_MED-1128.txt"
+  ],
+  "apple peel extract": [
+    "103_MED-4089.txt"
+  ],
+  "tumor suppressor": [
+    "103_MED-4089.txt"
+  ],
+  "insulin-like growth factor-1": [
+    "104_MED-4211.txt"
+  ],
+  "insulin-like growth factor-binding protein-3": [
+    "104_MED-4211.txt"
+  ],
+  "premenopausal women": [
+    "104_MED-4211.txt",
+    "132_MED-3844.txt"
+  ],
+  "dietary soy": [
+    "104_MED-4211.txt"
+  ],
+  "fat intake": [
+    "104_MED-4211.txt"
+  ],
+  "high-carbohydrate high-fiber diets": [
+    "105_MED-1609.txt"
+  ],
+  "glucose disposal": [
+    "105_MED-1609.txt"
+  ],
+  "euglycemic clamp": [
+    "105_MED-1609.txt"
+  ],
+  "peripheral insulin sensitivity": [
+    "105_MED-1609.txt"
+  ],
+  "maternal vaginal microflora": [
+    "106_MED-3682.txt"
+  ],
+  "wheezing": [
+    "106_MED-3682.txt"
+  ],
+  "early childhood": [
+    "106_MED-3682.txt"
+  ],
+  "vinegar supplementation": [
+    "107_MED-4703.txt"
+  ],
+  "blood glucose response": [
+    "107_MED-4703.txt"
+  ],
+  "satiety": [
+    "107_MED-4703.txt",
+    "141_MED-4262.txt",
+    "186_MED-939.txt",
+    "191_MED-4250.txt"
+  ],
+  "acetic acid": [
+    "107_MED-4703.txt"
+  ],
+  "prediabetes": [
+    "108_MED-1992.txt",
+    "145_MED-2001.txt"
+  ],
+  "diabetes risk": [
+    "108_MED-1992.txt"
+  ],
+  "lifestyle modification": [
+    "108_MED-1992.txt"
+  ],
+  "ciguatera fish poisoning": [
+    "109_MED-1573.txt"
+  ],
+  "scombroid fish poisoning": [
+    "109_MED-1573.txt"
+  ],
+  "foodborne illness": [
+    "109_MED-1573.txt"
+  ],
+  "surveillance systems": [
+    "109_MED-1573.txt"
+  ],
+  "underreporting": [
+    "109_MED-1573.txt"
+  ],
+  "progressive inflammatory neuropathy": [
+    "110_MED-3288.txt"
+  ],
+  "pork processing plant": [
+    "110_MED-3288.txt"
+  ],
+  "aerosolized porcine neural tissue": [
+    "110_MED-3288.txt"
+  ],
+  "autoimmune reaction": [
+    "110_MED-3288.txt"
+  ],
+  "epidemiological investigation": [
+    "110_MED-3288.txt"
+  ],
+  "exercise": [
+    "111_MED-2717.txt"
+  ],
+  "physical activity": [
+    "111_MED-2717.txt",
+    "150_MED-4787.txt"
+  ],
+  "metabolic risk factors": [
+    "111_MED-2717.txt"
+  ],
+  "fecal mutagenicity": [
+    "112_MED-2105.txt"
+  ],
+  "genotoxicity": [
+    "112_MED-2105.txt"
+  ],
+  "dna damage": [
+    "112_MED-2105.txt",
+    "129_MED-2095.txt"
+  ],
+  "colon cancer": [
+    "112_MED-2105.txt",
+    "149_MED-2073.txt"
+  ],
+  "intensive cardiac rehabilitation": [
+    "113_MED-4245.txt"
+  ],
+  "health outcomes": [
+    "113_MED-4245.txt"
+  ],
+  "program efficacy": [
+    "113_MED-4245.txt"
+  ],
+  "patient improvements": [
+    "113_MED-4245.txt"
+  ],
+  "purple discoloration": [
+    "114_MED-4497.txt"
+  ],
+  "large bowel": [
+    "114_MED-4497.txt"
+  ],
+  "autopsy": [
+    "114_MED-4497.txt"
+  ],
+  "beetroot ingestion": [
+    "114_MED-4497.txt"
+  ],
+  "post-mortem changes": [
+    "114_MED-4497.txt"
+  ],
+  "choline-controlled diets": [
+    "115_MED-3786.txt"
+  ],
+  "betaine": [
+    "115_MED-3786.txt"
+  ],
+  "clinical research": [
+    "115_MED-3786.txt"
+  ],
+  "trimethylaminuria": [
+    "115_MED-3786.txt"
+  ],
+  "methyl-group requirements": [
+    "115_MED-3786.txt"
+  ],
+  "gastrointestinal absorption": [
+    "116_MED-1839.txt"
+  ],
+  "aluminium": [
+    "116_MED-1839.txt",
+    "156_MED-1838.txt"
+  ],
+  "antacids": [
+    "116_MED-1839.txt"
+  ],
+  "citric acid": [
+    "116_MED-1839.txt"
+  ],
+  "serum concentration": [
+    "116_MED-1839.txt"
+  ],
+  "meat consumption": [
+    "117_MED-4482.txt"
+  ],
+  "cooking methods": [
+    "117_MED-4482.txt"
+  ],
+  "carcinogens": [
+    "117_MED-4482.txt"
+  ],
+  "cholesterol controversy": [
+    "118_MED-2370.txt"
+  ],
+  "hypercholesterolemia": [
+    "118_MED-2370.txt"
+  ],
+  "lipoprotein metabolism": [
+    "118_MED-2370.txt"
+  ],
+  "atherogenesis": [
+    "118_MED-2370.txt"
+  ],
+  "glucuronidation": [
+    "119_MED-5206.txt"
+  ],
+  "udp-glucuronosyltransferases": [
+    "119_MED-5206.txt"
+  ],
+  "detoxifying enzymes": [
+    "119_MED-5206.txt"
+  ],
+  "xenobiotic metabolism": [
+    "119_MED-5206.txt"
+  ],
+  "molecular biology": [
+    "119_MED-5206.txt"
+  ],
+  "processed meat": [
+    "120_MED-4878.txt"
+  ],
+  "multi-ethnic study of atherosclerosis": [
+    "120_MED-4878.txt"
+  ],
+  "glycoalkaloids": [
+    "121_MED-4913.txt"
+  ],
+  "probabilistic modelling": [
+    "121_MED-4913.txt"
+  ],
+  "exposure doses": [
+    "121_MED-4913.txt"
+  ],
+  "health risk characterization": [
+    "121_MED-4913.txt"
+  ],
+  "potatoes": [
+    "121_MED-4913.txt"
+  ],
+  "primary constipation": [
+    "122_MED-1031.txt"
+  ],
+  "bowel elimination": [
+    "122_MED-1031.txt"
+  ],
+  "recto-anal angle": [
+    "122_MED-1031.txt"
+  ],
+  "squatting posture": [
+    "122_MED-1031.txt"
+  ],
+  "defecation reflex": [
+    "122_MED-1031.txt"
+  ],
+  "coronary heart disease": [
+    "123_MED-1885.txt",
+    "167_MED-1556.txt"
+  ],
+  "dietary guidelines": [
+    "123_MED-1885.txt"
+  ],
+  "ldl/hdl ratio": [
+    "123_MED-1885.txt"
+  ],
+  "cholesterol restrictions": [
+    "123_MED-1885.txt"
+  ],
+  "dietary flavonoid intake": [
+    "124_MED-5116.txt"
+  ],
+  "breast cancer survival": [
+    "124_MED-5116.txt"
+  ],
+  "flavones": [
+    "124_MED-5116.txt"
+  ],
+  "isoflavones": [
+    "124_MED-5116.txt"
+  ],
+  "pasteurization": [
+    "125_MED-904.txt"
+  ],
+  "milk vitamins": [
+    "125_MED-904.txt"
+  ],
+  "raw milk consumption": [
+    "125_MED-904.txt"
+  ],
+  "health effects": [
+    "125_MED-904.txt",
+    "163_MED-5283.txt"
+  ],
+  "mutagenicity": [
+    "126_MED-5043.txt"
+  ],
+  "hela cells": [
+    "126_MED-5043.txt"
+  ],
+  "antiproliferative effect": [
+    "126_MED-5043.txt"
+  ],
+  "hormesis": [
+    "127_MED-2330.txt",
+    "135_MED-2325.txt"
+  ],
+  "dose response": [
+    "127_MED-2330.txt"
+  ],
+  "cellular signaling pathways": [
+    "127_MED-2330.txt"
+  ],
+  "adaptive response": [
+    "127_MED-2330.txt"
+  ],
+  "disease prevention": [
+    "127_MED-2330.txt"
+  ],
+  "gestational diabetes mellitus": [
+    "128_MED-2843.txt"
+  ],
+  "major congenital malformations": [
+    "128_MED-2843.txt"
+  ],
+  "pregestational diabetes mellitus": [
+    "128_MED-2843.txt"
+  ],
+  "buccal epithelial cells": [
+    "129_MED-2095.txt"
+  ],
+  "comet assay": [
+    "129_MED-2095.txt"
+  ],
+  "chlorhexidine": [
+    "129_MED-2095.txt"
+  ],
+  "cytogenetic evaluation": [
+    "129_MED-2095.txt"
+  ],
+  "multiple myeloma": [
+    "130_MED-1105.txt"
+  ],
+  "bullous dermatosis": [
+    "130_MED-1105.txt"
+  ],
+  "plasma cell disorder": [
+    "130_MED-1105.txt"
+  ],
+  "subepidermal bullae": [
+    "130_MED-1105.txt"
+  ],
+  "chemotherapy treatment": [
+    "130_MED-1105.txt"
+  ],
+  "fruit consumption": [
+    "131_MED-1795.txt"
+  ],
+  "hazard ratio": [
+    "131_MED-1795.txt",
+    "184_MED-1338.txt"
+  ],
+  "whole fruit": [
+    "131_MED-1795.txt"
+  ],
+  "antibacterial treatment": [
+    "132_MED-3844.txt"
+  ],
+  "urinary tract infection": [
+    "132_MED-3844.txt"
+  ],
+  "lignan status": [
+    "132_MED-3844.txt"
+  ],
+  "rye bread consumption": [
+    "133_MED-5349.txt"
+  ],
+  "prostate cancer risk": [
+    "133_MED-5349.txt"
+  ],
+  "adolescence": [
+    "133_MED-5349.txt"
+  ],
+  "whole grains": [
+    "133_MED-5349.txt"
+  ],
+  "dietary habits": [
+    "133_MED-5349.txt"
+  ],
+  "breast cancer incidence rates": [
+    "134_MED-4651.txt"
+  ],
+  "non-hispanic white women": [
+    "134_MED-4651.txt"
+  ],
+  "surveillance epidemiology and end results": [
+    "134_MED-4651.txt"
+  ],
+  "postmenopausal hormone use": [
+    "134_MED-4651.txt"
+  ],
+  "estrogen receptor status": [
+    "134_MED-4651.txt"
+  ],
+  "dietary restriction": [
+    "135_MED-2325.txt"
+  ],
+  "longevity": [
+    "135_MED-2325.txt"
+  ],
+  "lifespan extension": [
+    "135_MED-2325.txt"
+  ],
+  "allostatic load": [
+    "135_MED-2325.txt"
+  ],
+  "chicken fat content": [
+    "136_MED-1801.txt"
+  ],
+  "fatty acids": [
+    "136_MED-1801.txt"
+  ],
+  "n-3 n-6 ratio": [
+    "136_MED-1801.txt"
+  ],
+  "poultry husbandry": [
+    "136_MED-1801.txt"
+  ],
+  "cocoa flavanols": [
+    "137_MED-4335.txt"
+  ],
+  "anti-inflammatory effects": [
+    "137_MED-4335.txt"
+  ],
+  "dietary studies": [
+    "137_MED-4335.txt"
+  ],
+  "capsaicin": [
+    "138_MED-3516.txt"
+  ],
+  "nasal mucosa": [
+    "138_MED-3516.txt"
+  ],
+  "rhinorrhea": [
+    "138_MED-3516.txt"
+  ],
+  "sneezing": [
+    "138_MED-3516.txt"
+  ],
+  "desensitization": [
+    "138_MED-3516.txt"
+  ],
+  "meriva": [
+    "139_MED-2807.txt"
+  ],
+  "osteoarthritis": [
+    "139_MED-2807.txt",
+    "169_MED-4462.txt"
+  ],
+  "curcumin-phosphatidylcholine complex": [
+    "139_MED-2807.txt"
+  ],
+  "long-term efficacy": [
+    "139_MED-2807.txt"
+  ],
+  "inflammatory markers": [
+    "139_MED-2807.txt"
+  ],
+  "saffron extract": [
+    "140_MED-938.txt",
+    "186_MED-939.txt"
+  ],
+  "cytotoxic effect": [
+    "140_MED-938.txt"
+  ],
+  "chemotherapeutic agent": [
+    "140_MED-938.txt"
+  ],
+  "dietary non-nutrients": [
+    "141_MED-4262.txt"
+  ],
+  "water and gas": [
+    "141_MED-4262.txt"
+  ],
+  "weight management": [
+    "141_MED-4262.txt"
+  ],
+  "gastric distension": [
+    "141_MED-4262.txt"
+  ],
+  "protein oxidation": [
+    "142_MED-3270.txt"
+  ],
+  "maximum life span": [
+    "142_MED-3270.txt"
+  ],
+  "malondialdehydelysine": [
+    "142_MED-3270.txt"
+  ],
+  "methionine content": [
+    "142_MED-3270.txt"
+  ],
+  "paleolithic nutrition": [
+    "143_MED-1478.txt"
+  ],
+  "evolutionary discordance hypothesis": [
+    "143_MED-1478.txt"
+  ],
+  "hunter-gatherer diets": [
+    "143_MED-1478.txt"
+  ],
+  "chronic diseases": [
+    "143_MED-1478.txt",
+    "195_MED-3231.txt"
+  ],
+  "randomized controlled trials": [
+    "143_MED-1478.txt"
+  ],
+  "global burden of disease": [
+    "144_MED-2082.txt"
+  ],
+  "mortality causes": [
+    "144_MED-2082.txt"
+  ],
+  "systematic analysis": [
+    "144_MED-2082.txt"
+  ],
+  "cause of death ensemble model": [
+    "144_MED-2082.txt"
+  ],
+  "health policy": [
+    "144_MED-2082.txt"
+  ],
+  "awareness": [
+    "145_MED-2001.txt"
+  ],
+  "lifestyle changes": [
+    "145_MED-2001.txt"
+  ],
+  "egcg": [
+    "146_MED-4777.txt"
+  ],
+  "anticancer properties": [
+    "146_MED-4777.txt"
+  ],
+  "artemisia dracunculus": [
+    "147_MED-3807.txt"
+  ],
+  "tarragon": [
+    "147_MED-3807.txt"
+  ],
+  "chemical composition": [
+    "147_MED-3807.txt"
+  ],
+  "pharmacology": [
+    "147_MED-3807.txt"
+  ],
+  "safety": [
+    "147_MED-3807.txt"
+  ],
+  "allergies": [
+    "148_MED-3703.txt"
+  ],
+  "cancer risk": [
+    "148_MED-3703.txt"
+  ],
+  "site specific": [
+    "148_MED-3703.txt"
+  ],
+  "decreased risk": [
+    "148_MED-3703.txt"
+  ],
+  "increased risk": [
+    "148_MED-3703.txt"
+  ],
+  "curly kale": [
+    "149_MED-2073.txt"
+  ],
+  "thermal processing": [
+    "149_MED-2073.txt"
+  ],
+  "postmenopausal breast cancer": [
+    "150_MED-4787.txt"
+  ],
+  "moderate-to-vigorous intensity": [
+    "150_MED-4787.txt"
+  ],
+  "recent activity": [
+    "150_MED-4787.txt"
+  ],
+  "risk reduction": [
+    "150_MED-4787.txt"
+  ],
+  "parkinson disease": [
+    "151_MED-3940.txt",
+    "153_MED-3936.txt"
+  ],
+  "lewy pathology": [
+    "151_MED-3940.txt"
+  ],
+  "neurodegeneration": [
+    "151_MED-3940.txt"
+  ],
+  "substantia nigra": [
+    "151_MED-3940.txt"
+  ],
+  "incidental lewy body disease": [
+    "151_MED-3940.txt"
+  ],
+  "food and drug reward": [
+    "152_MED-3055.txt"
+  ],
+  "dopamine pathways": [
+    "152_MED-3055.txt"
+  ],
+  "brain imaging": [
+    "152_MED-3055.txt"
+  ],
+  "addiction and obesity": [
+    "152_MED-3055.txt"
+  ],
+  "treatment strategies": [
+    "152_MED-3055.txt"
+  ],
+  "organochlorine pesticides": [
+    "153_MED-3936.txt"
+  ],
+  "serum levels": [
+    "153_MED-3936.txt"
+  ],
+  "β-hexachlorocyclohexane": [
+    "153_MED-3936.txt"
+  ],
+  "case-control study": [
+    "153_MED-3936.txt"
+  ],
+  "antiinflammatory properties": [
+    "154_MED-2822.txt"
+  ],
+  "disease activity score": [
+    "154_MED-2822.txt"
+  ],
+  "non-small cell lung cancer": [
+    "155_MED-2601.txt"
+  ],
+  "endoplasmic reticulum stress": [
+    "155_MED-2601.txt"
+  ],
+  "caspase cascade": [
+    "155_MED-2601.txt"
+  ],
+  "herbal tea": [
+    "156_MED-1838.txt"
+  ],
+  "elemental analysis": [
+    "156_MED-1838.txt"
+  ],
+  "heavy metals": [
+    "156_MED-1838.txt"
+  ],
+  "veganism": [
+    "157_MED-1456.txt"
+  ],
+  "intramyocellular lipid": [
+    "157_MED-1456.txt"
+  ],
+  "cardioprotective": [
+    "157_MED-1456.txt"
+  ],
+  "cervical cancer": [
+    "158_MED-3560.txt"
+  ],
+  "hpv infection": [
+    "158_MED-3560.txt"
+  ],
+  "cin lesions": [
+    "158_MED-3560.txt"
+  ],
+  "clinical management": [
+    "158_MED-3560.txt"
+  ],
+  "hydroxycitric acid": [
+    "159_MED-3492.txt"
+  ],
+  "niacin-bound chromium": [
+    "159_MED-3492.txt"
+  ],
+  "gymnema sylvestre": [
+    "159_MED-3492.txt"
+  ],
+  "lipid profiles": [
+    "159_MED-3492.txt"
+  ],
+  "cow milk consumption": [
+    "160_MED-1223.txt"
+  ],
+  "insulin-like growth factor-i": [
+    "160_MED-1223.txt"
+  ],
+  "linear growth": [
+    "160_MED-1223.txt"
+  ],
+  "early menarche": [
+    "160_MED-1223.txt"
+  ],
+  "life history": [
+    "160_MED-1223.txt"
+  ],
+  "cigarette smoking": [
+    "161_MED-4825.txt"
+  ],
+  "diabetes mellitus": [
+    "161_MED-4825.txt"
+  ],
+  "elevated homocysteine": [
+    "162_MED-990.txt"
+  ],
+  "white matter volume": [
+    "162_MED-990.txt"
+  ],
+  "healthy elderly": [
+    "162_MED-990.txt"
+  ],
+  "brain volume": [
+    "162_MED-990.txt"
+  ],
+  "chocolate/cocoa": [
+    "163_MED-5283.txt"
+  ],
+  "antioxidant potential": [
+    "163_MED-5283.txt"
+  ],
+  "research review": [
+    "163_MED-5283.txt"
+  ],
+  "colloidal oatmeal": [
+    "164_MED-1316.txt"
+  ],
+  "clinical properties": [
+    "164_MED-1316.txt"
+  ],
+  "skin protectant": [
+    "164_MED-1316.txt"
+  ],
+  "chemical polymorphism": [
+    "164_MED-1316.txt"
+  ],
+  "anti-inflammatory": [
+    "164_MED-1316.txt"
+  ],
+  "spearmint tea": [
+    "165_MED-1522.txt"
+  ],
+  "polycystic ovarian syndrome": [
+    "165_MED-1522.txt"
+  ],
+  "anti-androgen effects": [
+    "165_MED-1522.txt"
+  ],
+  "hirsutism": [
+    "165_MED-1522.txt"
+  ],
+  "randomized controlled trial": [
+    "165_MED-1522.txt",
+    "175_MED-3988.txt",
+    "197_MED-4671.txt"
+  ],
+  "preschool children": [
+    "166_MED-4172.txt"
+  ],
+  "fruit and vegetables": [
+    "166_MED-4172.txt"
+  ],
+  "modelling and rewards intervention": [
+    "166_MED-4172.txt"
+  ],
+  "consumption increase": [
+    "166_MED-4172.txt"
+  ],
+  "generalisation": [
+    "166_MED-4172.txt"
+  ],
+  "saturated fat": [
+    "167_MED-1556.txt",
+    "172_MED-1069.txt"
+  ],
+  "prospective cohort studies": [
+    "167_MED-1556.txt"
+  ],
+  "high nutrient density diet": [
+    "168_MED-4989.txt"
+  ],
+  "retrospective chart review": [
+    "168_MED-4989.txt"
+  ],
+  "lipid profile": [
+    "168_MED-4989.txt"
+  ],
+  "patient adherence": [
+    "168_MED-4989.txt"
+  ],
+  "sulforaphane": [
+    "169_MED-4462.txt",
+    "182_MED-4461.txt",
+    "200_MED-2075.txt"
+  ],
+  "chondrocyte protection": [
+    "169_MED-4462.txt"
+  ],
+  "apoptosis inhibition": [
+    "169_MED-4462.txt"
+  ],
+  "caspase activation": [
+    "169_MED-4462.txt"
+  ],
+  "human health effects": [
+    "170_MED-3019.txt"
+  ],
+  "neurotoxicant": [
+    "170_MED-3019.txt"
+  ],
+  "low-level exposure": [
+    "170_MED-3019.txt"
+  ],
+  "individual susceptibility": [
+    "170_MED-3019.txt"
+  ],
+  "vitamin d supplementation": [
+    "171_MED-3990.txt"
+  ],
+  "mortality prevention": [
+    "171_MED-3990.txt"
+  ],
+  "adults": [
+    "171_MED-3990.txt"
+  ],
+  "monounsaturated fat": [
+    "172_MED-1069.txt"
+  ],
+  "polyunsaturated fat": [
+    "172_MED-1069.txt"
+  ],
+  "insulin secretion": [
+    "172_MED-1069.txt"
+  ],
+  "dietary advice": [
+    "173_MED-2750.txt"
+  ],
+  "angina": [
+    "173_MED-2750.txt"
+  ],
+  "oily fish": [
+    "173_MED-2750.txt"
+  ],
+  "cardiac death": [
+    "173_MED-2750.txt"
+  ],
+  "non-communicable diseases": [
+    "174_MED-2726.txt"
+  ],
+  "unhealthy commodities": [
+    "174_MED-2726.txt"
+  ],
+  "transnational corporations": [
+    "174_MED-2726.txt"
+  ],
+  "industry self-regulation": [
+    "174_MED-2726.txt"
+  ],
+  "public regulation": [
+    "174_MED-2726.txt"
+  ],
+  "vitamin d2": [
+    "175_MED-3988.txt"
+  ],
+  "vitamin d3": [
+    "175_MED-3988.txt"
+  ],
+  "25-hydroxyvitamin d": [
+    "175_MED-3988.txt"
+  ],
+  "vitamin d deficiency": [
+    "175_MED-3988.txt"
+  ],
+  "color red": [
+    "176_MED-3351.txt"
+  ],
+  "avoidance motivation": [
+    "176_MED-3351.txt"
+  ],
+  "snack consumption": [
+    "176_MED-3351.txt"
+  ],
+  "soft drink intake": [
+    "176_MED-3351.txt"
+  ],
+  "stop signal": [
+    "176_MED-3351.txt"
+  ],
+  "lavender essential oil": [
+    "177_MED-3662.txt"
+  ],
+  "biological activities": [
+    "177_MED-3662.txt"
+  ],
+  "antimicrobial agent": [
+    "177_MED-3662.txt"
+  ],
+  "psychological effects": [
+    "177_MED-3662.txt"
+  ],
+  "therapeutic significance": [
+    "177_MED-3662.txt"
+  ],
+  "celiac disease": [
+    "178_MED-2024.txt"
+  ],
+  "gluten intolerance": [
+    "178_MED-2024.txt"
+  ],
+  "laboratory diagnosis": [
+    "178_MED-2024.txt"
+  ],
+  "diagnostic tests": [
+    "178_MED-2024.txt"
+  ],
+  "non-celiac gluten sensitivity": [
+    "178_MED-2024.txt"
+  ],
+  "food cost": [
+    "179_MED-3770.txt"
+  ],
+  "nutritive value": [
+    "179_MED-3770.txt"
+  ],
+  "energy density": [
+    "179_MED-3770.txt"
+  ],
+  "food groups": [
+    "179_MED-3770.txt"
+  ],
+  "price differentials": [
+    "179_MED-3770.txt"
+  ],
+  "vascular endothelium": [
+    "180_MED-5281.txt"
+  ],
+  "endothelial dysfunction": [
+    "180_MED-5281.txt"
+  ],
+  "human diseases": [
+    "180_MED-5281.txt"
+  ],
+  "vascular abnormalities": [
+    "180_MED-5281.txt"
+  ],
+  "crocus sativus": [
+    "181_MED-746.txt"
+  ],
+  "erectile dysfunction": [
+    "181_MED-746.txt"
+  ],
+  "saffron treatment": [
+    "181_MED-746.txt"
+  ],
+  "nocturnal penile tumescence": [
+    "181_MED-746.txt"
+  ],
+  "international index of erectile function": [
+    "181_MED-746.txt"
+  ],
+  "oxaliplatin": [
+    "182_MED-4461.txt"
+  ],
+  "colorectal cancer": [
+    "182_MED-4461.txt"
+  ],
+  "cell growth inhibition": [
+    "182_MED-4461.txt"
+  ],
+  "apoptotic pathways": [
+    "182_MED-4461.txt"
+  ],
+  "iodine deficiency": [
+    "183_MED-4665.txt"
+  ],
+  "reproductive age women": [
+    "183_MED-4665.txt"
+  ],
+  "dairy products": [
+    "183_MED-4665.txt"
+  ],
+  "urinary iodine concentrations": [
+    "183_MED-4665.txt"
+  ],
+  "milk consumption": [
+    "184_MED-1338.txt"
+  ],
+  "fractures": [
+    "184_MED-1338.txt"
+  ],
+  "cohort studies": [
+    "184_MED-1338.txt"
+  ],
+  "ascorbic acid": [
+    "185_MED-4468.txt"
+  ],
+  "n-nitrosodimethylamine": [
+    "185_MED-4468.txt"
+  ],
+  "endogenous formation": [
+    "185_MED-4468.txt"
+  ],
+  "urinary excretion": [
+    "185_MED-4468.txt"
+  ],
+  "satiereal": [
+    "186_MED-939.txt"
+  ],
+  "snacking": [
+    "186_MED-939.txt"
+  ],
+  "antibiotic-associated diarrhea": [
+    "187_MED-3695.txt"
+  ],
+  "pediatric": [
+    "187_MED-3695.txt"
+  ],
+  "gut microflora": [
+    "187_MED-3695.txt"
+  ],
+  "colibacillosis": [
+    "188_MED-4805.txt"
+  ],
+  "layer flocks": [
+    "188_MED-4805.txt"
+  ],
+  "cage volume": [
+    "188_MED-4805.txt"
+  ],
+  "poultry farm distance": [
+    "188_MED-4805.txt"
+  ],
+  "tea mouthwash": [
+    "189_MED-2091.txt"
+  ],
+  "neem mouthwash": [
+    "189_MED-2091.txt"
+  ],
+  "chlorhexidine mouthwash": [
+    "189_MED-2091.txt"
+  ],
+  "oral health": [
+    "189_MED-2091.txt"
+  ],
+  "randomized control trial": [
+    "189_MED-2091.txt"
+  ],
+  "telomere shortening": [
+    "190_MED-4879.txt"
+  ],
+  "age estimation": [
+    "190_MED-4879.txt"
+  ],
+  "terminal restriction fragment": [
+    "190_MED-4879.txt"
+  ],
+  "southern blot analysis": [
+    "190_MED-4879.txt"
+  ],
+  "forensic samples": [
+    "190_MED-4879.txt"
+  ],
+  "dried prunes": [
+    "191_MED-4250.txt"
+  ],
+  "energy intake": [
+    "191_MED-4250.txt"
+  ],
+  "snack": [
+    "191_MED-4250.txt"
+  ],
+  "visual analogue scales": [
+    "191_MED-4250.txt"
+  ],
+  "cola beverages": [
+    "192_MED-2219.txt"
+  ],
+  "testosterone": [
+    "192_MED-2219.txt"
+  ],
+  "rat testes": [
+    "192_MED-2219.txt"
+  ],
+  "star expression": [
+    "192_MED-2219.txt"
+  ],
+  "epithelial barriers": [
+    "193_MED-3108.txt"
+  ],
+  "mucosal immune cells": [
+    "193_MED-3108.txt"
+  ],
+  "microbiota": [
+    "193_MED-3108.txt"
+  ],
+  "immune responses": [
+    "193_MED-3108.txt"
+  ],
+  "ideal cardiovascular health": [
+    "194_MED-1546.txt"
+  ],
+  "heart score study": [
+    "194_MED-1546.txt"
+  ],
+  "community-based population": [
+    "194_MED-1546.txt"
+  ],
+  "health disparities": [
+    "194_MED-1546.txt"
+  ],
+  "alkaline diet": [
+    "195_MED-3231.txt"
+  ],
+  "ph": [
+    "195_MED-3231.txt"
+  ],
+  "medical literature": [
+    "195_MED-3231.txt"
+  ],
+  "antiemetic": [
+    "196_MED-691.txt"
+  ],
+  "chemotherapy-induced nausea": [
+    "196_MED-691.txt"
+  ],
+  "motion sickness": [
+    "196_MED-691.txt"
+  ],
+  "saffron": [
+    "197_MED-4671.txt"
+  ],
+  "cognitive function": [
+    "197_MED-4671.txt"
+  ],
+  "placebo-controlled": [
+    "197_MED-4671.txt"
+  ],
+  "health care provider work hours": [
+    "198_MED-5347.txt"
+  ],
+  "sleep deprivation": [
+    "198_MED-5347.txt"
+  ],
+  "patient safety": [
+    "198_MED-5347.txt"
+  ],
+  "medical errors": [
+    "198_MED-5347.txt"
+  ],
+  "fatigue-related errors": [
+    "198_MED-5347.txt"
+  ],
+  "facial skin coloration": [
+    "199_MED-4659.txt"
+  ],
+  "perceived health": [
+    "199_MED-4659.txt"
+  ],
+  "skin redness": [
+    "199_MED-4659.txt"
+  ],
+  "skin yellowness": [
+    "199_MED-4659.txt"
+  ],
+  "color preferences": [
+    "199_MED-4659.txt"
+  ],
+  "chemoprotective mechanisms": [
+    "200_MED-2075.txt"
+  ],
+  "bioavailability": [
+    "200_MED-2075.txt"
+  ],
+  "clinical trials": [
+    "200_MED-2075.txt"
+  ]
+}

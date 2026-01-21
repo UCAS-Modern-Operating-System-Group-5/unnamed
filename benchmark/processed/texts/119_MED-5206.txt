@@ -1,0 +1,3 @@
+Title: UDP-glucuronosyltransferases: a family of detoxifying enzymes.
+
+Glucuronidation is an important process in the metabolism of xenobiotic and endogenous substances leading to enhancement of excretion of these compounds from the body. A multigene family encodes a number of UDP-glucuronosyltransferase enzymes which catalyse this route of metabolism. Recent advances in biochemical and molecular biological approaches, reviewed here by Thomas Tephly and Brian Burchell, have given new insight into the function and structure of UDP-glucuronosyltransferases. These proteins have surprising similarities and yet appear to be capable of conjugating a remarkable number of different chemicals.

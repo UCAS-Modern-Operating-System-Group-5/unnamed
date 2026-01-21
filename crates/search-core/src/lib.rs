@@ -31,9 +31,11 @@ pub use config::{SearchConfig, IndexConfig, AiConfig, WalkerConfig};
 pub use extract::{extract_text, TextExtractor};
 pub use indexer::{
     init_persistent_index, 
-    scan_existing_files, 
+    scan_existing_files,
+    scan_existing_files_with_progress,
     delete_from_index,
     start_file_watcher,
+    is_file_supported,
 };
 pub use models::FileDoc;
 pub use registry::{FileRegistry, FileState, EventType, PendingEvent};
@@ -155,6 +157,22 @@ impl SearchEngine {
             &self.bert,
             &self.cache,
             &self.registry,
+        )
+    }
+    
+    /// 扫描并索引目录（带进度回调）
+    pub fn scan_directory_with_progress<F>(&self, watch_path: &std::path::Path, progress_callback: F) -> anyhow::Result<()>
+    where
+        F: Fn(usize, usize) + Send + Sync,
+    {
+        scan_existing_files_with_progress(
+            watch_path,
+            &self.index,
+            &self.schema,
+            &self.bert,
+            &self.cache,
+            &self.registry,
+            progress_callback,
         )
     }
 }

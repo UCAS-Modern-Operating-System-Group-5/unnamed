@@ -21,6 +21,7 @@ uuid.workspace = true
 sled = "0.34"
 bincode = "1.3"
 chrono.workspace = true
+indicatif = "0.17"
 
 # 内部 crates
 rpc = { path = "../../crates/rpc" }

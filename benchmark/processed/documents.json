@@ -1,0 +1,2602 @@
+[
+  {
+    "index": 1,
+    "doc_id": "MED-4239",
+    "title": "A low-fat diet and/or strenuous exercise alters the IGF axis in vivo and reduces prostate tumor cell growth in vitro.",
+    "filename": "001_MED-4239.txt",
+    "keywords": [
+      "prostate cancer",
+      "low-fat diet",
+      "strenuous exercise",
+      "igf axis",
+      "tumor cell growth"
+    ]
+  },
+  {
+    "index": 2,
+    "doc_id": "MED-1323",
+    "title": "Low-carbohydrate diet scores and risk of type 2 diabetes in men",
+    "filename": "002_MED-1323.txt",
+    "keywords": [
+      "low-carbohydrate diet",
+      "type 2 diabetes",
+      "animal protein and fat",
+      "vegetable protein and fat",
+      "prospective cohort study"
+    ]
+  },
+  {
+    "index": 3,
+    "doc_id": "MED-863",
+    "title": "Penetrating ocular injury by durian fruit.",
+    "filename": "003_MED-863.txt",
+    "keywords": [
+      "penetrating ocular injury",
+      "durian fruit",
+      "case report",
+      "facial injury",
+      "protective devices"
+    ]
+  },
+  {
+    "index": 4,
+    "doc_id": "MED-4762",
+    "title": "Probiotic effects on cold and influenza-like symptom incidence and duration in children.",
+    "filename": "004_MED-4762.txt",
+    "keywords": [
+      "probiotics",
+      "cold symptoms",
+      "children",
+      "double-blind study",
+      "dietary supplementation"
+    ]
+  },
+  {
+    "index": 5,
+    "doc_id": "MED-2130",
+    "title": "Deconvoluting mTOR biology",
+    "filename": "005_MED-2130.txt",
+    "keywords": [
+      "mtor",
+      "tor protein complex",
+      "cellular growth",
+      "mtorc1 and mtorc2",
+      "signal propagation"
+    ]
+  },
+  {
+    "index": 6,
+    "doc_id": "MED-1993",
+    "title": "Type 2 diabetes mellitus in children and adolescents",
+    "filename": "006_MED-1993.txt",
+    "keywords": [
+      "type 2 diabetes mellitus",
+      "children and adolescents",
+      "obesity",
+      "screening",
+      "lifestyle intervention"
+    ]
+  },
+  {
+    "index": 7,
+    "doc_id": "MED-1857",
+    "title": "Periodontal conditions in vegetarians: a clinical study.",
+    "filename": "007_MED-1857.txt",
+    "keywords": [
+      "periodontal conditions",
+      "vegetarian diet",
+      "clinical study",
+      "oral hygiene",
+      "dental health"
+    ]
+  },
+  {
+    "index": 8,
+    "doc_id": "MED-1461",
+    "title": "Intramyocellular triglyceride content is a determinant of in vivo insulin resistance in humans: a 1H-13C nuclear magnetic resonance spectroscopy as...",
+    "filename": "008_MED-1461.txt",
+    "keywords": [
+      "insulin resistance",
+      "intramyocellular triglyceride",
+      "nuclear magnetic resonance spectroscopy",
+      "type 2 diabetes",
+      "lipid metabolism"
+    ]
+  },
+  {
+    "index": 9,
+    "doc_id": "MED-4739",
+    "title": "Nowhere to hide: Chemical toxicants and the unborn child.",
+    "filename": "009_MED-4739.txt",
+    "keywords": [
+      "toxicant exposures",
+      "reproductive health",
+      "pregnancy",
+      "contaminated seafood",
+      "nutritional sufficiency"
+    ]
+  },
+  {
+    "index": 10,
+    "doc_id": "MED-1282",
+    "title": "Beyond Guam: the cyanobacteria/BMAA hypothesis of the cause of ALS and other neurodegenerative diseases.",
+    "filename": "010_MED-1282.txt",
+    "keywords": [
+      "cyanobacteria",
+      "bmaa",
+      "neurodegenerative diseases",
+      "als",
+      "environmental causes"
+    ]
+  },
+  {
+    "index": 11,
+    "doc_id": "MED-4443",
+    "title": "Flaxseed: a potential source of food, feed and fiber.",
+    "filename": "011_MED-4443.txt",
+    "keywords": [
+      "flaxseed",
+      "nutritional composition",
+      "health benefits",
+      "functional food",
+      "omega-3"
+    ]
+  },
+  {
+    "index": 12,
+    "doc_id": "MED-4757",
+    "title": "Comparison of sex hormonal and metabolic profiles between omnivores and vegetarians in pre- and post-menopausal women.",
+    "filename": "012_MED-4757.txt",
+    "keywords": [
+      "sex hormonal profiles",
+      "metabolic profiles",
+      "vegetarians",
+      "omnivores",
+      "pre- and post-menopausal women"
+    ]
+  },
+  {
+    "index": 13,
+    "doc_id": "MED-3731",
+    "title": "Esophageal cancer: epidemiology, pathogenesis and prevention.",
+    "filename": "013_MED-3731.txt",
+    "keywords": [
+      "esophageal cancer",
+      "epidemiology",
+      "pathogenesis",
+      "prevention",
+      "risk factors"
+    ]
+  },
+  {
+    "index": 14,
+    "doc_id": "MED-1204",
+    "title": "Cholesterol crystals cause mechanical damage to biological membranes: a proposed mechanism of plaque rupture and erosion leading to arterial thromb...",
+    "filename": "014_MED-1204.txt",
+    "keywords": [
+      "cholesterol crystallization",
+      "plaque rupture",
+      "mechanical damage",
+      "biological membranes",
+      "cardiovascular events"
+    ]
+  },
+  {
+    "index": 15,
+    "doc_id": "MED-3966",
+    "title": "Fine and ultrafine particles of the diet: influence on the mucosal immune response and association with Crohn's disease.",
+    "filename": "015_MED-3966.txt",
+    "keywords": [
+      "crohn's disease",
+      "dietary microparticles",
+      "mucosal immune response",
+      "food additives",
+      "inflammation"
+    ]
+  },
+  {
+    "index": 16,
+    "doc_id": "MED-3013",
+    "title": "Reducing the staggering costs of environmental disease in children, estimated at $76.6 billion in 2008.",
+    "filename": "016_MED-3013.txt",
+    "keywords": [
+      "environmental disease costs",
+      "children's health",
+      "toxic chemical exposure",
+      "lead poisoning prevention",
+      "mercury emissions reduction"
+    ]
+  },
+  {
+    "index": 17,
+    "doc_id": "MED-903",
+    "title": "Antiproliferation and induction of apoptosis by Moringa oleifera leaf extract on human cancer cells.",
+    "filename": "017_MED-903.txt",
+    "keywords": [
+      "moringa oleifera leaf extract",
+      "antiproliferation",
+      "apoptosis",
+      "cancer cells",
+      "medicinal plants"
+    ]
+  },
+  {
+    "index": 18,
+    "doc_id": "MED-894",
+    "title": "Ceylon cinnamon does not affect postprandial plasma glucose or insulin in subjects with impaired glucose tolerance.",
+    "filename": "018_MED-894.txt",
+    "keywords": [
+      "ceylon cinnamon",
+      "impaired glucose tolerance",
+      "postprandial glucose",
+      "insulin response",
+      "coumarin exposure"
+    ]
+  },
+  {
+    "index": 19,
+    "doc_id": "MED-1237",
+    "title": "Banting Memorial Lecture 2012 Reversing the twin cycles of Type 2 diabetes",
+    "filename": "019_MED-1237.txt",
+    "keywords": [
+      "type 2 diabetes reversal",
+      "twin cycle hypothesis",
+      "intra-organ fat",
+      "beta cell function",
+      "very low calorie diet"
+    ]
+  },
+  {
+    "index": 20,
+    "doc_id": "MED-1834",
+    "title": "The role of latitude, ultraviolet radiation exposure and vitamin D in childhood asthma and hayfever: an Australian multicenter study.",
+    "filename": "020_MED-1834.txt",
+    "keywords": [
+      "latitude",
+      "ultraviolet radiation",
+      "vitamin d",
+      "childhood asthma",
+      "hayfever"
+    ]
+  },
+  {
+    "index": 21,
+    "doc_id": "MED-1922",
+    "title": "Stress and Telomere Biology: A Lifespan Perspective",
+    "filename": "021_MED-1922.txt",
+    "keywords": [
+      "stress",
+      "telomere biology",
+      "lifespan",
+      "aging processes",
+      "mental illnesses"
+    ]
+  },
+  {
+    "index": 22,
+    "doc_id": "MED-3542",
+    "title": "Monoamine oxidase inhibitors and the cheese effect.",
+    "filename": "022_MED-3542.txt",
+    "keywords": [
+      "monoamine oxidase inhibitors",
+      "cheese effect",
+      "tyramine",
+      "intestinal metabolism",
+      "antidepressant"
+    ]
+  },
+  {
+    "index": 23,
+    "doc_id": "MED-4034",
+    "title": "High-fiber foods reduce periodontal disease progression in men aged 65 and older: the Veterans Affairs normative aging study/Dental Longitudinal St...",
+    "filename": "023_MED-4034.txt",
+    "keywords": [
+      "high-fiber foods",
+      "periodontal disease progression",
+      "men aged 65 and older",
+      "alveolar bone loss",
+      "tooth loss"
+    ]
+  },
+  {
+    "index": 24,
+    "doc_id": "MED-869",
+    "title": "Yerba Mate (Ilex paraguariensis) consumption is associated with higher bone mineral density in postmenopausal women.",
+    "filename": "024_MED-869.txt",
+    "keywords": [
+      "yerba mate",
+      "bone mineral density",
+      "postmenopausal women",
+      "osteoporosis prevention",
+      "bone health"
+    ]
+  },
+  {
+    "index": 25,
+    "doc_id": "MED-3806",
+    "title": "Toxicology of nutmeg abuse.",
+    "filename": "025_MED-3806.txt",
+    "keywords": [
+      "nutmeg abuse",
+      "toxicity",
+      "hallucinations",
+      "central nervous system",
+      "adverse effects"
+    ]
+  },
+  {
+    "index": 26,
+    "doc_id": "MED-1739",
+    "title": "Roundup disrupts male reproductive functions by triggering calcium-mediated cell death in rat testis and Sertoli cells.",
+    "filename": "026_MED-1739.txt",
+    "keywords": [
+      "roundup",
+      "glyphosate",
+      "sertoli cell death",
+      "calcium overload",
+      "oxidative stress"
+    ]
+  },
+  {
+    "index": 27,
+    "doc_id": "MED-4642",
+    "title": "Diets and hormonal levels in postmenopausal women with or without breast cancer.",
+    "filename": "027_MED-4642.txt",
+    "keywords": [
+      "diet",
+      "breast cancer",
+      "postmenopausal women",
+      "hormones",
+      "fiber"
+    ]
+  },
+  {
+    "index": 28,
+    "doc_id": "MED-4308",
+    "title": "Effect of nutrient intake on premenstrual depression.",
+    "filename": "028_MED-4308.txt",
+    "keywords": [
+      "premenstrual syndrome",
+      "nutrient intake",
+      "carbohydrate craving",
+      "depression",
+      "serotonin synthesis"
+    ]
+  },
+  {
+    "index": 29,
+    "doc_id": "MED-4564",
+    "title": "Acute rhinosinusitis in adults.",
+    "filename": "029_MED-4564.txt",
+    "keywords": [
+      "acute rhinosinusitis",
+      "viral infections",
+      "symptomatic treatment",
+      "antibiotics",
+      "computed tomography"
+    ]
+  },
+  {
+    "index": 30,
+    "doc_id": "MED-3730",
+    "title": "Randomized phase II trial of lyophilized strawberries in patients with dysplastic precancerous lesions of the esophagus.",
+    "filename": "030_MED-3730.txt",
+    "keywords": [
+      "freeze-dried strawberries",
+      "esophageal dysplasia",
+      "phase ii trial",
+      "cancer prevention",
+      "biomarker reduction"
+    ]
+  },
+  {
+    "index": 31,
+    "doc_id": "MED-2990",
+    "title": "Bisphosphonate-associated osteonecrosis of the jaw: report of a task force of the American Society for Bone and Mineral Research.",
+    "filename": "031_MED-2990.txt",
+    "keywords": [
+      "bisphosphonate-associated osteonecrosis",
+      "jaw",
+      "task force",
+      "american society for bone and mineral research",
+      "case definition"
+    ]
+  },
+  {
+    "index": 32,
+    "doc_id": "MED-1842",
+    "title": "The effect of sour tea (Hibiscus sabdariffa) on essential hypertension.",
+    "filename": "032_MED-1842.txt",
+    "keywords": [
+      "sour tea",
+      "hibiscus sabdariffa",
+      "essential hypertension",
+      "blood pressure",
+      "clinical study"
+    ]
+  },
+  {
+    "index": 33,
+    "doc_id": "MED-3202",
+    "title": "Inhibitory effect of grapefruit juice and its bitter principal, naringenin, on CYP1A2 dependent metabolism of caffeine in man.",
+    "filename": "033_MED-3202.txt",
+    "keywords": [
+      "grapefruit juice",
+      "naringenin",
+      "cyp1a2 inhibition",
+      "caffeine metabolism",
+      "drug interaction"
+    ]
+  },
+  {
+    "index": 34,
+    "doc_id": "MED-3961",
+    "title": "Lack of efficacy of a reduced microparticle diet in a multi-centred trial of patients with active Crohn's disease.",
+    "filename": "034_MED-3961.txt",
+    "keywords": [
+      "crohn's disease",
+      "dietary microparticles",
+      "clinical trial",
+      "remission induction",
+      "corticosteroid treatment"
+    ]
+  },
+  {
+    "index": 35,
+    "doc_id": "MED-2146",
+    "title": "Antidiabetic potential of commonly consumed legumes: a review.",
+    "filename": "035_MED-2146.txt",
+    "keywords": [
+      "antidiabetic potential",
+      "legumes",
+      "diabetes management",
+      "dietary therapy",
+      "glucose-lowering"
+    ]
+  },
+  {
+    "index": 36,
+    "doc_id": "MED-5062",
+    "title": "Food additives and hyperactive behaviour in 3-year-old and 8/9-year-old children in the community: a randomised, double-blinded, placebo-controlled...",
+    "filename": "036_MED-5062.txt",
+    "keywords": [
+      "artificial food colour additives",
+      "hyperactivity",
+      "children",
+      "randomised controlled trial",
+      "sodium benzoate"
+    ]
+  },
+  {
+    "index": 37,
+    "doc_id": "MED-5319",
+    "title": "Nonpungent capsaicin analogs (capsinoids) increase energy expenditure through the activation of brown adipose tissue in humans.",
+    "filename": "037_MED-5319.txt",
+    "keywords": [
+      "capsinoids",
+      "brown adipose tissue",
+      "energy expenditure",
+      "fdg-pet",
+      "thermogenesis"
+    ]
+  },
+  {
+    "index": 38,
+    "doc_id": "MED-718",
+    "title": "The relation of passage of gas an abdominal bloating to colonic gas production.",
+    "filename": "038_MED-718.txt",
+    "keywords": [
+      "abdominal bloating",
+      "gas passage",
+      "colonic gas production",
+      "fermentable fiber",
+      "irritable bowel syndrome"
+    ]
+  },
+  {
+    "index": 39,
+    "doc_id": "MED-4839",
+    "title": "Migrating fish bone presenting as acute onset of neck lump.",
+    "filename": "039_MED-4839.txt",
+    "keywords": [
+      "migrating fish bone",
+      "neck lump",
+      "acute onset",
+      "computed tomography",
+      "foreign body extraction"
+    ]
+  },
+  {
+    "index": 40,
+    "doc_id": "MED-5046",
+    "title": "Common tea formulations modulate in vitro digestive recovery of green tea catechins.",
+    "filename": "040_MED-5046.txt",
+    "keywords": [
+      "green tea catechins",
+      "in vitro digestion",
+      "catechin recovery",
+      "food additives",
+      "beverage formulation"
+    ]
+  },
+  {
+    "index": 41,
+    "doc_id": "MED-1554",
+    "title": "Reduced or modified dietary fat for preventing cardiovascular disease.",
+    "filename": "041_MED-1554.txt",
+    "keywords": [
+      "dietary fat",
+      "cardiovascular disease",
+      "mortality",
+      "systematic review",
+      "randomized trials"
+    ]
+  },
+  {
+    "index": 42,
+    "doc_id": "MED-4546",
+    "title": "Acute and subacute toxicity of tyramine, spermidine, spermine, putrescine and cadaverine in rats.",
+    "filename": "042_MED-4546.txt",
+    "keywords": [
+      "biogenic amines",
+      "acute toxicity",
+      "subacute toxicity",
+      "rats",
+      "spermine toxicity"
+    ]
+  },
+  {
+    "index": 43,
+    "doc_id": "MED-3021",
+    "title": "Hair-to-blood ratio and biological half-life of mercury: experimental study of methylmercury exposure through fish consumption in humans.",
+    "filename": "043_MED-3021.txt",
+    "keywords": [
+      "methylmercury exposure",
+      "hair-to-blood ratio",
+      "biological half-life",
+      "fish consumption",
+      "mercury elimination"
+    ]
+  },
+  {
+    "index": 44,
+    "doc_id": "MED-2452",
+    "title": "A prospective study of diet and adult-onset asthma.",
+    "filename": "044_MED-2452.txt",
+    "keywords": [
+      "diet and asthma",
+      "vitamin e intake",
+      "antioxidant activity",
+      "airway inflammation",
+      "prospective study"
+    ]
+  },
+  {
+    "index": 45,
+    "doc_id": "MED-2145",
+    "title": "Effect of non-oil-seed pulses on glycaemic control: a systematic review and meta-analysis of randomised controlled experimental trials in people wi...",
+    "filename": "045_MED-2145.txt",
+    "keywords": [
+      "non-oil-seed pulses",
+      "glycaemic control",
+      "systematic review",
+      "meta-analysis",
+      "randomised controlled trials"
+    ]
+  },
+  {
+    "index": 46,
+    "doc_id": "MED-1532",
+    "title": "Trends in mortality from cancers of the breast, colon, prostate, esophagus, and stomach in East Asia: role of nutrition transition.",
+    "filename": "046_MED-1532.txt",
+    "keywords": [
+      "cancer mortality",
+      "nutrition transition",
+      "east asia",
+      "breast cancer",
+      "stomach cancer"
+    ]
+  },
+  {
+    "index": 47,
+    "doc_id": "MED-1814",
+    "title": "Dietary patterns and risk of pancreatic cancer in a large population-based case-control study in the San Francisco Bay Area",
+    "filename": "047_MED-1814.txt",
+    "keywords": [
+      "pancreatic cancer",
+      "dietary patterns",
+      "prudent diet",
+      "western diet",
+      "risk factors"
+    ]
+  },
+  {
+    "index": 48,
+    "doc_id": "MED-4858",
+    "title": "Plasma beta-carotene is not a suitable biomarker of fruit and vegetable intake in german subjects with a long-term high consumption of fruits and v...",
+    "filename": "048_MED-4858.txt",
+    "keywords": [
+      "plasma beta-carotene",
+      "fruit and vegetable intake",
+      "biomarker",
+      "dietary intake",
+      "raw food diet"
+    ]
+  },
+  {
+    "index": 49,
+    "doc_id": "MED-2435",
+    "title": "Chemoprevention of breast cancer by dietary compounds.",
+    "filename": "049_MED-2435.txt",
+    "keywords": [
+      "breast cancer",
+      "chemoprevention",
+      "dietary compounds",
+      "phytochemicals",
+      "carcinogenesis"
+    ]
+  },
+  {
+    "index": 50,
+    "doc_id": "MED-1281",
+    "title": "Scanning the human proteome for calmodulin-binding proteins",
+    "filename": "050_MED-1281.txt",
+    "keywords": [
+      "calmodulin-binding proteins",
+      "calcium sensors",
+      "human proteome",
+      "mrna display",
+      "signaling pathways"
+    ]
+  },
+  {
+    "index": 51,
+    "doc_id": "MED-1232",
+    "title": "High dietary fiber intake prevents stroke at a population level.",
+    "filename": "051_MED-1232.txt",
+    "keywords": [
+      "dietary fiber intake",
+      "stroke risk",
+      "population study",
+      "soluble fiber",
+      "insoluble fiber"
+    ]
+  },
+  {
+    "index": 52,
+    "doc_id": "MED-2719",
+    "title": "Why do individuals not lose more weight from an exercise intervention at a defined dose? An energy balance analysis",
+    "filename": "052_MED-2719.txt",
+    "keywords": [
+      "exercise intervention",
+      "weight loss",
+      "energy balance",
+      "caloric intake",
+      "energy expenditure"
+    ]
+  },
+  {
+    "index": 53,
+    "doc_id": "MED-1252",
+    "title": "Determinants of hypocholesterolemic response to soy and animal protein-based diets.",
+    "filename": "053_MED-1252.txt",
+    "keywords": [
+      "soy protein",
+      "animal protein",
+      "plasma cholesterol",
+      "hypocholesterolemic response",
+      "dietary cholesterol"
+    ]
+  },
+  {
+    "index": 54,
+    "doc_id": "MED-2588",
+    "title": "Low-Carbohydrate Diets and All-Cause Mortality: A Systematic Review and Meta-Analysis of Observational Studies",
+    "filename": "054_MED-2588.txt",
+    "keywords": [
+      "low-carbohydrate diets",
+      "all-cause mortality",
+      "cardiovascular disease",
+      "meta-analysis",
+      "observational studies"
+    ]
+  },
+  {
+    "index": 55,
+    "doc_id": "MED-5225",
+    "title": "Vegetarian diet improves insulin resistance and oxidative stress markers more than conventional diet in subjects with Type 2 diabetes",
+    "filename": "055_MED-5225.txt",
+    "keywords": [
+      "vegetarian diet",
+      "type 2 diabetes",
+      "insulin resistance",
+      "oxidative stress",
+      "calorie restriction"
+    ]
+  },
+  {
+    "index": 56,
+    "doc_id": "MED-2476",
+    "title": "Diet, infection and wheezy illness: lessons from adults.",
+    "filename": "056_MED-2476.txt",
+    "keywords": [
+      "asthma",
+      "atopic disease",
+      "childhood infections",
+      "dietary factors",
+      "vitamin intake"
+    ]
+  },
+  {
+    "index": 57,
+    "doc_id": "MED-4049",
+    "title": "Intervention of human breast cell carcinogenesis chronically induced by 2-amino-1-methyl-6-phenylimidazo[4,5-b]pyridine",
+    "filename": "057_MED-4049.txt",
+    "keywords": [
+      "phip-induced carcinogenesis",
+      "breast cancer",
+      "heterocyclic amines",
+      "ras-erk-nox-ros pathway",
+      "green tea catechins"
+    ]
+  },
+  {
+    "index": 58,
+    "doc_id": "MED-2080",
+    "title": "Platelets in atherosclerosis.",
+    "filename": "058_MED-2080.txt",
+    "keywords": [
+      "platelets",
+      "atherosclerosis",
+      "inflammation",
+      "immune functions",
+      "antiplatelet therapies"
+    ]
+  },
+  {
+    "index": 59,
+    "doc_id": "MED-5052",
+    "title": "Can green tea do that? A literature review of the clinical evidence.",
+    "filename": "059_MED-5052.txt",
+    "keywords": [
+      "green tea",
+      "clinical evidence",
+      "chemoprevention",
+      "cardiovascular protection",
+      "literature review"
+    ]
+  },
+  {
+    "index": 60,
+    "doc_id": "MED-974",
+    "title": "Complicated Diverticulitis",
+    "filename": "060_MED-974.txt",
+    "keywords": [
+      "complicated diverticulitis",
+      "mortality rates",
+      "elective resection",
+      "perforation",
+      "immunocompromised patients"
+    ]
+  },
+  {
+    "index": 61,
+    "doc_id": "MED-4705",
+    "title": "Human cancer cell antiproliferative and antioxidant activities of Juglans regia L.",
+    "filename": "061_MED-4705.txt",
+    "keywords": [
+      "walnut extracts",
+      "antioxidant activity",
+      "antiproliferative effects",
+      "phenolic compounds",
+      "cancer cell lines"
+    ]
+  },
+  {
+    "index": 62,
+    "doc_id": "MED-3272",
+    "title": "Colorectal cancer screening with odour material by canine scent detection",
+    "filename": "062_MED-3272.txt",
+    "keywords": [
+      "colorectal cancer screening",
+      "canine scent detection",
+      "early detection",
+      "volatile organic compounds",
+      "non-invasive method"
+    ]
+  },
+  {
+    "index": 63,
+    "doc_id": "MED-3692",
+    "title": "Human gut microbiota and its relationship to health and disease.",
+    "filename": "063_MED-3692.txt",
+    "keywords": [
+      "probiotics",
+      "gut microbiota",
+      "health",
+      "disease",
+      "clinical intervention"
+    ]
+  },
+  {
+    "index": 64,
+    "doc_id": "MED-1394",
+    "title": "Primary prevention of cardiovascular disease with a Mediterranean diet.",
+    "filename": "064_MED-1394.txt",
+    "keywords": [
+      "mediterranean diet",
+      "cardiovascular disease prevention",
+      "randomized trial",
+      "extra-virgin olive oil",
+      "nuts"
+    ]
+  },
+  {
+    "index": 65,
+    "doc_id": "MED-2713",
+    "title": "Effect of sweet orange aroma on experimental anxiety in humans.",
+    "filename": "065_MED-2713.txt",
+    "keywords": [
+      "sweet orange aroma",
+      "anxiolytic effect",
+      "essential oil",
+      "anxiety",
+      "aromatherapy"
+    ]
+  },
+  {
+    "index": 66,
+    "doc_id": "MED-1165",
+    "title": "Concentrations of polybrominated diphenyl ethers, hexachlorobenzene and polycyclic aromatic hydrocarbons in various foodstuffs before and after coo...",
+    "filename": "066_MED-1165.txt",
+    "keywords": [
+      "polybrominated diphenyl ethers",
+      "hexachlorobenzene",
+      "polycyclic aromatic hydrocarbons",
+      "cooking processes",
+      "food contamination"
+    ]
+  },
+  {
+    "index": 67,
+    "doc_id": "MED-3765",
+    "title": "Molecular mechanisms of alcohol-mediated carcinogenesis.",
+    "filename": "067_MED-3765.txt",
+    "keywords": [
+      "alcohol-mediated carcinogenesis",
+      "acetaldehyde",
+      "dna methylation",
+      "genetic susceptibility",
+      "ethanol metabolism"
+    ]
+  },
+  {
+    "index": 68,
+    "doc_id": "MED-2217",
+    "title": "Prevalence of Alzheimer's disease and other dementias in rural India: the Indo-US study.",
+    "filename": "068_MED-2217.txt",
+    "keywords": [
+      "alzheimer's disease",
+      "dementia prevalence",
+      "rural india",
+      "cognitive impairment",
+      "risk factors"
+    ]
+  },
+  {
+    "index": 69,
+    "doc_id": "MED-5148",
+    "title": "Effects of low habitual cocoa intake on blood pressure and bioactive nitric oxide: a randomized controlled trial.",
+    "filename": "069_MED-5148.txt",
+    "keywords": [
+      "cocoa intake",
+      "blood pressure",
+      "dark chocolate",
+      "polyphenols",
+      "nitric oxide"
+    ]
+  },
+  {
+    "index": 70,
+    "doc_id": "MED-4176",
+    "title": "Perfluorooctanesulfonate and related fluorochemicals in human blood samples from China.",
+    "filename": "070_MED-4176.txt",
+    "keywords": [
+      "perfluorinated compounds",
+      "human blood",
+      "china",
+      "pfos",
+      "pfc concentrations"
+    ]
+  },
+  {
+    "index": 71,
+    "doc_id": "MED-4134",
+    "title": "Prevalence of Pathogenic Yersinia enterocolitica Strains in Pigs in the United States",
+    "filename": "071_MED-4134.txt",
+    "keywords": [
+      "yersinia enterocolitica",
+      "pathogenic strains",
+      "swine prevalence",
+      "pcr assay",
+      "food-borne pathogen"
+    ]
+  },
+  {
+    "index": 72,
+    "doc_id": "MED-892",
+    "title": "Habitual dietary sodium intake is inversely associated with coronary flow reserve in middle-aged male twins",
+    "filename": "072_MED-892.txt",
+    "keywords": [
+      "dietary sodium",
+      "coronary flow reserve",
+      "cardiovascular disease",
+      "inverse association",
+      "middle-aged twins"
+    ]
+  },
+  {
+    "index": 73,
+    "doc_id": "MED-5285",
+    "title": "Cocoa, Blood Pressure, and Cardiovascular Health.",
+    "filename": "073_MED-5285.txt",
+    "keywords": [
+      "cocoa",
+      "blood pressure",
+      "cardiovascular health",
+      "flavanols",
+      "polyphenols"
+    ]
+  },
+  {
+    "index": 74,
+    "doc_id": "MED-2599",
+    "title": "Curcumin sensitizes tumor necrosis factor-related apoptosis-inducing ligand (TRAIL)-induced apoptosis through reactive oxygen species-mediated upre...",
+    "filename": "074_MED-2599.txt",
+    "keywords": [
+      "curcumin",
+      "trail-induced apoptosis",
+      "reactive oxygen species",
+      "dr5 upregulation",
+      "renal cancer cells"
+    ]
+  },
+  {
+    "index": 75,
+    "doc_id": "MED-3895",
+    "title": "Metabolic and performance effects of raisins versus sports gel as pre-exercise feedings in cyclists.",
+    "filename": "075_MED-3895.txt",
+    "keywords": [
+      "pre-exercise feeding",
+      "carbohydrate sources",
+      "metabolic effects",
+      "cycling performance",
+      "raisins vs sports gel"
+    ]
+  },
+  {
+    "index": 76,
+    "doc_id": "MED-1708",
+    "title": "Dietary sugars intake and cardiovascular health: a scientific statement from the American Heart Association.",
+    "filename": "076_MED-1708.txt",
+    "keywords": [
+      "dietary sugars",
+      "cardiovascular health",
+      "added sugars",
+      "sugar-sweetened beverages",
+      "american heart association"
+    ]
+  },
+  {
+    "index": 77,
+    "doc_id": "MED-4585",
+    "title": "Evaluation of phenolic compounds in commercial fruit juices and fruit drinks.",
+    "filename": "077_MED-4585.txt",
+    "keywords": [
+      "phenolic compounds",
+      "fruit juices",
+      "antioxidant activity",
+      "proanthocyanidins",
+      "alzheimer's disease"
+    ]
+  },
+  {
+    "index": 78,
+    "doc_id": "MED-1120",
+    "title": "Molecular mimicry in the autoimmune pathogenesis of rheumatic heart disease.",
+    "filename": "078_MED-1120.txt",
+    "keywords": [
+      "molecular mimicry",
+      "rheumatic heart disease",
+      "autoimmune pathogenesis",
+      "streptococcal m protein",
+      "cardiac myosin"
+    ]
+  },
+  {
+    "index": 79,
+    "doc_id": "MED-984",
+    "title": "Plasma concentrations of homocysteine and other aminothiol compounds are related to food intake in healthy human subjects.",
+    "filename": "079_MED-984.txt",
+    "keywords": [
+      "plasma homocysteine",
+      "food intake",
+      "aminothiol compounds",
+      "cardiovascular disease",
+      "hyperhomocysteinemia"
+    ]
+  },
+  {
+    "index": 80,
+    "doc_id": "MED-4369",
+    "title": "Interventions for nausea and vomiting in early pregnancy",
+    "filename": "080_MED-4369.txt",
+    "keywords": [
+      "nausea and vomiting",
+      "early pregnancy",
+      "interventions",
+      "acupressure",
+      "ginger"
+    ]
+  },
+  {
+    "index": 81,
+    "doc_id": "MED-1879",
+    "title": "Daily flaxseed consumption improves glycemic control in obese men and women with pre-diabetes: a randomized study.",
+    "filename": "081_MED-1879.txt",
+    "keywords": [
+      "flaxseed consumption",
+      "glycemic control",
+      "pre-diabetes",
+      "randomized study",
+      "insulin sensitivity"
+    ]
+  },
+  {
+    "index": 82,
+    "doc_id": "MED-4899",
+    "title": "Quantitative measurement of endogenous estrogen metabolites, risk-factors for development of breast cancer, in commercial milk products by LC-MS/MS.",
+    "filename": "082_MED-4899.txt",
+    "keywords": [
+      "estrogen metabolites",
+      "breast cancer risk",
+      "commercial milk",
+      "lc-ms/ms",
+      "catechol estrogens"
+    ]
+  },
+  {
+    "index": 83,
+    "doc_id": "MED-2202",
+    "title": "Sweet potato: a review of its past, present, and future role in human nutrition.",
+    "filename": "083_MED-2202.txt",
+    "keywords": [
+      "sweet potato",
+      "human nutrition",
+      "beta-carotene",
+      "anthocyanins",
+      "value-added products"
+    ]
+  },
+  {
+    "index": 84,
+    "doc_id": "MED-1170",
+    "title": "Parental occupational exposure to pesticides as risk factor for brain tumors in children and young adults: a systematic review and meta-analysis.",
+    "filename": "084_MED-1170.txt",
+    "keywords": [
+      "parental occupational exposure",
+      "pesticides",
+      "brain tumors",
+      "children",
+      "meta-analysis"
+    ]
+  },
+  {
+    "index": 85,
+    "doc_id": "MED-5258",
+    "title": "Association of Coffee Drinking with Total and Cause-Specific Mortality",
+    "filename": "085_MED-5258.txt",
+    "keywords": [
+      "coffee consumption",
+      "mortality",
+      "inverse association",
+      "cause-specific mortality",
+      "prospective study"
+    ]
+  },
+  {
+    "index": 86,
+    "doc_id": "MED-1923",
+    "title": "Loving-Kindness Meditation practice associated with longer telomeres in women.",
+    "filename": "086_MED-1923.txt",
+    "keywords": [
+      "loving-kindness meditation",
+      "telomere length",
+      "aging",
+      "stress",
+      "women"
+    ]
+  },
+  {
+    "index": 87,
+    "doc_id": "MED-5305",
+    "title": "Effect of spiced food on metabolic rate.",
+    "filename": "087_MED-5305.txt",
+    "keywords": [
+      "thermic effect",
+      "metabolic rate",
+      "spices",
+      "diet-induced thermogenesis",
+      "chilli"
+    ]
+  },
+  {
+    "index": 88,
+    "doc_id": "MED-1276",
+    "title": "Spatial clustering of amyotrophic lateral sclerosis in Finland at place of birth and place of death.",
+    "filename": "088_MED-1276.txt",
+    "keywords": [
+      "amyotrophic lateral sclerosis",
+      "spatial clustering",
+      "finland",
+      "birth place",
+      "death place"
+    ]
+  },
+  {
+    "index": 89,
+    "doc_id": "MED-3230",
+    "title": "Estimated net acid excretion inversely correlates with urine pH in vegans, lacto-ovo vegetarians, and omnivores.",
+    "filename": "089_MED-3230.txt",
+    "keywords": [
+      "urine ph",
+      "net acid excretion",
+      "dietary groups",
+      "acid-base balance",
+      "vegans"
+    ]
+  },
+  {
+    "index": 90,
+    "doc_id": "MED-4220",
+    "title": "Effect of diet and exercise on serum insulin, IGF-I, and IGFBP-1 levels and growth of LNCaP cells in vitro (United States).",
+    "filename": "090_MED-4220.txt",
+    "keywords": [
+      "diet and exercise",
+      "serum igf-i",
+      "igfbp-1",
+      "lncap cell growth",
+      "prostate cancer"
+    ]
+  },
+  {
+    "index": 91,
+    "doc_id": "MED-5167",
+    "title": "Endocrine disruptors and hypospadias: role of genistein and the fungicide vinclozolin.",
+    "filename": "091_MED-5167.txt",
+    "keywords": [
+      "endocrine disruptors",
+      "hypospadias",
+      "genistein",
+      "vinclozolin",
+      "gestational exposure"
+    ]
+  },
+  {
+    "index": 92,
+    "doc_id": "MED-2627",
+    "title": "Human exposure to endocrine disrupters: carcinogenic risk assessment.",
+    "filename": "092_MED-2627.txt",
+    "keywords": [
+      "endocrine disrupters",
+      "cancer risk assessment",
+      "low dose extrapolation",
+      "exposure data",
+      "biologically based dose response model"
+    ]
+  },
+  {
+    "index": 93,
+    "doc_id": "MED-1570",
+    "title": "Ciguatera: recent advances but the risk remains.",
+    "filename": "093_MED-1570.txt",
+    "keywords": [
+      "ciguatera",
+      "ciguatoxins",
+      "seafood poisoning",
+      "gambierdiscus toxicus",
+      "coral bleaching"
+    ]
+  },
+  {
+    "index": 94,
+    "doc_id": "MED-2664",
+    "title": "Plant foods and brain aging: a critical appraisal.",
+    "filename": "094_MED-2664.txt",
+    "keywords": [
+      "brain aging",
+      "plant foods",
+      "antioxidants",
+      "oxidative stress",
+      "neuroprotectants"
+    ]
+  },
+  {
+    "index": 95,
+    "doc_id": "MED-2572",
+    "title": "Traditional non-Western diets.",
+    "filename": "095_MED-2572.txt",
+    "keywords": [
+      "traditional diets",
+      "indigenous health",
+      "food as medicine",
+      "disease patterns",
+      "nutrient bioavailability"
+    ]
+  },
+  {
+    "index": 96,
+    "doc_id": "MED-1789",
+    "title": "Nonextractable polyphenols, usually ignored, are the major part of dietary polyphenols: a study on the Spanish diet.",
+    "filename": "096_MED-1789.txt",
+    "keywords": [
+      "nonextractable polyphenols",
+      "dietary polyphenols",
+      "spanish diet",
+      "polyphenol intake",
+      "food analysis"
+    ]
+  },
+  {
+    "index": 97,
+    "doc_id": "MED-4412",
+    "title": "Nutritional risk factors for the development of chronic obstructive pulmonary disease (COPD) in male smokers.",
+    "filename": "097_MED-4412.txt",
+    "keywords": [
+      "nutritional risk factors",
+      "copd",
+      "male smokers",
+      "black tea",
+      "vegetables-fruits"
+    ]
+  },
+  {
+    "index": 98,
+    "doc_id": "MED-2092",
+    "title": "Cytotoxicity of Mouthrinses on Epithelial Cells by Micronucleus Test",
+    "filename": "098_MED-2092.txt",
+    "keywords": [
+      "cytotoxicity",
+      "mouthrinses",
+      "epithelial cells",
+      "micronucleus test",
+      "gingival indices"
+    ]
+  },
+  {
+    "index": 99,
+    "doc_id": "MED-4566",
+    "title": "Taking vitamin D with the largest meal improves absorption and results in higher serum levels of 25-hydroxyvitamin D.",
+    "filename": "099_MED-4566.txt",
+    "keywords": [
+      "vitamin d absorption",
+      "serum 25-hydroxyvitamin d",
+      "largest meal",
+      "supplementation",
+      "deficiency treatment"
+    ]
+  },
+  {
+    "index": 100,
+    "doc_id": "MED-4476",
+    "title": "Determination of total N-nitroso compounds and their precursors in frankfurters, fresh meat, dried salted fish, sauces, tobacco, and tobacco smoke ...",
+    "filename": "100_MED-4476.txt",
+    "keywords": [
+      "n-nitroso compounds",
+      "n-nitroso precursors",
+      "chemiluminescence detection",
+      "food analysis",
+      "tobacco products"
+    ]
+  },
+  {
+    "index": 101,
+    "doc_id": "MED-4299",
+    "title": "Evolution of the human diet: linking our ancestral diet to modern functional foods as a means of chronic disease prevention.",
+    "filename": "101_MED-4299.txt",
+    "keywords": [
+      "human diet evolution",
+      "paleolithic diet",
+      "chronic disease prevention",
+      "functional foods",
+      "bioactive compounds"
+    ]
+  },
+  {
+    "index": 102,
+    "doc_id": "MED-1128",
+    "title": "Rheumatoid arthritis is linked to Proteus--the evidence.",
+    "filename": "102_MED-1128.txt",
+    "keywords": [
+      "rheumatoid arthritis",
+      "proteus mirabilis",
+      "etiopathogenesis",
+      "diagnostic markers",
+      "therapeutic protocol"
+    ]
+  },
+  {
+    "index": 103,
+    "doc_id": "MED-4089",
+    "title": "Antiproliferative effects of apple peel extract against cancer cells.",
+    "filename": "103_MED-4089.txt",
+    "keywords": [
+      "apple peel extract",
+      "antiproliferative effects",
+      "cancer cells",
+      "antioxidants",
+      "tumor suppressor"
+    ]
+  },
+  {
+    "index": 104,
+    "doc_id": "MED-4211",
+    "title": "Dietary soy and fats in relation to serum insulin-like growth factor-1 and insulin-like growth factor-binding protein-3 levels in premenopausal Jap...",
+    "filename": "104_MED-4211.txt",
+    "keywords": [
+      "insulin-like growth factor-1",
+      "insulin-like growth factor-binding protein-3",
+      "premenopausal women",
+      "dietary soy",
+      "fat intake"
+    ]
+  },
+  {
+    "index": 105,
+    "doc_id": "MED-1609",
+    "title": "High-carbohydrate, high-fiber diets increase peripheral insulin sensitivity in healthy young and old adults.",
+    "filename": "105_MED-1609.txt",
+    "keywords": [
+      "high-carbohydrate high-fiber diets",
+      "insulin sensitivity",
+      "glucose disposal",
+      "euglycemic clamp",
+      "peripheral insulin sensitivity"
+    ]
+  },
+  {
+    "index": 106,
+    "doc_id": "MED-3682",
+    "title": "Maternal vaginal microflora during pregnancy and the risk of asthma hospitalization and use of antiasthma medication in early childhood.",
+    "filename": "106_MED-3682.txt",
+    "keywords": [
+      "maternal vaginal microflora",
+      "wheezing",
+      "asthma",
+      "early childhood",
+      "pregnancy"
+    ]
+  },
+  {
+    "index": 107,
+    "doc_id": "MED-4703",
+    "title": "Vinegar supplementation lowers glucose and insulin responses and increases satiety after a bread meal in healthy subjects.",
+    "filename": "107_MED-4703.txt",
+    "keywords": [
+      "vinegar supplementation",
+      "blood glucose response",
+      "insulin response",
+      "satiety",
+      "acetic acid"
+    ]
+  },
+  {
+    "index": 108,
+    "doc_id": "MED-1992",
+    "title": "Prediabetes: A high-risk state for developing diabetes",
+    "filename": "108_MED-1992.txt",
+    "keywords": [
+      "prediabetes",
+      "diabetes risk",
+      "insulin resistance",
+      "lifestyle modification",
+      "prevention"
+    ]
+  },
+  {
+    "index": 109,
+    "doc_id": "MED-1573",
+    "title": "Ciguatera and scombroid fish poisoning in the United States.",
+    "filename": "109_MED-1573.txt",
+    "keywords": [
+      "ciguatera fish poisoning",
+      "scombroid fish poisoning",
+      "foodborne illness",
+      "surveillance systems",
+      "underreporting"
+    ]
+  },
+  {
+    "index": 110,
+    "doc_id": "MED-3288",
+    "title": "Outbreak of progressive inflammatory neuropathy following exposure to aerosolized porcine neural tissue.",
+    "filename": "110_MED-3288.txt",
+    "keywords": [
+      "progressive inflammatory neuropathy",
+      "pork processing plant",
+      "aerosolized porcine neural tissue",
+      "autoimmune reaction",
+      "epidemiological investigation"
+    ]
+  },
+  {
+    "index": 111,
+    "doc_id": "MED-2717",
+    "title": "The role of exercise in the treatment of obesity.",
+    "filename": "111_MED-2717.txt",
+    "keywords": [
+      "exercise",
+      "obesity",
+      "weight loss",
+      "physical activity",
+      "metabolic risk factors"
+    ]
+  },
+  {
+    "index": 112,
+    "doc_id": "MED-2105",
+    "title": "Recent Perspectives on the Relations between Fecal Mutagenicity, Genotoxicity, and Diet",
+    "filename": "112_MED-2105.txt",
+    "keywords": [
+      "fecal mutagenicity",
+      "genotoxicity",
+      "diet",
+      "dna damage",
+      "colon cancer"
+    ]
+  },
+  {
+    "index": 113,
+    "doc_id": "MED-4245",
+    "title": "The effectiveness and efficacy of an intensive cardiac rehabilitation program in 24 sites.",
+    "filename": "113_MED-4245.txt",
+    "keywords": [
+      "intensive cardiac rehabilitation",
+      "health outcomes",
+      "cardiovascular disease",
+      "program efficacy",
+      "patient improvements"
+    ]
+  },
+  {
+    "index": 114,
+    "doc_id": "MED-4497",
+    "title": "The case of the purple colon.",
+    "filename": "114_MED-4497.txt",
+    "keywords": [
+      "purple discoloration",
+      "large bowel",
+      "autopsy",
+      "beetroot ingestion",
+      "post-mortem changes"
+    ]
+  },
+  {
+    "index": 115,
+    "doc_id": "MED-3786",
+    "title": "Choline- and betaine-defined diets for use in clinical research and for the management of trimethylaminuria.",
+    "filename": "115_MED-3786.txt",
+    "keywords": [
+      "choline-controlled diets",
+      "betaine",
+      "clinical research",
+      "trimethylaminuria",
+      "methyl-group requirements"
+    ]
+  },
+  {
+    "index": 116,
+    "doc_id": "MED-1839",
+    "title": "Gastrointestinal absorption of aluminium from single doses of aluminium containing antacids in man.",
+    "filename": "116_MED-1839.txt",
+    "keywords": [
+      "gastrointestinal absorption",
+      "aluminium",
+      "antacids",
+      "citric acid",
+      "serum concentration"
+    ]
+  },
+  {
+    "index": 117,
+    "doc_id": "MED-4482",
+    "title": "Meat consumption, Cooking Practices, Meat Mutagens and Risk of Prostate Cancer",
+    "filename": "117_MED-4482.txt",
+    "keywords": [
+      "meat consumption",
+      "prostate cancer",
+      "heterocyclic amines",
+      "cooking methods",
+      "carcinogens"
+    ]
+  },
+  {
+    "index": 118,
+    "doc_id": "MED-2370",
+    "title": "Thematic review series: the pathogenesis of atherosclerosis: an interpretive history of the cholesterol controversy, part III: mechanistically defi...",
+    "filename": "118_MED-2370.txt",
+    "keywords": [
+      "atherosclerosis",
+      "cholesterol controversy",
+      "hypercholesterolemia",
+      "lipoprotein metabolism",
+      "atherogenesis"
+    ]
+  },
+  {
+    "index": 119,
+    "doc_id": "MED-5206",
+    "title": "UDP-glucuronosyltransferases: a family of detoxifying enzymes.",
+    "filename": "119_MED-5206.txt",
+    "keywords": [
+      "glucuronidation",
+      "udp-glucuronosyltransferases",
+      "detoxifying enzymes",
+      "xenobiotic metabolism",
+      "molecular biology"
+    ]
+  },
+  {
+    "index": 120,
+    "doc_id": "MED-4878",
+    "title": "Dietary patterns, food groups, and telomere length in the Multi-Ethnic Study of Atherosclerosis (MESA)",
+    "filename": "120_MED-4878.txt",
+    "keywords": [
+      "telomere length",
+      "dietary patterns",
+      "processed meat",
+      "inflammation",
+      "multi-ethnic study of atherosclerosis"
+    ]
+  },
+  {
+    "index": 121,
+    "doc_id": "MED-4913",
+    "title": "Probabilistic modelling of exposure doses and implications for health risk characterization: glycoalkaloids from potatoes.",
+    "filename": "121_MED-4913.txt",
+    "keywords": [
+      "glycoalkaloids",
+      "probabilistic modelling",
+      "exposure doses",
+      "health risk characterization",
+      "potatoes"
+    ]
+  },
+  {
+    "index": 122,
+    "doc_id": "MED-1031",
+    "title": "Primary constipation: an underlying mechanism.",
+    "filename": "122_MED-1031.txt",
+    "keywords": [
+      "primary constipation",
+      "bowel elimination",
+      "recto-anal angle",
+      "squatting posture",
+      "defecation reflex"
+    ]
+  },
+  {
+    "index": 123,
+    "doc_id": "MED-1885",
+    "title": "Rethinking dietary cholesterol.",
+    "filename": "123_MED-1885.txt",
+    "keywords": [
+      "dietary cholesterol",
+      "coronary heart disease",
+      "dietary guidelines",
+      "ldl/hdl ratio",
+      "cholesterol restrictions"
+    ]
+  },
+  {
+    "index": 124,
+    "doc_id": "MED-5116",
+    "title": "Dietary flavonoid intake and breast cancer survival among women on Long Island.",
+    "filename": "124_MED-5116.txt",
+    "keywords": [
+      "dietary flavonoid intake",
+      "breast cancer survival",
+      "mortality",
+      "flavones",
+      "isoflavones"
+    ]
+  },
+  {
+    "index": 125,
+    "doc_id": "MED-904",
+    "title": "A systematic review and meta-analysis of the effects of pasteurization on milk vitamins, and evidence for raw milk consumption and other health-rel...",
+    "filename": "125_MED-904.txt",
+    "keywords": [
+      "pasteurization",
+      "milk vitamins",
+      "raw milk consumption",
+      "health effects",
+      "systematic review"
+    ]
+  },
+  {
+    "index": 126,
+    "doc_id": "MED-5043",
+    "title": "Hibiscus sabdariffa L. extracts inhibit the mutagenicity in microsuspension assay and the proliferation of HeLa cells.",
+    "filename": "126_MED-5043.txt",
+    "keywords": [
+      "hibiscus sabdariffa",
+      "mutagenicity",
+      "hela cells",
+      "phenolic compounds",
+      "antiproliferative effect"
+    ]
+  },
+  {
+    "index": 127,
+    "doc_id": "MED-2330",
+    "title": "Hormesis Defined",
+    "filename": "127_MED-2330.txt",
+    "keywords": [
+      "hormesis",
+      "dose response",
+      "cellular signaling pathways",
+      "adaptive response",
+      "disease prevention"
+    ]
+  },
+  {
+    "index": 128,
+    "doc_id": "MED-2843",
+    "title": "Major congenital malformations in women with gestational diabetes mellitus: a systematic review and meta-analysis.",
+    "filename": "128_MED-2843.txt",
+    "keywords": [
+      "gestational diabetes mellitus",
+      "major congenital malformations",
+      "systematic review",
+      "meta-analysis",
+      "pregestational diabetes mellitus"
+    ]
+  },
+  {
+    "index": 129,
+    "doc_id": "MED-2095",
+    "title": "Monitoring of buccal epithelial cells by alkaline comet assay (single cell gel electrophoresis technique) in cytogenetic evaluation of chlorhexidine.",
+    "filename": "129_MED-2095.txt",
+    "keywords": [
+      "buccal epithelial cells",
+      "comet assay",
+      "chlorhexidine",
+      "dna damage",
+      "cytogenetic evaluation"
+    ]
+  },
+  {
+    "index": 130,
+    "doc_id": "MED-1105",
+    "title": "A CASE OF MULTIPLE MYELOMA PRESENTING AS A BULLOUS DERMATOSIS",
+    "filename": "130_MED-1105.txt",
+    "keywords": [
+      "multiple myeloma",
+      "bullous dermatosis",
+      "plasma cell disorder",
+      "subepidermal bullae",
+      "chemotherapy treatment"
+    ]
+  },
+  {
+    "index": 131,
+    "doc_id": "MED-1795",
+    "title": "Fruit consumption and risk of type 2 diabetes: results from three prospective longitudinal cohort studies",
+    "filename": "131_MED-1795.txt",
+    "keywords": [
+      "fruit consumption",
+      "type 2 diabetes",
+      "prospective cohort study",
+      "hazard ratio",
+      "whole fruit"
+    ]
+  },
+  {
+    "index": 132,
+    "doc_id": "MED-3844",
+    "title": "Does antibacterial treatment for urinary tract infection contribute to the risk of breast cancer?",
+    "filename": "132_MED-3844.txt",
+    "keywords": [
+      "antibacterial treatment",
+      "urinary tract infection",
+      "breast cancer risk",
+      "lignan status",
+      "premenopausal women"
+    ]
+  },
+  {
+    "index": 133,
+    "doc_id": "MED-5349",
+    "title": "Rye Bread Consumption in Early Life and Reduced Risk of Advanced Prostate Cancer",
+    "filename": "133_MED-5349.txt",
+    "keywords": [
+      "rye bread consumption",
+      "prostate cancer risk",
+      "adolescence",
+      "whole grains",
+      "dietary habits"
+    ]
+  },
+  {
+    "index": 134,
+    "doc_id": "MED-4651",
+    "title": "Breast cancer incidence rates in U.S. women are no longer declining.",
+    "filename": "134_MED-4651.txt",
+    "keywords": [
+      "breast cancer incidence rates",
+      "non-hispanic white women",
+      "surveillance epidemiology and end results",
+      "postmenopausal hormone use",
+      "estrogen receptor status"
+    ]
+  },
+  {
+    "index": 135,
+    "doc_id": "MED-2325",
+    "title": "Longevity. The allostatic load of dietary restriction.",
+    "filename": "135_MED-2325.txt",
+    "keywords": [
+      "dietary restriction",
+      "longevity",
+      "lifespan extension",
+      "hormesis",
+      "allostatic load"
+    ]
+  },
+  {
+    "index": 136,
+    "doc_id": "MED-1801",
+    "title": "Modern organic and broiler chickens sold for human consumption provide more energy from fat than protein.",
+    "filename": "136_MED-1801.txt",
+    "keywords": [
+      "chicken fat content",
+      "fatty acids",
+      "n-3 n-6 ratio",
+      "human nutrition",
+      "poultry husbandry"
+    ]
+  },
+  {
+    "index": 137,
+    "doc_id": "MED-4335",
+    "title": "Chocolate at heart: the anti-inflammatory impact of cocoa flavanols.",
+    "filename": "137_MED-4335.txt",
+    "keywords": [
+      "cocoa flavanols",
+      "inflammation",
+      "cardiovascular health",
+      "anti-inflammatory effects",
+      "dietary studies"
+    ]
+  },
+  {
+    "index": 138,
+    "doc_id": "MED-3516",
+    "title": "Secretion, pain and sneezing induced by the application of capsaicin to the nasal mucosa in man.",
+    "filename": "138_MED-3516.txt",
+    "keywords": [
+      "capsaicin",
+      "nasal mucosa",
+      "rhinorrhea",
+      "sneezing",
+      "desensitization"
+    ]
+  },
+  {
+    "index": 139,
+    "doc_id": "MED-2807",
+    "title": "Efficacy and safety of Meriva®, a curcumin-phosphatidylcholine complex, during extended administration in osteoarthritis patients.",
+    "filename": "139_MED-2807.txt",
+    "keywords": [
+      "meriva",
+      "osteoarthritis",
+      "curcumin-phosphatidylcholine complex",
+      "long-term efficacy",
+      "inflammatory markers"
+    ]
+  },
+  {
+    "index": 140,
+    "doc_id": "MED-938",
+    "title": "Study of cytotoxic and apoptogenic properties of saffron extract in human cancer cell lines.",
+    "filename": "140_MED-938.txt",
+    "keywords": [
+      "saffron extract",
+      "cytotoxic effect",
+      "apoptosis",
+      "cancer cell lines",
+      "chemotherapeutic agent"
+    ]
+  },
+  {
+    "index": 141,
+    "doc_id": "MED-4262",
+    "title": "Satiety: have we neglected dietary non-nutrients?",
+    "filename": "141_MED-4262.txt",
+    "keywords": [
+      "satiety",
+      "dietary non-nutrients",
+      "water and gas",
+      "weight management",
+      "gastric distension"
+    ]
+  },
+  {
+    "index": 142,
+    "doc_id": "MED-3270",
+    "title": "Protein methionine content and MDA-lysine adducts are inversely related to maximum life span in the heart of mammals.",
+    "filename": "142_MED-3270.txt",
+    "keywords": [
+      "aging",
+      "protein oxidation",
+      "maximum life span",
+      "malondialdehydelysine",
+      "methionine content"
+    ]
+  },
+  {
+    "index": 143,
+    "doc_id": "MED-1478",
+    "title": "Paleolithic nutrition: twenty-five years later.",
+    "filename": "143_MED-1478.txt",
+    "keywords": [
+      "paleolithic nutrition",
+      "evolutionary discordance hypothesis",
+      "hunter-gatherer diets",
+      "chronic diseases",
+      "randomized controlled trials"
+    ]
+  },
+  {
+    "index": 144,
+    "doc_id": "MED-2082",
+    "title": "Global and regional mortality from 235 causes of death for 20 age groups in 1990 and 2010: a systematic analysis for the Global Burden of Disease S...",
+    "filename": "144_MED-2082.txt",
+    "keywords": [
+      "global burden of disease",
+      "mortality causes",
+      "systematic analysis",
+      "cause of death ensemble model",
+      "health policy"
+    ]
+  },
+  {
+    "index": 145,
+    "doc_id": "MED-2001",
+    "title": "Awareness of prediabetes--United States, 2005-2010.",
+    "filename": "145_MED-2001.txt",
+    "keywords": [
+      "prediabetes",
+      "type 2 diabetes",
+      "awareness",
+      "lifestyle changes",
+      "risk factors"
+    ]
+  },
+  {
+    "index": 146,
+    "doc_id": "MED-4777",
+    "title": "Green tea: nature's defense against malignancies.",
+    "filename": "146_MED-4777.txt",
+    "keywords": [
+      "green tea",
+      "chemoprevention",
+      "polyphenols",
+      "egcg",
+      "anticancer properties"
+    ]
+  },
+  {
+    "index": 147,
+    "doc_id": "MED-3807",
+    "title": "Artemisia dracunculus L. (tarragon): a critical review of its traditional use, chemical composition, pharmacology, and safety.",
+    "filename": "147_MED-3807.txt",
+    "keywords": [
+      "artemisia dracunculus",
+      "tarragon",
+      "chemical composition",
+      "pharmacology",
+      "safety"
+    ]
+  },
+  {
+    "index": 148,
+    "doc_id": "MED-3703",
+    "title": "The association between allergies and cancer: what is currently known?",
+    "filename": "148_MED-3703.txt",
+    "keywords": [
+      "allergies",
+      "cancer risk",
+      "site specific",
+      "decreased risk",
+      "increased risk"
+    ]
+  },
+  {
+    "index": 149,
+    "doc_id": "MED-2073",
+    "title": "Antiproliferative effects of fresh and thermal processed green and red cultivars of curly kale (Brassica oleracea L. convar. acephala var. sabellica).",
+    "filename": "149_MED-2073.txt",
+    "keywords": [
+      "curly kale",
+      "phytochemicals",
+      "thermal processing",
+      "antiproliferative effects",
+      "colon cancer"
+    ]
+  },
+  {
+    "index": 150,
+    "doc_id": "MED-4787",
+    "title": "Intensity and timing of physical activity in relation to postmenopausal breast cancer risk: the prospective NIH-AARP Diet and Health Study",
+    "filename": "150_MED-4787.txt",
+    "keywords": [
+      "physical activity",
+      "postmenopausal breast cancer",
+      "moderate-to-vigorous intensity",
+      "recent activity",
+      "risk reduction"
+    ]
+  },
+  {
+    "index": 151,
+    "doc_id": "MED-3940",
+    "title": "Lewy pathology is not the first sign of degeneration in vulnerable neurons in Parkinson disease",
+    "filename": "151_MED-3940.txt",
+    "keywords": [
+      "parkinson disease",
+      "lewy pathology",
+      "neurodegeneration",
+      "substantia nigra",
+      "incidental lewy body disease"
+    ]
+  },
+  {
+    "index": 152,
+    "doc_id": "MED-3055",
+    "title": "Food and drug reward: overlapping circuits in human obesity and addiction.",
+    "filename": "152_MED-3055.txt",
+    "keywords": [
+      "food and drug reward",
+      "dopamine pathways",
+      "brain imaging",
+      "addiction and obesity",
+      "treatment strategies"
+    ]
+  },
+  {
+    "index": 153,
+    "doc_id": "MED-3936",
+    "title": "Elevated Serum Pesticide Levels and Risk of Parkinson Disease",
+    "filename": "153_MED-3936.txt",
+    "keywords": [
+      "parkinson disease",
+      "organochlorine pesticides",
+      "serum levels",
+      "β-hexachlorocyclohexane",
+      "case-control study"
+    ]
+  },
+  {
+    "index": 154,
+    "doc_id": "MED-2822",
+    "title": "A randomized, pilot study to assess the efficacy and safety of curcumin in patients with active rheumatoid arthritis.",
+    "filename": "154_MED-2822.txt",
+    "keywords": [
+      "curcumin",
+      "rheumatoid arthritis",
+      "antiinflammatory properties",
+      "disease activity score",
+      "clinical trial"
+    ]
+  },
+  {
+    "index": 155,
+    "doc_id": "MED-2601",
+    "title": "Curcumin induces apoptosis in human non-small cell lung cancer NCI-H460 cells through ER stress and caspase cascade- and mitochondria-dependent pat...",
+    "filename": "155_MED-2601.txt",
+    "keywords": [
+      "curcumin",
+      "apoptosis",
+      "non-small cell lung cancer",
+      "endoplasmic reticulum stress",
+      "caspase cascade"
+    ]
+  },
+  {
+    "index": 156,
+    "doc_id": "MED-1838",
+    "title": "Aluminium and other elements in selected herbal tea plant species and their infusions.",
+    "filename": "156_MED-1838.txt",
+    "keywords": [
+      "herbal tea",
+      "elemental analysis",
+      "aluminium",
+      "heavy metals",
+      "dietary intake"
+    ]
+  },
+  {
+    "index": 157,
+    "doc_id": "MED-1456",
+    "title": "Veganism and its relationship with insulin resistance and intramyocellular lipid.",
+    "filename": "157_MED-1456.txt",
+    "keywords": [
+      "veganism",
+      "insulin sensitivity",
+      "intramyocellular lipid",
+      "dietary factors",
+      "cardioprotective"
+    ]
+  },
+  {
+    "index": 158,
+    "doc_id": "MED-3560",
+    "title": "HPV-mediated cervical carcinogenesis: concepts and clinical implications.",
+    "filename": "158_MED-3560.txt",
+    "keywords": [
+      "cervical cancer",
+      "hpv infection",
+      "carcinogenesis",
+      "cin lesions",
+      "clinical management"
+    ]
+  },
+  {
+    "index": 159,
+    "doc_id": "MED-3492",
+    "title": "Effects of a natural extract of (-)-hydroxycitric acid (HCA-SX) and a combination of HCA-SX plus niacin-bound chromium and Gymnema sylvestre extrac...",
+    "filename": "159_MED-3492.txt",
+    "keywords": [
+      "hydroxycitric acid",
+      "weight loss",
+      "niacin-bound chromium",
+      "gymnema sylvestre",
+      "lipid profiles"
+    ]
+  },
+  {
+    "index": 160,
+    "doc_id": "MED-1223",
+    "title": "Cow milk consumption, insulin-like growth factor-I, and human biology: a life history approach.",
+    "filename": "160_MED-1223.txt",
+    "keywords": [
+      "cow milk consumption",
+      "insulin-like growth factor-i",
+      "linear growth",
+      "early menarche",
+      "life history"
+    ]
+  },
+  {
+    "index": 161,
+    "doc_id": "MED-4825",
+    "title": "Pancreatic cancer: a review of the evidence on causation.",
+    "filename": "161_MED-4825.txt",
+    "keywords": [
+      "pancreatic cancer",
+      "risk factors",
+      "epidemiology",
+      "cigarette smoking",
+      "diabetes mellitus"
+    ]
+  },
+  {
+    "index": 162,
+    "doc_id": "MED-990",
+    "title": "Associations between elevated homocysteine, cognitive impairment, and reduced white matter volume in healthy old adults.",
+    "filename": "162_MED-990.txt",
+    "keywords": [
+      "elevated homocysteine",
+      "cognitive impairment",
+      "white matter volume",
+      "healthy elderly",
+      "brain volume"
+    ]
+  },
+  {
+    "index": 163,
+    "doc_id": "MED-5283",
+    "title": "Chocolate/cocoa and human health: a review.",
+    "filename": "163_MED-5283.txt",
+    "keywords": [
+      "chocolate/cocoa",
+      "health effects",
+      "phenolic compounds",
+      "antioxidant potential",
+      "research review"
+    ]
+  },
+  {
+    "index": 164,
+    "doc_id": "MED-1316",
+    "title": "Colloidal oatmeal: history, chemistry and clinical properties.",
+    "filename": "164_MED-1316.txt",
+    "keywords": [
+      "colloidal oatmeal",
+      "clinical properties",
+      "skin protectant",
+      "chemical polymorphism",
+      "anti-inflammatory"
+    ]
+  },
+  {
+    "index": 165,
+    "doc_id": "MED-1522",
+    "title": "Spearmint herbal tea has significant anti-androgen effects in polycystic ovarian syndrome. A randomized controlled trial.",
+    "filename": "165_MED-1522.txt",
+    "keywords": [
+      "spearmint tea",
+      "polycystic ovarian syndrome",
+      "anti-androgen effects",
+      "hirsutism",
+      "randomized controlled trial"
+    ]
+  },
+  {
+    "index": 166,
+    "doc_id": "MED-4172",
+    "title": "Increasing pre-school children's consumption of fruit and vegetables. A modelling and rewards intervention.",
+    "filename": "166_MED-4172.txt",
+    "keywords": [
+      "preschool children",
+      "fruit and vegetables",
+      "modelling and rewards intervention",
+      "consumption increase",
+      "generalisation"
+    ]
+  },
+  {
+    "index": 167,
+    "doc_id": "MED-1556",
+    "title": "Meta-analysis of prospective cohort studies evaluating the association of saturated fat with cardiovascular disease",
+    "filename": "167_MED-1556.txt",
+    "keywords": [
+      "saturated fat",
+      "cardiovascular disease",
+      "meta-analysis",
+      "prospective cohort studies",
+      "coronary heart disease"
+    ]
+  },
+  {
+    "index": 168,
+    "doc_id": "MED-4989",
+    "title": "Effect of a high nutrient density diet on long-term weight loss: a retrospective chart review.",
+    "filename": "168_MED-4989.txt",
+    "keywords": [
+      "high nutrient density diet",
+      "weight loss",
+      "retrospective chart review",
+      "lipid profile",
+      "patient adherence"
+    ]
+  },
+  {
+    "index": 169,
+    "doc_id": "MED-4462",
+    "title": "Sulforaphane protects human chondrocytes against cell death induced by various stimuli.",
+    "filename": "169_MED-4462.txt",
+    "keywords": [
+      "sulforaphane",
+      "chondrocyte protection",
+      "apoptosis inhibition",
+      "caspase activation",
+      "osteoarthritis"
+    ]
+  },
+  {
+    "index": 170,
+    "doc_id": "MED-3019",
+    "title": "Evidence on the Human Health Effects of Low-Level Methylmercury Exposure",
+    "filename": "170_MED-3019.txt",
+    "keywords": [
+      "methylmercury exposure",
+      "human health effects",
+      "neurotoxicant",
+      "low-level exposure",
+      "individual susceptibility"
+    ]
+  },
+  {
+    "index": 171,
+    "doc_id": "MED-3990",
+    "title": "Vitamin D supplementation for prevention of mortality in adults.",
+    "filename": "171_MED-3990.txt",
+    "keywords": [
+      "vitamin d supplementation",
+      "mortality prevention",
+      "adults",
+      "randomized trials",
+      "meta-analysis"
+    ]
+  },
+  {
+    "index": 172,
+    "doc_id": "MED-1069",
+    "title": "Differential effects of monounsaturated, polyunsaturated and saturated fat ingestion on glucose-stimulated insulin secretion, sensitivity and clear...",
+    "filename": "172_MED-1069.txt",
+    "keywords": [
+      "monounsaturated fat",
+      "polyunsaturated fat",
+      "saturated fat",
+      "insulin secretion",
+      "insulin sensitivity"
+    ]
+  },
+  {
+    "index": 173,
+    "doc_id": "MED-2750",
+    "title": "Lack of benefit of dietary advice to men with angina: results of a controlled trial.",
+    "filename": "173_MED-2750.txt",
+    "keywords": [
+      "dietary advice",
+      "angina",
+      "mortality",
+      "oily fish",
+      "cardiac death"
+    ]
+  },
+  {
+    "index": 174,
+    "doc_id": "MED-2726",
+    "title": "Profits and pandemics: prevention of harmful effects of tobacco, alcohol, and ultra-processed food and drink industries.",
+    "filename": "174_MED-2726.txt",
+    "keywords": [
+      "non-communicable diseases",
+      "unhealthy commodities",
+      "transnational corporations",
+      "industry self-regulation",
+      "public regulation"
+    ]
+  },
+  {
+    "index": 175,
+    "doc_id": "MED-3988",
+    "title": "Vitamin D2 Is as Effective as Vitamin D3 in Maintaining Circulating Concentrations of 25-Hydroxyvitamin D",
+    "filename": "175_MED-3988.txt",
+    "keywords": [
+      "vitamin d2",
+      "vitamin d3",
+      "25-hydroxyvitamin d",
+      "randomized controlled trial",
+      "vitamin d deficiency"
+    ]
+  },
+  {
+    "index": 176,
+    "doc_id": "MED-3351",
+    "title": "The color red reduces snack food and soft drink intake.",
+    "filename": "176_MED-3351.txt",
+    "keywords": [
+      "color red",
+      "avoidance motivation",
+      "snack consumption",
+      "soft drink intake",
+      "stop signal"
+    ]
+  },
+  {
+    "index": 177,
+    "doc_id": "MED-3662",
+    "title": "Biological activities of lavender essential oil.",
+    "filename": "177_MED-3662.txt",
+    "keywords": [
+      "lavender essential oil",
+      "biological activities",
+      "antimicrobial agent",
+      "psychological effects",
+      "therapeutic significance"
+    ]
+  },
+  {
+    "index": 178,
+    "doc_id": "MED-2024",
+    "title": "Cutting-edge issues in celiac disease and in gluten intolerance.",
+    "filename": "178_MED-2024.txt",
+    "keywords": [
+      "celiac disease",
+      "gluten intolerance",
+      "laboratory diagnosis",
+      "diagnostic tests",
+      "non-celiac gluten sensitivity"
+    ]
+  },
+  {
+    "index": 179,
+    "doc_id": "MED-3770",
+    "title": "The cost of US foods as related to their nutritive value",
+    "filename": "179_MED-3770.txt",
+    "keywords": [
+      "food cost",
+      "nutritive value",
+      "energy density",
+      "food groups",
+      "price differentials"
+    ]
+  },
+  {
+    "index": 180,
+    "doc_id": "MED-5281",
+    "title": "The Vascular Endothelium and Human Diseases",
+    "filename": "180_MED-5281.txt",
+    "keywords": [
+      "vascular endothelium",
+      "endothelial dysfunction",
+      "human diseases",
+      "pathogenesis",
+      "vascular abnormalities"
+    ]
+  },
+  {
+    "index": 181,
+    "doc_id": "MED-746",
+    "title": "Evaluation of Crocus sativus L. (saffron) on male erectile dysfunction: a pilot study.",
+    "filename": "181_MED-746.txt",
+    "keywords": [
+      "crocus sativus",
+      "erectile dysfunction",
+      "saffron treatment",
+      "nocturnal penile tumescence",
+      "international index of erectile function"
+    ]
+  },
+  {
+    "index": 182,
+    "doc_id": "MED-4461",
+    "title": "Sulforaphane potentiates oxaliplatin-induced cell growth inhibition in colorectal cancer cells via induction of different modes of cell death.",
+    "filename": "182_MED-4461.txt",
+    "keywords": [
+      "sulforaphane",
+      "oxaliplatin",
+      "colorectal cancer",
+      "cell growth inhibition",
+      "apoptotic pathways"
+    ]
+  },
+  {
+    "index": 183,
+    "doc_id": "MED-4665",
+    "title": "Some subgroups of reproductive age women in the United States may be at risk for iodine deficiency.",
+    "filename": "183_MED-4665.txt",
+    "keywords": [
+      "iodine deficiency",
+      "reproductive age women",
+      "pregnancy",
+      "dairy products",
+      "urinary iodine concentrations"
+    ]
+  },
+  {
+    "index": 184,
+    "doc_id": "MED-1338",
+    "title": "Milk intake and risk of mortality and fractures in women and men: cohort studies",
+    "filename": "184_MED-1338.txt",
+    "keywords": [
+      "milk consumption",
+      "mortality",
+      "fractures",
+      "cohort studies",
+      "hazard ratio"
+    ]
+  },
+  {
+    "index": 185,
+    "doc_id": "MED-4468",
+    "title": "Effect of ascorbic acid and green tea on endogenous formation of N-nitrosodimethylamine and N-nitrosopiperidine in humans.",
+    "filename": "185_MED-4468.txt",
+    "keywords": [
+      "ascorbic acid",
+      "green tea",
+      "n-nitrosodimethylamine",
+      "endogenous formation",
+      "urinary excretion"
+    ]
+  },
+  {
+    "index": 186,
+    "doc_id": "MED-939",
+    "title": "Satiereal, a Crocus sativus L extract, reduces snacking and increases satiety in a randomized placebo-controlled study of mildly overweight, health...",
+    "filename": "186_MED-939.txt",
+    "keywords": [
+      "satiereal",
+      "snacking",
+      "satiety",
+      "weight loss",
+      "saffron extract"
+    ]
+  },
+  {
+    "index": 187,
+    "doc_id": "MED-3695",
+    "title": "Probiotics for the prevention of pediatric antibiotic-associated diarrhea.",
+    "filename": "187_MED-3695.txt",
+    "keywords": [
+      "probiotics",
+      "antibiotic-associated diarrhea",
+      "pediatric",
+      "prevention",
+      "gut microflora"
+    ]
+  },
+  {
+    "index": 188,
+    "doc_id": "MED-4805",
+    "title": "Risk factors associated with colibacillosis outbreaks in caged layer flocks.",
+    "filename": "188_MED-4805.txt",
+    "keywords": [
+      "colibacillosis",
+      "risk factors",
+      "layer flocks",
+      "cage volume",
+      "poultry farm distance"
+    ]
+  },
+  {
+    "index": 189,
+    "doc_id": "MED-2091",
+    "title": "Comparison of the effectiveness of 0.5% tea, 2% neem and 0.2% chlorhexidine mouthwashes on oral health: a randomized control trial.",
+    "filename": "189_MED-2091.txt",
+    "keywords": [
+      "tea mouthwash",
+      "neem mouthwash",
+      "chlorhexidine mouthwash",
+      "oral health",
+      "randomized control trial"
+    ]
+  },
+  {
+    "index": 190,
+    "doc_id": "MED-4879",
+    "title": "Estimating age of humans based on telomere shortening.",
+    "filename": "190_MED-4879.txt",
+    "keywords": [
+      "telomere shortening",
+      "age estimation",
+      "terminal restriction fragment",
+      "southern blot analysis",
+      "forensic samples"
+    ]
+  },
+  {
+    "index": 191,
+    "doc_id": "MED-4250",
+    "title": "Short-term effects of a snack including dried prunes on energy intake and satiety in normal-weight individuals.",
+    "filename": "191_MED-4250.txt",
+    "keywords": [
+      "dried prunes",
+      "satiety",
+      "energy intake",
+      "snack",
+      "visual analogue scales"
+    ]
+  },
+  {
+    "index": 192,
+    "doc_id": "MED-2219",
+    "title": "No harmful effect of different Coca-cola beverages after 6 months of intake on rat testes.",
+    "filename": "192_MED-2219.txt",
+    "keywords": [
+      "cola beverages",
+      "oxidative stress",
+      "testosterone",
+      "rat testes",
+      "star expression"
+    ]
+  },
+  {
+    "index": 193,
+    "doc_id": "MED-3108",
+    "title": "Epithelial barrier biology: good fences make good neighbours",
+    "filename": "193_MED-3108.txt",
+    "keywords": [
+      "epithelial barriers",
+      "mucosal immune cells",
+      "microbiota",
+      "immune responses",
+      "diet"
+    ]
+  },
+  {
+    "index": 194,
+    "doc_id": "MED-1546",
+    "title": "Low Prevalence of “Ideal Cardiovascular Health” in a Community-Based Population: The Heart Strategies Concentrating on Risk Evaluation (Heart SCORE) Study",
+    "filename": "194_MED-1546.txt",
+    "keywords": [
+      "ideal cardiovascular health",
+      "heart score study",
+      "community-based population",
+      "american heart association",
+      "health disparities"
+    ]
+  },
+  {
+    "index": 195,
+    "doc_id": "MED-3231",
+    "title": "The Alkaline Diet: Is There Evidence That an Alkaline pH Diet Benefits Health?",
+    "filename": "195_MED-3231.txt",
+    "keywords": [
+      "alkaline diet",
+      "health",
+      "ph",
+      "chronic diseases",
+      "medical literature"
+    ]
+  },
+  {
+    "index": 196,
+    "doc_id": "MED-691",
+    "title": "Ginger in the prevention of nausea and vomiting: a review.",
+    "filename": "196_MED-691.txt",
+    "keywords": [
+      "ginger",
+      "nausea and vomiting",
+      "antiemetic",
+      "chemotherapy-induced nausea",
+      "motion sickness"
+    ]
+  },
+  {
+    "index": 197,
+    "doc_id": "MED-4671",
+    "title": "Saffron in the treatment of patients with mild to moderate Alzheimer's disease: a 16-week, randomized and placebo-controlled trial.",
+    "filename": "197_MED-4671.txt",
+    "keywords": [
+      "saffron",
+      "alzheimer's disease",
+      "randomized controlled trial",
+      "cognitive function",
+      "placebo-controlled"
+    ]
+  },
+  {
+    "index": 198,
+    "doc_id": "MED-5347",
+    "title": "Effects of health care provider work hours and sleep deprivation on safety and performance.",
+    "filename": "198_MED-5347.txt",
+    "keywords": [
+      "health care provider work hours",
+      "sleep deprivation",
+      "patient safety",
+      "medical errors",
+      "fatigue-related errors"
+    ]
+  },
+  {
+    "index": 199,
+    "doc_id": "MED-4659",
+    "title": "Facial Skin Coloration Affects Perceived Health of Human Faces",
+    "filename": "199_MED-4659.txt",
+    "keywords": [
+      "facial skin coloration",
+      "perceived health",
+      "skin redness",
+      "skin yellowness",
+      "color preferences"
+    ]
+  },
+  {
+    "index": 200,
+    "doc_id": "MED-2075",
+    "title": "Multi-targeted prevention of cancer by sulforaphane",
+    "filename": "200_MED-2075.txt",
+    "keywords": [
+      "sulforaphane",
+      "cancer prevention",
+      "chemoprotective mechanisms",
+      "bioavailability",
+      "clinical trials"
+    ]
+  }
+]

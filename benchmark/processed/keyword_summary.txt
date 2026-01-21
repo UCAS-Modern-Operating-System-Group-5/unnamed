@@ -1,0 +1,264 @@
+关键词索引摘要
+============================================================
+
+总共 200 个文档
+总共 853 个唯一关键词
+
+------------------------------------------------------------
+按文件数量排序的关键词:
+------------------------------------------------------------
+
+risk factors: (6 files)
+  - 013_MED-3731.txt
+  - 047_MED-1814.txt
+  - 068_MED-2217.txt
+  - 145_MED-2001.txt
+  - 161_MED-4825.txt
+  ... and 1 more
+
+cardiovascular disease: (6 files)
+  - 041_MED-1554.txt
+  - 054_MED-2588.txt
+  - 072_MED-892.txt
+  - 079_MED-984.txt
+  - 113_MED-4245.txt
+  ... and 1 more
+
+meta-analysis: (6 files)
+  - 045_MED-2145.txt
+  - 054_MED-2588.txt
+  - 084_MED-1170.txt
+  - 128_MED-2843.txt
+  - 167_MED-1556.txt
+  ... and 1 more
+
+type 2 diabetes: (5 files)
+  - 002_MED-1323.txt
+  - 008_MED-1461.txt
+  - 055_MED-5225.txt
+  - 131_MED-1795.txt
+  - 145_MED-2001.txt
+
+mortality: (5 files)
+  - 041_MED-1554.txt
+  - 085_MED-5258.txt
+  - 124_MED-5116.txt
+  - 173_MED-2750.txt
+  - 184_MED-1338.txt
+
+weight loss: (5 files)
+  - 052_MED-2719.txt
+  - 111_MED-2717.txt
+  - 159_MED-3492.txt
+  - 168_MED-4989.txt
+  - 186_MED-939.txt
+
+inflammation: (4 files)
+  - 015_MED-3966.txt
+  - 058_MED-2080.txt
+  - 120_MED-4878.txt
+  - 137_MED-4335.txt
+
+oxidative stress: (4 files)
+  - 026_MED-1739.txt
+  - 055_MED-5225.txt
+  - 094_MED-2664.txt
+  - 192_MED-2219.txt
+
+breast cancer: (4 files)
+  - 027_MED-4642.txt
+  - 046_MED-1532.txt
+  - 049_MED-2435.txt
+  - 057_MED-4049.txt
+
+systematic review: (4 files)
+  - 041_MED-1554.txt
+  - 045_MED-2145.txt
+  - 125_MED-904.txt
+  - 128_MED-2843.txt
+
+phenolic compounds: (4 files)
+  - 061_MED-4705.txt
+  - 077_MED-4585.txt
+  - 126_MED-5043.txt
+  - 163_MED-5283.txt
+
+insulin sensitivity: (4 files)
+  - 081_MED-1879.txt
+  - 105_MED-1609.txt
+  - 157_MED-1456.txt
+  - 172_MED-1069.txt
+
+satiety: (4 files)
+  - 107_MED-4703.txt
+  - 141_MED-4262.txt
+  - 186_MED-939.txt
+  - 191_MED-4250.txt
+
+prostate cancer: (3 files)
+  - 001_MED-4239.txt
+  - 090_MED-4220.txt
+  - 117_MED-4482.txt
+
+probiotics: (3 files)
+  - 004_MED-4762.txt
+  - 063_MED-3692.txt
+  - 187_MED-3695.txt
+
+children: (3 files)
+  - 004_MED-4762.txt
+  - 036_MED-5062.txt
+  - 084_MED-1170.txt
+
+insulin resistance: (3 files)
+  - 008_MED-1461.txt
+  - 055_MED-5225.txt
+  - 108_MED-1992.txt
+
+pregnancy: (3 files)
+  - 009_MED-4739.txt
+  - 106_MED-3682.txt
+  - 183_MED-4665.txt
+
+prevention: (3 files)
+  - 013_MED-3731.txt
+  - 108_MED-1992.txt
+  - 187_MED-3695.txt
+
+apoptosis: (3 files)
+  - 017_MED-903.txt
+  - 140_MED-938.txt
+  - 155_MED-2601.txt
+
+diet: (3 files)
+  - 027_MED-4642.txt
+  - 112_MED-2105.txt
+  - 193_MED-3108.txt
+
+blood pressure: (3 files)
+  - 032_MED-1842.txt
+  - 069_MED-5148.txt
+  - 073_MED-5285.txt
+
+antioxidant activity: (3 files)
+  - 044_MED-2452.txt
+  - 061_MED-4705.txt
+  - 077_MED-4585.txt
+
+chemoprevention: (3 files)
+  - 049_MED-2435.txt
+  - 059_MED-5052.txt
+  - 146_MED-4777.txt
+
+green tea: (3 files)
+  - 059_MED-5052.txt
+  - 146_MED-4777.txt
+  - 185_MED-4468.txt
+
+antiproliferative effects: (3 files)
+  - 061_MED-4705.txt
+  - 103_MED-4089.txt
+  - 149_MED-2073.txt
+
+alzheimer's disease: (3 files)
+  - 068_MED-2217.txt
+  - 077_MED-4585.txt
+  - 197_MED-4671.txt
+
+polyphenols: (3 files)
+  - 069_MED-5148.txt
+  - 073_MED-5285.txt
+  - 146_MED-4777.txt
+
+cardiovascular health: (3 files)
+  - 073_MED-5285.txt
+  - 076_MED-1708.txt
+  - 137_MED-4335.txt
+
+curcumin: (3 files)
+  - 074_MED-2599.txt
+  - 154_MED-2822.txt
+  - 155_MED-2601.txt
+
+randomized controlled trial: (3 files)
+  - 165_MED-1522.txt
+  - 175_MED-3988.txt
+  - 197_MED-4671.txt
+
+sulforaphane: (3 files)
+  - 169_MED-4462.txt
+  - 182_MED-4461.txt
+  - 200_MED-2075.txt
+
+prospective cohort study: (2 files)
+  - 002_MED-1323.txt
+  - 131_MED-1795.txt
+
+obesity: (2 files)
+  - 006_MED-1993.txt
+  - 111_MED-2717.txt
+
+vegetarian diet: (2 files)
+  - 007_MED-1857.txt
+  - 055_MED-5225.txt
+
+clinical study: (2 files)
+  - 007_MED-1857.txt
+  - 032_MED-1842.txt
+
+epidemiology: (2 files)
+  - 013_MED-3731.txt
+  - 161_MED-4825.txt
+
+pathogenesis: (2 files)
+  - 013_MED-3731.txt
+  - 180_MED-5281.txt
+
+crohn's disease: (2 files)
+  - 015_MED-3966.txt
+  - 034_MED-3961.txt
+
+dietary microparticles: (2 files)
+  - 015_MED-3966.txt
+  - 034_MED-3961.txt
+
+food additives: (2 files)
+  - 015_MED-3966.txt
+  - 040_MED-5046.txt
+
+cancer cells: (2 files)
+  - 017_MED-903.txt
+  - 103_MED-4089.txt
+
+insulin response: (2 files)
+  - 018_MED-894.txt
+  - 107_MED-4703.txt
+
+stress: (2 files)
+  - 021_MED-1922.txt
+  - 086_MED-1923.txt
+
+postmenopausal women: (2 files)
+  - 024_MED-869.txt
+  - 027_MED-4642.txt
+
+computed tomography: (2 files)
+  - 029_MED-4564.txt
+  - 039_MED-4839.txt
+
+cancer prevention: (2 files)
+  - 030_MED-3730.txt
+  - 200_MED-2075.txt
+
+hibiscus sabdariffa: (2 files)
+  - 032_MED-1842.txt
+  - 126_MED-5043.txt
+
+clinical trial: (2 files)
+  - 034_MED-3961.txt
+  - 154_MED-2822.txt
+
+energy expenditure: (2 files)
+  - 037_MED-5319.txt
+  - 052_MED-2719.txt
+
