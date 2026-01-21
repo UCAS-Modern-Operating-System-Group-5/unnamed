@@ -13,7 +13,129 @@
 
 ---
 
-## 📁 项目结构
+## 效果展示
+
+### 自然语言搜索
+
+使用 AI 语义理解进行智能搜索：
+
+![自然语言搜索展示](docs/picture/GUI/自然语言搜索展示.png)
+
+### 规则搜索
+
+支持精确匹配、Glob 模式、文件过滤等高级语法：
+
+![规则搜索展示](docs/picture/GUI/rule_based搜索展示.png)
+
+### 规则搜索（筛选 + 自动补全）
+
+支持时间、大小过滤和智能补全：
+
+![规则搜索筛选补全](docs/picture/GUI/rule_based搜索展示（筛选+字符补全）.png)
+
+---
+
+## 🚀 快速开始
+
+### 安装依赖
+
+确保已安装 Rust 工具链（推荐使用 rustup）。
+
+### 运行服务器
+
+```bash
+# 启动搜索服务
+cargo run -- serve
+
+# 或者先建立索引
+cargo run -- index /path/to/documents
+```
+
+### 运行 GUI 客户端
+
+```bash
+cargo run -p gui
+```
+
+### 运行测试客户端
+
+```bash
+cargo run -p server --example interactive_client
+cargo run -p server --example test_client
+```
+
+---
+
+## 📋 命令参考
+
+| 命令 | 说明 |
+|------|------|
+| `cargo run -- serve` | 启动 RPC 搜索服务 |
+| `cargo run -- index <path>` | 对指定目录建立索引 |
+| `cargo run -- clear-cache` | 清除缓存数据 |
+| `cargo run -p gui` | 启动 GUI 客户端 |
+
+### 使用 Just（可选）
+
+如果安装了 [just](https://github.com/casey/just)：
+
+```bash
+just              # 默认命令
+just run -- serve # 运行服务器
+```
+
+---
+
+## 🔧 跨平台编译
+
+使用 [cargo-zigbuild](https://github.com/rust-cross/cargo-zigbuild) 进行交叉编译（推荐）：
+
+```bash
+# 编译到 RISC-V 64 位
+cargo zigbuild --release --target riscv64gc-unknown-linux-gnu
+```
+
+或使用 [cross](https://github.com/cross-rs/cross)：
+
+```bash
+CROSS_CONTAINER_UID=0 CROSS_CONTAINER_GID=0 cross build --release --target riscv64gc-unknown-linux-gnu
+
+# 或使用 just
+just build-riscv
+```
+---
+
+## RISC-V 性能测试
+
+本项目已在 RISC-V 64 位平台上进行测试，以下是 CPU 占用情况：
+
+### 基准状态（系统空闲）
+
+![基准状态](docs/picture/cpu_performance/base.png)
+
+### 仅运行 GUI 客户端
+
+![仅GUI](docs/picture/cpu_performance/only-gui.png)
+
+### Server 索引构建中
+
+![索引构建](docs/picture/cpu_performance/server-index.png)
+
+### Server 运行中（等待请求）
+
+![Server等待](docs/picture/cpu_performance/server-serve.png)
+
+### Server + GUI 空闲状态
+
+![Server+GUI空闲](docs/picture/cpu_performance/server-serve-gui-nothing.png)
+
+### Server + GUI 搜索中
+
+![Server+GUI搜索](docs/picture/cpu_performance/server-serve-gui-searching.png)
+
+---
+
+### 📂 项目结构
 
 ```
 unnamed/
@@ -139,76 +261,6 @@ unnamed/
 | **命令行** | [Clap](https://github.com/clap-rs/clap) |
 | **异步运行时** | [Tokio](https://tokio.rs/) |
 
----
-
-## 🚀 快速开始
-
-### 安装依赖
-
-确保已安装 Rust 工具链（推荐使用 rustup）。
-
-### 运行服务器
-
-```bash
-# 启动搜索服务
-cargo run -- serve
-
-# 或者先建立索引
-cargo run -- index /path/to/documents
-```
-
-### 运行 GUI 客户端
-
-```bash
-cargo run -p gui
-```
-
-### 运行测试无gui客户端（for testing）
-
-```bash
-cargo run -p server --example interactive_client
-cargo run -p server --example test_client
-```
-
----
-
-## 📋 命令参考
-
-| 命令 | 说明 |
-|------|------|
-| `cargo run -- serve` | 启动 RPC 搜索服务 |
-| `cargo run -- index <path>` | 对指定目录建立索引 |
-| `cargo run -- clear-cache` | 清除缓存数据 |
-| `cargo run -p gui` | 启动 GUI 客户端 |
-
-### 使用 Just（可选）
-
-如果安装了 [just](https://github.com/casey/just)：
-
-```bash
-just              # 默认命令
-just run -- serve # 运行服务器
-```
-
----
-
-## 🔧 跨平台编译
-
-使用 [cargo-zigbuild](https://github.com/rust-cross/cargo-zigbuild) 进行交叉编译（推荐）：
-
-```bash
-# 编译到 RISC-V 64 位
-cargo zigbuild --release --target riscv64gc-unknown-linux-gnu
-```
-
-或使用 [cross](https://github.com/cross-rs/cross)：
-
-```bash
-CROSS_CONTAINER_UID=0 CROSS_CONTAINER_GID=0 cross build --release --target riscv64gc-unknown-linux-gnu
-
-# 或使用 just
-just build-riscv
-```
 
 ---
 
@@ -241,12 +293,13 @@ tantivy              # 全文搜索（通过 search-core）
 
 ---
 
-## 📄 许可证
 
-本项目采用 MIT 许可证。详见 [LICENSE](LICENSE) 文件。
+### 许可证
+
+本项目采用 GNU General Public License v3 (GPLv3) 许可证。详见 [LICENSE](LICENSE) 文件。
 
 ---
 
-## 🤝 贡献
+## CONTRIBUTE
 
 欢迎提交 Issue 和 Pull Request！

@@ -1,4 +1,6 @@
 /target
+.DS_Store
+**/.DS_Store
 /private.just
 .direnv
 .env*
