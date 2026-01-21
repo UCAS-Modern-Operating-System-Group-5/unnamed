@@ -165,7 +165,11 @@ impl egui_table::TableDelegate for SearchResultTable<'_> {
                         .file_name()
                         .map(|v| v.to_string_lossy())
                         .unwrap_or("".into());
-                    let file_path = hit.file_path.to_string_lossy();
+                    let file_path = hit
+                        .file_path
+                        .parent()
+                        .map(|p| p.to_string_lossy())
+                        .unwrap_or(hit.file_path.to_string_lossy());
                     match col_nr {
                         0 => {
                             ui.label(file_name);
@@ -182,13 +186,19 @@ impl egui_table::TableDelegate for SearchResultTable<'_> {
                         }
                         val if val == &time_col_index => match sort_mode {
                             SortMode::AccessedTime => {
-                                ui.label(timestamp_to_local_string(hit.access_time as i64));
+                                ui.label(timestamp_to_local_string(
+                                    hit.access_time as i64,
+                                ));
                             }
                             SortMode::CreatedTime => {
-                                ui.label(timestamp_to_local_string(hit.access_time as i64));
+                                ui.label(timestamp_to_local_string(
+                                    hit.access_time as i64,
+                                ));
                             }
                             _ => {
-                                ui.label(timestamp_to_local_string(hit.access_time as i64));
+                                ui.label(timestamp_to_local_string(
+                                    hit.access_time as i64,
+                                ));
                             }
                         },
                         _ => {}
