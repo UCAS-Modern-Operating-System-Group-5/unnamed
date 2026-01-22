@@ -1,8 +1,11 @@
 //! Benchmark 测试 - 自动化批量测试搜索准确率
 //! 
 //! 运行方式:
-//! cargo run -p server --example benchmark_test           # 测试全部文件
+//! cargo run -p server --example benchmark_test           # 测试中文数据集（默认）
+//! cargo run -p server --example benchmark_test -- --lang ZH  # 指定中文数据集
+//! cargo run -p server --example benchmark_test -- --lang EN  # 指定英文数据集
 //! cargo run -p server --example benchmark_test -- --limit 10  # 只测试前10个文件（debug模式）
+//! cargo run -p server --example benchmark_test -- --lang EN --limit 5  # 英文数据集，测试前5个
 //! 
 //! 功能：
 //! 1. 备份原有索引
@@ -29,25 +32,50 @@ use tokio::process::Command;
 use std::process::Stdio;
 use chrono;
 use indicatif::{ProgressBar, ProgressStyle};
+use std::collections::HashMap;
 
 #[derive(Debug)]
 struct TestCase {
-    title: String,
     question: String,
+    // ZH: title（单个答案）; EN: expected_files（多个答案）
+    title: Option<String>,
+    expected_files: Vec<String>,  // EN 用，存储所有预期答案
 }
 
 #[derive(Debug)]
 struct TestResult {
     question: String,
-    title: String,
+    expected: String,  // 改为通用的 expected，可以是 title 或 keyword
     found: bool,
     rank: Option<usize>, // 如果找到，记录排名位置
     total_results: usize,
     search_time_ms: u64,
 }
 
-/// 读取 card.csv 文件
-fn load_test_cases(csv_path: &Path) -> anyhow::Result<Vec<TestCase>> {
+/// 读取 ZH 的 keyword_index.json 文件
+fn load_test_cases_zh(json_path: &Path) -> anyhow::Result<Vec<TestCase>> {
+    let content = std::fs::read_to_string(json_path)?;
+    let keyword_index: HashMap<String, Vec<String>> = serde_json::from_str(&content)?;
+    
+    let mut cases = Vec::new();
+    for (keyword, titles) in keyword_index.iter() {
+        if !keyword.is_empty() && !titles.is_empty() {
+            cases.push(TestCase {
+                question: keyword.clone(),
+                title: Some(titles[0].clone()),  // ZH 只用第一个 title
+                expected_files: titles.clone(),   // 但也存储所有的（为了兼容）
+            });
+        }
+    }
+    
+    // 按关键词排序以保证顺序一致
+    cases.sort_by(|a, b| a.question.cmp(&b.question));
+    
+    Ok(cases)
+}
+
+/// 读取 ZH 的旧 card.csv 文件（兼容旧格式）
+fn load_test_cases_zh_csv(csv_path: &Path) -> anyhow::Result<Vec<TestCase>> {
     let file = File::open(csv_path)?;
     let reader = BufReader::new(file);
     let mut cases = Vec::new();
@@ -67,12 +95,66 @@ fn load_test_cases(csv_path: &Path) -> anyhow::Result<Vec<TestCase>> {
             
             // 跳过空问题
             if !question.is_empty() && !title.is_empty() {
-                cases.push(TestCase { title, question });
+                cases.push(TestCase { 
+                    question, 
+                    title: Some(title.clone()),
+                    expected_files: vec![title],  // ZH 不使用多文件
+                });
             }
         }
     }
     
     Ok(cases)
+}
+
+/// 读取 EN 的 keyword_index.json 文件
+fn load_test_cases_en(json_path: &Path) -> anyhow::Result<Vec<TestCase>> {
+    let content = std::fs::read_to_string(json_path)?;
+    let keyword_index: HashMap<String, Vec<String>> = serde_json::from_str(&content)?;
+    
+    let mut cases = Vec::new();
+    for (keyword, files) in keyword_index.iter() {
+        if !keyword.is_empty() && !files.is_empty() {
+            cases.push(TestCase {
+                question: keyword.clone(),
+                title: None,  // EN 不使用 title
+                expected_files: files.clone(),
+            });
+        }
+    }
+    
+    // 按关键词排序以保证顺序一致
+    cases.sort_by(|a, b| a.question.cmp(&b.question));
+    
+    Ok(cases)
+}
+
+/// 通用的读取测试用例函数（都使用 JSON 格式）
+fn load_test_cases(lang_dir: &Path, lang: &str) -> anyhow::Result<Vec<TestCase>> {
+    // EN 的 keyword_index.json 在 processed 目录下
+    let json_path = if lang == "EN" {
+        lang_dir.join("processed").join("keyword_index.json")
+    } else {
+        lang_dir.join("keyword_index.json")
+    };
+    
+    if !json_path.exists() {
+        // 如果 JSON 不存在，尝试从 CSV 读取（仅用于兼容）
+        println!("⚠️  keyword_index.json 不存在，尝试从 card.csv 读取");
+        let csv_path = lang_dir.join("card.csv");
+        if lang == "EN" {
+            load_test_cases_zh_csv(&csv_path)  // 两种格式都用同一个 CSV 读取函数
+        } else {
+            load_test_cases_zh_csv(&csv_path)
+        }
+    } else {
+        // 两种语言都从 JSON 读取
+        if lang == "EN" {
+            load_test_cases_en(&json_path)
+        } else {
+            load_test_cases_zh(&json_path)
+        }
+    }
 }
 
 /// 获取索引目录路径
@@ -351,21 +433,17 @@ async fn start_server() -> anyhow::Result<tokio::process::Child> {
     
     // 使用编译好的二进制文件启动
     // 注意：继承 stderr 让我们能看到 server 的启动日志（包括 AI 模型加载进度）
-    let spawn_start = Instant::now();
     let child = Command::new("cargo")
         .args(&["run", "-p", "server", "--", "serve"])
         .stdout(Stdio::null())
         .stderr(Stdio::inherit())  // 继承 stderr 以便看到 server 日志
         .spawn()?;
-    let spawn_time = spawn_start.elapsed();
     
     // 等待 server 启动
     println!("⏳ 等待 server 启动（包括 AI 模型加载）...");
-    let wait_start = Instant::now();
     tokio::time::sleep(Duration::from_secs(2)).await;
-    let wait_time = wait_start.elapsed();
     
-    println!("✓ Server 已启动 (启动过程: {:.1}s)", wait_time.as_secs_f64());
+    println!("✓ Server 已启动");
     Ok(child)
 }
 
@@ -442,6 +520,7 @@ async fn wait_for_server_ready(socket_path: &Path, timeout_secs: u64) -> anyhow:
 }
 
 /// 检查文件名中是否包含 title 的关键词
+/// 检查 ZH 文件名是否匹配 title
 fn check_title_match(file_path: &str, title: &str) -> bool {
     // 从文件路径中提取文件名（去掉编号前缀）
     let file_name = Path::new(file_path)
@@ -470,6 +549,20 @@ fn check_title_match(file_path: &str, title: &str) -> bool {
     file_name_clean.contains(&key_words.chars().take(10).collect::<String>())
 }
 
+/// 检查 EN 文件名是否在预期文件列表中
+fn check_file_match(file_path: &str, expected_files: &[String]) -> bool {
+    if expected_files.is_empty() {
+        return false;
+    }
+    
+    let file_name = Path::new(file_path)
+        .file_name()
+        .and_then(|s| s.to_str())
+        .unwrap_or("");
+    
+    expected_files.iter().any(|expected| expected == file_name)
+}
+
 /// 执行单个测试用例
 async fn run_test_case(
     client: &WorldClient,
@@ -486,9 +579,15 @@ async fn run_test_case(
     let session_id = match client.start_search(context::current(), req).await? {
         Ok(id) => id,
         Err(_e) => {
+            let expected = if let Some(title) = &test_case.title {
+                title.clone()
+            } else {
+                format!("One of: {}", test_case.expected_files.join(", "))
+            };
+            
             return Ok(TestResult {
                 question: test_case.question.clone(),
-                title: test_case.title.clone(),
+                expected,
                 found: false,
                 rank: None,
                 total_results: 0,
@@ -533,7 +632,17 @@ async fn run_test_case(
     if let Ok((_req_id, Ok(results))) = client.fetch_search_results(context::current(), fetch_req).await {
         for (idx, hit) in results.hits.iter().enumerate() {
             let file_path_str = hit.file_path.to_string_lossy();
-            if check_title_match(&file_path_str, &test_case.title) {
+            
+            // 根据是 ZH 还是 EN 选择不同的匹配方式
+            let is_match = if let Some(title) = &test_case.title {
+                // ZH: 检查文件名是否包含 title
+                check_title_match(&file_path_str, title)
+            } else {
+                // EN: 检查文件名是否在预期文件列表中
+                check_file_match(&file_path_str, &test_case.expected_files)
+            };
+            
+            if is_match {
                 found = true;
                 rank = Some(idx + 1);
                 break;
@@ -543,9 +652,15 @@ async fn run_test_case(
     
     let search_time_ms = start_time.elapsed().as_millis() as u64;
     
+    let expected = if let Some(title) = &test_case.title {
+        title.clone()
+    } else {
+        format!("One of: {}", test_case.expected_files.join(", "))
+    };
+    
     Ok(TestResult {
         question: test_case.question.clone(),
-        title: test_case.title.clone(),
+        expected,
         found,
         rank,
         total_results: total_count,
@@ -558,7 +673,7 @@ fn save_results_csv(results: &[TestResult], output_path: &Path) -> anyhow::Resul
     let mut file = File::create(output_path)?;
     
     // 写入表头
-    writeln!(file, "question,expected_title,found,rank,total_results,search_time_ms")?;
+    writeln!(file, "question,expected,found,rank,total_results,search_time_ms")?;
     
     // 写入每条结果
     for result in results {
@@ -566,7 +681,7 @@ fn save_results_csv(results: &[TestResult], output_path: &Path) -> anyhow::Resul
             file,
             "\"{}\",\"{}\",{},{},{},{}",
             result.question.replace("\"", "\"\""),
-            result.title.replace("\"", "\"\""),
+            result.expected.replace("\"", "\"\""),
             result.found,
             result.rank.map(|r| r.to_string()).unwrap_or_else(|| "N/A".to_string()),
             result.total_results,
@@ -628,7 +743,7 @@ fn generate_report(
         writeln!(file, "==========================================")?;
         for (idx, result) in failed_cases.iter().enumerate() {
             writeln!(file, "[{}] 问题: {}", idx + 1, result.question)?;
-            writeln!(file, "    期望标题: {}", result.title)?;
+            writeln!(file, "    期望: {}", result.expected)?;
             writeln!(file)?;
         }
     }
@@ -637,34 +752,71 @@ fn generate_report(
 }
 
 /// 解析命令行参数
-fn parse_args() -> Option<usize> {
+fn parse_args() -> (Option<usize>, String) {
     let args: Vec<String> = std::env::args().collect();
+    let mut limit = None;
+    let mut lang = "ZH".to_string();  // 默认中文
     
     // 查找 --limit 参数
     for i in 0..args.len() {
         if args[i] == "--limit" || args[i] == "-l" {
             if i + 1 < args.len() {
                 if let Ok(n) = args[i + 1].parse::<usize>() {
-                    return Some(n);
+                    limit = Some(n);
+                }
+            }
+        }
+        // 查找 --lang 参数
+        if args[i] == "--lang" {
+            if i + 1 < args.len() {
+                let l = args[i + 1].to_uppercase();
+                if l == "ZH" || l == "EN" {
+                    lang = l;
                 }
             }
         }
     }
     
-    None
+    (limit, lang)
 }
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     // 解析命令行参数
-    let limit = parse_args();
+    let (limit, lang) = parse_args();
+    
+    // 构建数据集路径
+    let benchmark_base = Path::new("benchmark");
+    let lang_dir = benchmark_base.join(&lang);
+    
+    // 确定提取目录
+    // ZH: benchmark/ZH/docs/extracted
+    // EN: benchmark/EN/processed
+    let extracted_dir = if lang == "EN" {
+        lang_dir.join("processed")
+    } else {
+        lang_dir.join("docs").join("extracted")
+    };
+    
+    let csv_path = lang_dir.join("card.csv");
+    let result_csv_path = lang_dir.join("result.csv");
+    let report_path = lang_dir.join("report.txt");
     
     if let Some(n) = limit {
-        println!("🚀 开始 Benchmark 自动化测试 (Debug 模式: 测试前 {} 个文件)", n);
+        println!("🚀 开始 Benchmark 自动化测试 (语言: {}, Debug 模式: 测试前 {} 个文件)", lang, n);
     } else {
-        println!("🚀 开始 Benchmark 自动化测试");
+        println!("🚀 开始 Benchmark 自动化测试 (语言: {})", lang);
     }
     println!("{}", "=".repeat(60));
+    
+    // 检查必要的目录和文件
+    if !extracted_dir.exists() {
+        return Err(anyhow::anyhow!("提取目录不存在: {:?}", extracted_dir));
+    }
+    let keyword_index_path = lang_dir.join("keyword_index.json");
+    if !keyword_index_path.exists() && !csv_path.exists() {
+        return Err(anyhow::anyhow!("测试数据不存在 (需要 keyword_index.json 或 card.csv): {:?}", lang_dir));
+    }
     
     // 步骤 0: 杀掉可能存在的旧 server 进程
     println!();
@@ -677,8 +829,7 @@ async fn main() -> anyhow::Result<()> {
     println!();
     
     // 步骤 1.5: 准备测试数据（如果是 debug 模式，拷贝文件到临时目录）
-    let source_dir = Path::new("benchmark/docs/extracted");
-    let (index_dir, temp_dir) = prepare_test_data(source_dir, limit)?;
+    let (index_dir, temp_dir) = prepare_test_data(&extracted_dir, limit)?;
     let index_path = index_dir.to_string_lossy().to_string();
     let index_time_ms = run_index(&index_path).await?;
     
@@ -719,11 +870,10 @@ async fn main() -> anyhow::Result<()> {
         }
     }
     
-    // 加载测试用例
-    let csv_path = Path::new("benchmark/card.csv");
-    println!("\n📋 加载测试用例: {:?}", csv_path);
+    // 加载测试用例（从 keyword_index.json）
+    println!("\n📋 加载测试用例: {:?}", lang_dir);
     
-    let mut test_cases = load_test_cases(csv_path)?;
+    let mut test_cases = load_test_cases(&lang_dir, &lang)?;
     
     // 如果是 debug 模式，只保留前 N 个测试用例
     if let Some(n) = limit {
@@ -802,20 +952,18 @@ async fn main() -> anyhow::Result<()> {
         
         for (idx, result) in failed_cases.iter().enumerate() {
             println!("[{}] 问题: {}", idx + 1, result.question);
-            println!("    期望标题: {}", result.title);
+            println!("    期望: {}", result.expected);
         }
     }
     
     // 保存结果到 CSV
-    let result_csv_path = Path::new("benchmark/result.csv");
     println!("\n💾 保存详细结果到: {:?}", result_csv_path);
-    save_results_csv(&results, result_csv_path)?;
+    save_results_csv(&results, &result_csv_path)?;
     println!("✓ result.csv 已保存");
     
     // 生成报告
-    let report_path = Path::new("benchmark/report.txt");
     println!("💾 生成测试报告到: {:?}", report_path);
-    generate_report(&results, index_time_ms, report_path)?;
+    generate_report(&results, index_time_ms, &report_path)?;
     println!("✓ report.txt 已生成");
     
     println!("\n✅ Benchmark 测试完成！");

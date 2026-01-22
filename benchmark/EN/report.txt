@@ -1,0 +1,76 @@
+==========================================
+       Benchmark 测试报告
+==========================================
+
+测试时间: 2026-01-22 01:04:23
+
+【索引性能】
+索引时间: 1359908ms (1359.91s)
+
+【搜索准确率】
+总测试数: 853
+成功找到: 836 / 853 (98.01%)
+
+【排名分布】
+Top-1:  627 (73.51%)
+Top-3:  771 (90.39%)
+Top-5:  795 (93.20%)
+Top-10: 826 (96.83%)
+
+【搜索性能】
+平均搜索时间: 549.06ms
+总搜索时间: 468344ms (468.34s)
+
+【未找到的测试用例】(17个)
+==========================================
+[1] 问题: adverse effects
+    期望: One of: 025_MED-3806.txt
+
+[2] 问题: als
+    期望: One of: 010_MED-1282.txt
+
+[3] 问题: american heart association
+    期望: One of: 076_MED-1708.txt, 194_MED-1546.txt
+
+[4] 问题: biomarker reduction
+    期望: One of: 030_MED-3730.txt
+
+[5] 问题: case-control study
+    期望: One of: 153_MED-3936.txt
+
+[6] 问题: disease activity score
+    期望: One of: 154_MED-2822.txt
+
+[7] 问题: elemental analysis
+    期望: One of: 156_MED-1838.txt
+
+[8] 问题: estrogen receptor status
+    期望: One of: 134_MED-4651.txt
+
+[9] 问题: food contamination
+    期望: One of: 066_MED-1165.txt
+
+[10] 问题: heart score study
+    期望: One of: 194_MED-1546.txt
+
+[11] 问题: metabolic effects
+    期望: One of: 075_MED-3895.txt
+
+[12] 问题: multi-ethnic study of atherosclerosis
+    期望: One of: 120_MED-4878.txt
+
+[13] 问题: neurotoxicant
+    期望: One of: 170_MED-3019.txt
+
+[14] 问题: ph
+    期望: One of: 195_MED-3231.txt
+
+[15] 问题: risk reduction
+    期望: One of: 150_MED-4787.txt
+
+[16] 问题: supplementation
+    期望: One of: 099_MED-4566.txt
+
+[17] 问题: symptomatic treatment
+    期望: One of: 029_MED-4564.txt
+
