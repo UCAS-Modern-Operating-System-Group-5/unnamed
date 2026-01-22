@@ -64,7 +64,7 @@ cargo run -- clear-cache
 ```
 ### 运行 GUI 客户端
 
-注意在构建运行客户端前需要下载字体到 `./apps/gui/assets` 目录下。字体的 [Google Derive 地址](https://drive.google.com/drive/folders/1UdCXbwmbCVaQ4eclQFWxIT4reJw7NrxI?usp=sharing)。详细可以参考 [./apps/gui/README.md](./apps/gui/README.md)。
+注意在构建运行客户端前需要下载字体到 `./apps/gui/assets` 目录下。字体的 [Google Drive 地址](https://drive.google.com/drive/folders/1UdCXbwmbCVaQ4eclQFWxIT4reJw7NrxI?usp=sharing)。详细可以参考 [./apps/gui/README.md](./apps/gui/README.md)。
 
 ```bash
 cargo run -p gui
