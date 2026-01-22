@@ -56,7 +56,28 @@ cargo run -- index /path/to/documents
 
 注意程序会从 HuggingFace 下载模型。如果遇到网络问题，可以手动下载模型 [BAAI/bge-small-zh-v1.5](https://huggingface.co/BAAI/bge-small-zh-v1.5) 到 `~/.cache/huggingface/hub/models--BAAI--bge-small-zh-v1.5` 目录下。
 
-TODO INode 设置
+### Linux inotify 限制配置
+
+在 Linux 系统上，`notify` 库底层使用 `inotify` 机制进行文件系统事件监听。默认情况下，Linux 内核对单个用户可监控的文件/目录数量存在限制（通常为 8192），当监控大型目录树时可能会遇到 "No space left on device" 或 "Too many open files" 错误。
+
+#### 查看当前限制
+
+```bash
+cat /proc/sys/fs/inotify/max_user_watches
+```
+
+#### 提高监控限制
+
+若需监控大量文件，建议临时或永久提高该限制：
+
+```bash
+# 临时生效（重启后失效）
+sudo sysctl fs.inotify.max_user_watches=524288
+
+# 永久生效
+echo "fs.inotify.max_user_watches=524288" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+```
 
 ### 清除缓存 
 ```bash
